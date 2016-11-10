@@ -1,4 +1,4 @@
- 
+
 .sl-tab {
 	display: inline-block;
 	background-color: #2B2B2B;
@@ -69,4 +69,54 @@ div[class*="loading"] {
 	margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
 	left: 0;
 	right: 0;
+}
+
+/*
+filesearchbox
+*/
+.searchbox {
+    position: absolute;
+    background: #2F343F;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin: auto;
+    width: 35%;
+    min-width: 650px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px -3px whitesmoke;
+}
+
+.searchboxInput {
+    width: 99%;
+    height: 40px;
+    border-radius: 10px 10px 0 0;
+    margin: 0.5%;
+    text-indent: 10px;
+    background-color: #525662;
+    border: 0;
+    outline: 0;
+}
+
+.searchboxResultsList {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+    overflow: hidden;
+}
+
+.searchboxResultsList > li {
+    width: 99%;
+    height: 40px;
+    line-height: 40px;
+    margin: 0.5%;
+    background-color: #383C4A;
+    color: #949eb6;
+    text-indent: 10px;
+}
+
+.searchboxResultsList > li:last-child {
+    border-radius: 0 0 10px 10px;
 }

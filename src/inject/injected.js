@@ -21,7 +21,8 @@ function getDir(selectedElement) {
     return path;
 }
 
-var openfiles = []
+var openfiles = [];
+var allfiles = [];
 var currentActiveFile = 0;
 insertTab($('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0]);
 
@@ -54,6 +55,62 @@ function newFile(el) {
     var file = {el: el, name: getname(el), dir: getDir(el)};
     file.path = getDir(el)+getname(el);
     return file;
+}
+
+$(window).keydown(function(event) {
+    console.log(event.keyCode);
+  if(event.altKey && event.keyCode == 80) { /* p */
+    event.preventDefault();
+    startFuzzySearch();
+  }
+});
+
+
+function indexAllFiles() {
+    allFiles = [];
+
+    $('file-entity > li.ng-scope').each(
+        function() {
+            if(isFile($(this))) {
+                allFiles.push(newFile($(this).find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0]));
+            }
+        }
+    );
+
+}
+
+function startFuzzySearch() {
+    indexAllFiles();
+    $('.searchbox').remove();
+    $('body').append(`<div class="searchbox"><input type="text" class="searchboxInput" /><ul class="searchboxResultsList"></ul></div>`);
+    
+    var h1 = $('.searchboxInput').on('input', function() {
+        $('.searchboxResultsList').empty();
+        var i = 5;
+        var j = 0;
+        var test = new RegExp($(this).val(), "ig");
+        while(i-- > 0) {
+            while(j < allFiles.length) {
+                if(test.test(allFiles[j++].path)) {
+                    $('.searchboxResultsList').append(`<li><span>${allFiles[j-1].path}</span></li>`);
+                    break;
+                }
+            }
+        }
+    });
+
+    var close = function() {
+        h1.unbind();
+        $('.searchbox').remove();
+    };
+
+    $('.searchboxInput').keyup(function() {if(event.keyCode == 27) close();})
+
+    $('.searchboxInput').focus();
+}
+
+function isFile(el) {
+    return $(el).children('div.entity[ng-if="entity.type != \'folder\'"]').length == 1;
 }
 
 function insertTab(el) {
