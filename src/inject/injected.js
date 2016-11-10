@@ -8,10 +8,10 @@ $("header").append('<ul id="sl-tabs"></ul>');
 function updatePath() {
     var selectedElement = $('.selected');
 
-    placeElement.text(getPath(selectedElement));
+    placeElement.text(getDir(selectedElement));
 }
 
-function getPath(selectedElement) {
+function getDir(selectedElement) {
     var folders = $(selectedElement).parentsUntil().filter("div[ng-controller='FileTreeFolderController']");
     var path = "";
     for (var i = folders.length - 1; i >= 0; i--) {
@@ -26,7 +26,8 @@ var currentActiveFile = 0;
 insertTab($('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0]);
 
 $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
-    var index = openfiles.indexOf(this);
+    var el = this;
+    var index = openfiles.findIndex(function(file) {return file.el == el;});
     if (!evt.shiftKey) {
         if (index == -1) {
             insertTab(this);
@@ -49,30 +50,58 @@ $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-h
 });
 
 
+function newFile(el) {
+    var file = {el: el, name: getname(el), dir: getDir(el)};
+    file.path = getDir(el)+getname(el);
+    return file;
+}
+
 function insertTab(el) {
-    openfiles.push(el);
-    $("#sl-tabs").append("<li class='sl-tab'><span class='sl-tab-title' title='" + getPath(el) + getname(el) + "'>" + getname(el) + "</span><a class='sl-tab-remove fa fa-times' href='#'></a></li>");
+    var file = newFile(el);
+    openfiles.push(file);
+    $("#sl-tabs").append("<li class='sl-tab'><span class='sl-tab-title' title='" + file.path + "'>" + file.name + "</span><a class='sl-tab-remove fa fa-times' href='#'></a></li>");
     setActiveTab(openfiles.length - 1);
 }
 
 function replaceTab(index, el) {
-    $($($("#sl-tabs").children()[index]).find(".sl-tab-title")[0]).html(getname(el));
-    $($($("#sl-tabs").children()[index]).find(".sl-tab-title")[0]).attr("title", getPath(el) + getname(el));
-    openfiles[index] = el;
+    var file = newFile(el);
+
+    var tab = $("#sl-tabs").children().eq(index).find(".sl-tab-title").eq(0);
+    tab.html(shortestPath(file, openfiles));
+    tab.attr("title", file.path);
+    openfiles[index] = file;
 }
 
 function setActiveTab(index) {
     $(".sl-tab").removeClass("sl-tab-active");
-    $($("#sl-tabs").children()[index]).addClass("sl-tab-active");
+    $("#sl-tabs").children().eq(index).addClass("sl-tab-active");
     currentActiveFile = index;
 }
 
 function getname(el) {
-    return $($(el).find("span.ng-binding")[0]).text().replace(" ", "");
+    return $(el).find("span.ng-binding").eq(0).text().replace(" ", "");
+}
+
+function shortestPath(file, fileList) {
+    var n = 1; /* number of slashes to include*/
+    var a = file.path;
+    var exp = new RegExp(`(\/?[^\/]+){${n}}$`);
+    for(var i = 0; i < fileList.length; i++) {
+        var b = fileList[i].path;
+        if(a != b) {
+            while(exp.test(a) && exp.exec(a)[0] == exp.exec(b)[0]) {
+                if(exp.exec(a)[0].length != a.length) {
+                    n++;
+                    exp = new RegExp(`(\/?[^\/]+){${n}}$`);
+                }
+            }
+        }
+    }
+    return exp.exec(a)[0];
 }
 
 $("html").on("click", ".sl-tab-title", function(evt) {
-    openfiles[$(".sl-tab-title").index(this)].click();
+    openfiles[$(".sl-tab-title").index(this)].el.click();
 });
 
 $("html").on("click", ".sl-tab-remove", function(evt) {
@@ -95,7 +124,7 @@ $("html").on("click", "div.pdf-viewer.ng-scope", function() {
     setTimeout(function() {
         updatePath();
         var selected = $('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0];
-        var index = openfiles.indexOf(selected);
+        var index = openfiles.findIndex(function(file) {return file.el == selected;});
         if (index != -1) {
             setActiveTab(index)
         } else {
