@@ -26,6 +26,9 @@
 	border-bottom:3px solid #A93529;
 	color:#eee;
 }
+.sl-tab-remove:hover {
+	text-decoration: none;
+}
 
 .ui-layout-container, .toolbar, .ui-layout-resizer {
 	background-color:#333333 !important;
