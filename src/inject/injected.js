@@ -91,7 +91,7 @@ $("html").on("mouseup", ".sl-tab", function(e) {
     }
 });
 
-$("div.ui-layout-east.ui-layout-pane.ui-layout-pane-east, div.ui-layout-center.ui-layout-pane.ui-layout-pane-center").click(function() {
+$("html").on("click", "div.pdf-viewer.ng-scope", function() {
     setTimeout(function() {
         updatePath();
         var selected = $('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0];
