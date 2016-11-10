@@ -97,7 +97,7 @@ function shortestPath(file, fileList) {
             }
         }
     }
-    return exp.exec(a)[0];
+    return /^\/?(.*)/.exec(exp.exec(a)[0])[1];
 }
 
 $("html").on("click", ".sl-tab-title", function(evt) {
