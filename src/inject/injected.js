@@ -51,7 +51,7 @@ $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-h
 
 function insertTab(el) {
     openfiles.push(el);
-    $("#sl-tabs").append("<li class='sl-tab'><span class='sl-tab-title' title='" + getPath(el) + getname(el) + "'>" + getname(el) + "</span><a class='sl-tab-remove fa fa-times-circle' href='#'></a></li>");
+    $("#sl-tabs").append("<li class='sl-tab'><span class='sl-tab-title' title='" + getPath(el) + getname(el) + "'>" + getname(el) + "</span><a class='sl-tab-remove fa fa-times' href='#'></a></li>");
     setActiveTab(openfiles.length - 1);
 }
 
