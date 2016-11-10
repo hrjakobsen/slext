@@ -1,0 +1,30 @@
+{
+  "name": "ShareLatexOptimizr",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Extension for making ShareLatex more awesome",
+  "homepage_url": "http://aaq.dk",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "permissions": [
+    "https://www.sharelatex.com/project/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.sharelatex.com/project/*"
+      ],
+      "js": [
+        "js/jquery/jquery.min.js","src/inject/inject.js"
+      ],
+      "css": [
+      	"css/appstyle.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": ["src/inject/injected.js"]
+}

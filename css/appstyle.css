@@ -1,0 +1,69 @@
+ 
+.sl-tab {
+	display: inline-block;
+	background-color: #2B2B2B;
+	padding: 0 5px;
+	color:#bbb;
+}
+.sl-tab:hover {
+	background-color: #333333;
+}
+#sl-tabs {
+	position: absolute;
+	bottom: 0;
+	margin-bottom:0;
+	left:0;
+	padding-left: 0px;
+	border-top:2px solid #666666;
+	width:100%;
+}
+.sl-tab-title {
+	line-height:35px;
+	margin:7px;
+	cursor: default;
+}
+.sl-tab-active {
+	border-bottom:3px solid #A93529;
+	color:#eee;
+}
+
+.ui-layout-container, .toolbar, .ui-layout-resizer {
+	background-color:#333333 !important;
+}
+.entity-name {
+	color:#A4A4A4 !important;
+}
+.entity-name:hover {
+	color:#a93529 !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+  background: #313131;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #535353; 
+}
+#ide-body {
+	margin-top: 40px;
+}
+header {
+	height: 80px !important;
+}
+
+div[class*="loading"] {
+	background-color: #2B2B2B !important;
+}
+
+#filesearchbox {
+	position: fixed;
+	width: 500px;
+	height: 200px;
+	margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+	left: 0;
+	right: 0;
+}
