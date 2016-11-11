@@ -65,6 +65,14 @@ $(window).keydown(function(event) {
   }
 });
 
+$(window).keydown(function(event) {
+    console.log(event.keyCode);
+  if(event.altKey && event.keyCode == 87) { /* p */
+    event.preventDefault();
+    $(".sl-tab.sl-tab-active").find(".sl-tab-remove")[0].click();
+  }
+});
+
 
 function indexAllFiles() {
     allFiles = [];
