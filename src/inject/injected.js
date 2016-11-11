@@ -24,6 +24,7 @@ function getDir(selectedElement) {
 var openfiles = [];
 var allfiles = [];
 var currentActiveFile = 0;
+indexAllFiles();
 insertTab($('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0]);
 
 $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
@@ -80,7 +81,6 @@ function indexAllFiles() {
 }
 
 function startFuzzySearch() {
-    indexAllFiles();
     $('.searchbox').remove();
     $('body').append(`<div class="searchbox"><input type="text" class="searchboxInput" /><ul class="searchboxResultsList"></ul></div>`);
     var currentSelection = 0;
@@ -115,11 +115,6 @@ function startFuzzySearch() {
         $('.searchbox').remove();
     };
 
-    var close = function() {
-        h1.unbind();
-        $('.searchbox').remove();
-    };
-
     var chooseItem = function() {
         allFiles[$('.searchboxResultsList').children().eq(currentSelection).attr("index")].el.click();
     }
@@ -139,7 +134,6 @@ function startFuzzySearch() {
         close();
     });
 
-
     $('.searchboxInput').focus();
 }
 
@@ -147,20 +141,30 @@ function isFile(el) {
     return $(el).children('div.entity[ng-if="entity.type != \'folder\'"]').length == 1;
 }
 
+function updateTabNames() {
+    $('.sl-tab').each(function() {
+        var tabTitle = $(this).find('.sl-tab-title');
+        var index = openfiles.findIndex(function(file) {return file.path == tabTitle.attr('title');});
+        tabTitle.html(shortestPath(openfiles[index], openfiles));
+    });
+}
+
 function insertTab(el) {
     var file = newFile(el);
     openfiles.push(file);
     $("#sl-tabs").append("<li class='sl-tab'><span class='sl-tab-title' title='" + file.path + "'>" + file.name + "</span><a class='sl-tab-remove fa fa-times' href='#'></a></li>");
     setActiveTab(openfiles.length - 1);
+    updateTabNames();
 }
 
 function replaceTab(index, el) {
     var file = newFile(el);
 
     var tab = $("#sl-tabs").children().eq(index).find(".sl-tab-title").eq(0);
-    tab.html(shortestPath(file, openfiles));
+    tab.html(file.name);
     tab.attr("title", file.path);
     openfiles[index] = file;
+    updateTabNames();
 }
 
 function setActiveTab(index) {
@@ -203,6 +207,7 @@ $("html").on("click", ".sl-tab-remove", function(evt) {
     }
     openfiles.splice(index, 1);
     $(this).parent().remove();
+    updateTabNames();
 });
 
 $("html").on("mouseup", ".sl-tab", function(e) {
@@ -210,6 +215,15 @@ $("html").on("mouseup", ".sl-tab", function(e) {
         $(this).find(".sl-tab-remove")[0].click();
     }
 });
+
+// watch for changes in file tree
+var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+var obs = new MutationObserver(function(mutations, observer) {
+    if(mutations[0].addedNodes.length || mutations[0].removedNodes.length)
+        indexAllFiles();
+});
+obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
+
 
 $("html").on("click", "div.pdf-viewer.ng-scope", function() {
     setTimeout(function() {
