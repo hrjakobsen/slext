@@ -189,7 +189,7 @@ function shortestPath(file, fileList) {
             }
         }
     }
-    return exp.exec(a)[0];
+    return /^\/?(.*)/.exec(exp.exec(a)[0])[1];
 }
 
 $("html").on("click", ".sl-tab-title", function(evt) {
@@ -200,7 +200,7 @@ $("html").on("click", ".sl-tab-remove", function(evt) {
     if (openfiles.length < 2) return;
     var index = $(".sl-tab").index($(this).parent());
     if (currentActiveFile == $(".sl-tab").index($(this).parent())) {
-        openfiles[currentActiveFile == 0 ? 1 : currentActiveFile - 1].click();
+        openfiles[currentActiveFile == 0 ? 1 : currentActiveFile - 1].el.click();
     }
     openfiles.splice(index, 1);
     $(this).parent().remove();
