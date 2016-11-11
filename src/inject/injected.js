@@ -88,10 +88,9 @@ function startFuzzySearch() {
         $('.searchboxResultsList').empty();
         var i = 5;
         var j = 0;
-        var test = new RegExp($(this).val(), "ig");
         while(i-- > 0) {
             while(j < allFiles.length) {
-                if(test.test(allFiles[j++].path)) {
+                if(allFiles[j++].path.toLowerCase().includes($(this).val().toLowerCase())) {
                     $('.searchboxResultsList').append(`<li index="${j-1}"><span>${allFiles[j-1].path}</span></li>`);
                     break;
                 }
