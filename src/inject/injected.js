@@ -59,7 +59,6 @@ function newFile(el) {
 }
 
 $(window).keydown(function(event) {
-    console.log(event.keyCode);
   if(event.altKey && event.keyCode == 80) { /* p */
     event.preventDefault();
     startFuzzySearch();
@@ -67,7 +66,6 @@ $(window).keydown(function(event) {
 });
 
 $(window).keydown(function(event) {
-    console.log(event.keyCode);
   if(event.altKey && event.keyCode == 87) { /* p */
     event.preventDefault();
     $(".sl-tab.sl-tab-active").find(".sl-tab-remove")[0].click();
@@ -246,3 +244,31 @@ $("html").on("click", "div.pdf-viewer.ng-scope", function() {
 
     }, 1000);
 });
+
+$( window ).unload(function() {
+    SaveOpenedTabs();
+});
+
+function SaveOpenedTabs() {
+    var openPaths = [];
+    for (var i = 0; i < openfiles.length; i++) {
+        openPaths.push({path: openfiles[i].path, favorite: false});
+    }
+    localStorage.setItem('openedFiles', JSON.stringify(openPaths));
+}
+
+function ReloadTabs() {
+    var lastOpenedFiles = JSON.parse(localStorage.getItem('openedFiles'));
+    indexAllFiles();
+    for (var j = 0; j < lastOpenedFiles.length; j++) {
+        var index = allFiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path;});
+        if (index != -1) {
+            if (openfiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path}) == -1) {
+                insertTab(allFiles[index].el);
+                setActiveTab(0);
+            }
+        }
+    }
+}
+
+ReloadTabs();
