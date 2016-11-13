@@ -41,7 +41,12 @@ $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-h
         }
     } else {
         if (index == -1) {
-            replaceTab(currentActiveFile, this)
+            if (!$("#sl-tabs").children().eq(currentActiveFile).hasClass("sl-tab-favorite")) {
+                replaceTab(currentActiveFile, this)
+            } else {
+                insertTab(this);
+                setActiveTab(openfiles.length - 1);                
+            }
         } else {
             if (index != currentActiveFile) {
                 setActiveTab(index);
@@ -242,7 +247,7 @@ var obs = new MutationObserver(function(mutations, observer) {
 obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
 
 
-$("html").on("click", "div.pdf-viewer.ng-scope", function() {
+$("html").on("click", "div.pdf-viewer.ng-scope, .online-user", function() {
     setTimeout(function() {
         updatePath();
         var selected = $('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0];
