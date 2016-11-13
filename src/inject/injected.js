@@ -312,3 +312,5 @@ function ReloadTabs() {
 }
 
 ReloadTabs();
+
+$("#sl-loadscreen").remove();
