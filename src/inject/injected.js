@@ -62,16 +62,23 @@ $(window).keydown(function(event) {
   if(event.altKey && event.keyCode == 80) { /* p */
     event.preventDefault();
     startFuzzySearch();
-  }
-});
-
-$(window).keydown(function(event) {
-  if(event.altKey && event.keyCode == 87) { /* p */
+  } else if(event.altKey && event.keyCode == 87) { /* w */
     event.preventDefault();
     $(".sl-tab.sl-tab-active").find(".sl-tab-remove")[0].click();
+  } else if (event.altKey && event.keyCode == 68) { /* d */
+    event.preventDefault();
+    favoriteCurrentTab();
   }
 });
 
+function favoriteCurrentTab() {
+    var tab = $(".sl-tab-active");
+    if (tab.hasClass("sl-tab-favorite")) {
+        tab.removeClass("sl-tab-favorite");
+    } else {
+        tab.addClass("sl-tab-favorite");
+    }
+}
 
 function indexAllFiles() {
     allFiles = [];
@@ -206,13 +213,17 @@ $("html").on("click", ".sl-tab-title", function(evt) {
 });
 
 $("html").on("click", ".sl-tab-remove", function(evt) {
-    if (openfiles.length < 2) return;
+    if (openfiles.length <= 1) return;
+    if ($(this).parent().hasClass("sl-tab-favorite")) return;
     var index = $(".sl-tab").index($(this).parent());
-    if (currentActiveFile == $(".sl-tab").index($(this).parent())) {
-        openfiles[currentActiveFile == 0 ? 1 : currentActiveFile - 1].el.click();
+    var filedeleted = currentActiveFile;
+    var newIndex = currentActiveFile == 0 ? 1 : currentActiveFile - 1;
+    if (currentActiveFile == index) {
+        openfiles[newIndex].el.click();
     }
     openfiles.splice(index, 1);
     $(this).parent().remove();
+    setActiveTab(filedeleted == 0 ? 0 : filedeleted - 1);
     updateTabNames();
 });
 
@@ -251,24 +262,48 @@ $( window ).unload(function() {
 
 function SaveOpenedTabs() {
     var openPaths = [];
+    var tabs = $("#sl-tabs").children();
     for (var i = 0; i < openfiles.length; i++) {
-        openPaths.push({path: openfiles[i].path, favorite: false});
+        openPaths.push({path: openfiles[i].path, favorite: tabs.eq(i).hasClass("sl-tab-favorite")});
     }
     localStorage.setItem('openedFiles', JSON.stringify(openPaths));
 }
 
 function ReloadTabs() {
     var lastOpenedFiles = JSON.parse(localStorage.getItem('openedFiles'));
-    indexAllFiles();
-    for (var j = 0; j < lastOpenedFiles.length; j++) {
-        var index = allFiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path;});
-        if (index != -1) {
-            if (openfiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path}) == -1) {
-                insertTab(allFiles[index].el);
-                setActiveTab(0);
+    if (lastOpenedFiles != null) {
+        lastOpenedFiles.sort(function(a,b) {
+        if (a.favorite) {
+            if (b.favorite) {
+                return 0;
+            }
+            return -1;
+        } else if (b.favorite) {      
+            return 1;
+        }
+        return 0;
+        });
+        indexAllFiles();
+        openfiles = []
+        $("#sl-tabs").empty();
+        for (var j = 0; j < lastOpenedFiles.length; j++) {
+            var index = allFiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path;});
+            if (index != -1) {
+                var openIndex = openfiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path});
+                if (openIndex == -1) {
+                    insertTab(allFiles[index].el);
+                    if (lastOpenedFiles[j].favorite) {
+                        $(".sl-tab").last().addClass("sl-tab-favorite");
+                    }
+                    setActiveTab(0);
+                } else if (lastOpenedFiles[j].favorite){
+                    $("#sl-tabs").children().eq(j).addClass("sl-tab-favorite");
+                }
             }
         }
+        $(openfiles[0].el).click(); 
     }
+    
 }
 
 ReloadTabs();
