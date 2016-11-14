@@ -100,7 +100,7 @@ function indexAllFiles() {
 
 function startFuzzySearch() {
     $('.searchbox').remove();
-    $('body').append(`<div class="searchbox"><input type="text" class="searchboxInput" /><ul class="searchboxResultsList"></ul></div>`);
+    $('body').append(`<div class="searchbox" id="sl-search"><input type="text" class="searchboxInput" /><ul class="searchboxResultsList"></ul></div>`);
     var currentSelection = 0;
     var h1 = $('.searchboxInput').on('input', function() {
         $('.searchboxResultsList').empty();
@@ -118,6 +118,7 @@ function startFuzzySearch() {
         
     });
 
+
     var setSelected = function(index) {
         var children = $('.searchboxResultsList').children();
         var selected = Math.min(Math.max(index, 0), children.length - 1);
@@ -130,6 +131,7 @@ function startFuzzySearch() {
 
     var close = function() {
         h1.unbind();
+        clickListener.unbind();
         $('.searchbox').remove();
     };
 
@@ -146,6 +148,13 @@ function startFuzzySearch() {
             close();
         };
     });
+
+    var clickListener = $(document).click(function(e) {
+        if (!(e.target.id == "sl-search" || $(e.target).parents("#sl-search").size())) { 
+            close();
+        }
+    });
+
 
     $('.searchbox').on("click", ".searchboxResultsList>li", function() {
         allFiles[$(this).attr("index")].el.click();
