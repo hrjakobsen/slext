@@ -62,8 +62,11 @@ header {
 	height: 80px !important;
 }
 
-div[class*="loading"] {
+.loading-panel, .loading-screen {
 	background-color: #2B2B2B !important;
+}
+.loading-screen .container h3 {
+    color:white;
 }
 
 #filesearchbox {
