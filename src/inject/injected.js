@@ -67,8 +67,10 @@ $("html").on("click", ".sl-compile-main", function(evt) {
     }
 
     openfiles[$(".sl-tab").index(mainFile)].el.click();
-    $("a[ng-click='recompile()']").click();
-    openfiles[$(".sl-tab").index(currentTab)].el.click();
+    setTimeout(function() {
+        $("a[ng-click='recompile()']").click();
+        openfiles[$(".sl-tab").index(currentTab)].el.click();
+    }, 100);
 });
 
 
@@ -100,6 +102,11 @@ $(window).keydown(function(event) {
         var next = $('.sl-tab-active').next();
         if(next.length) {
             next.find('.sl-tab-title').click();
+        }
+    } else if (event.altKey && event.keyCode == 13) { /* enter */
+        var compileMainButton = $('.sl-compile-main');
+        if(compileMainButton.length > 0) {
+            compileMainButton.click();
         }
     }
 });
