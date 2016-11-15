@@ -149,7 +149,7 @@ function startFuzzySearch() {
         allFiles[$('.searchboxResultsList').children().eq(currentSelection).attr("index")].el.click();
     }
 
-    $('.searchboxInput').keyup(function() {
+    $('.searchboxInput').keydown(function() {
         if(event.keyCode == 27) close();
         if (event.keyCode == 40) {event.preventDefault(); currentSelection = setSelected(currentSelection + 1);}
         if (event.keyCode == 38) {event.preventDefault(); currentSelection = setSelected(currentSelection - 1);}
