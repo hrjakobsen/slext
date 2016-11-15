@@ -1,8 +1,12 @@
-# sl-optimizr
+# SLext
 
 ##To install
 ###Chrome
-Clone repository
+
+Download from Chrome webstore or install from source.
+
+To install from source, clone the repository:
+
 ```bash
 git clone git@github.com:hrjakobsen/sl-optimizr.git"
 ```
