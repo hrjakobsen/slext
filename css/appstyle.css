@@ -38,6 +38,11 @@ header {
 .sl-tab-favorite>.sl-tab-remove::before {
     content: "\f004";
 }
+
+.sl-tab-mainfile>.sl-tab-remove::before {
+    content: "\f015" !important;
+}
+
 .sl-tab-active {
 	border-bottom:3px solid #A93529;
 	color:#eee;

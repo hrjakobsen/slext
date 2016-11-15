@@ -4,6 +4,7 @@ placeElement.css("z-index", "9999");
 updatePath();
 
 $("header").append('<ul id="sl-tabs"></ul>');
+$(".log-btn").before("<a href='#' class='sl-compile-main btn btn-info'>Compile main</a>");
 
 function updatePath() {
     var selectedElement = $('.selected');
@@ -56,6 +57,20 @@ $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-h
     updatePath();
 });
 
+$("html").on("click", ".sl-compile-main", function(evt) {
+    var currentTab = $(".sl-tab-active");
+    var mainFile = $(".sl-tab-mainfile");
+
+    if (mainFile.length != 1) {
+        alert("Choose a main file with alt-m");
+        return;
+    }
+
+    openfiles[$(".sl-tab").index(mainFile)].el.click();
+    $("a[ng-click='recompile()']").click();
+    openfiles[$(".sl-tab").index(currentTab)].el.click();
+});
+
 
 function newFile(el) {
     var file = {el: el, name: getname(el), dir: getDir(el)};
@@ -73,6 +88,9 @@ $(window).keydown(function(event) {
     } else if (event.altKey && event.keyCode == 68) { /* d */
         event.preventDefault();
         favoriteCurrentTab();
+    } else if (event.altKey && event.keyCode == 77) { /* m */
+        event.preventDefault();
+        setMainTabToCurrentTab();
     } else if (event.altKey && event.keyCode == 72) { /* h */
         var prev = $('.sl-tab-active').prev();
         if(prev.length) {
@@ -92,6 +110,16 @@ function favoriteCurrentTab() {
         tab.removeClass("sl-tab-favorite");
     } else {
         tab.addClass("sl-tab-favorite");
+    }
+}
+
+function setMainTabToCurrentTab() {
+    var tab = $(".sl-tab-active");
+    if (tab.hasClass("sl-tab-mainfile")) {
+        tab.removeClass("sl-tab-mainfile");
+    } else {
+        $(".sl-tab").removeClass("sl-tab-mainfile");
+        tab.addClass("sl-tab-mainfile");
     }
 }
 
@@ -288,15 +316,18 @@ function SaveOpenedTabs() {
     var openPaths = [];
     var tabs = $("#sl-tabs").children();
     for (var i = 0; i < openfiles.length; i++) {
-        openPaths.push({path: openfiles[i].path, favorite: tabs.eq(i).hasClass("sl-tab-favorite")});
+        openPaths.push({path: openfiles[i].path, favorite: tabs.eq(i).hasClass("sl-tab-favorite"), main : tabs.eq(i).hasClass("sl-tab-mainfile")});
     }
     localStorage.setItem('openedFiles', JSON.stringify(openPaths));
 }
 
 function ReloadTabs() {
     var lastOpenedFiles = JSON.parse(localStorage.getItem('openedFiles'));
+    console.log(lastOpenedFiles);
     if (lastOpenedFiles != null) {
         lastOpenedFiles.sort(function(a,b) {
+        if (a.main) return -1;
+        if (b.main) return 1;
         if (a.favorite) {
             if (b.favorite) {
                 return 0;
@@ -314,18 +345,18 @@ function ReloadTabs() {
             var index = allFiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path;});
             if (index != -1) {
                 var openIndex = openfiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path});
-                if (openIndex == -1) {
-                    insertTab(allFiles[index].el);
-                    if (lastOpenedFiles[j].favorite) {
-                        $(".sl-tab").last().addClass("sl-tab-favorite");
-                    }
-                    setActiveTab(0);
-                } else if (lastOpenedFiles[j].favorite){
-                    $("#sl-tabs").children().eq(j).addClass("sl-tab-favorite");
+                if (openIndex == -1) insertTab(allFiles[index].el);
+                    
+                if (lastOpenedFiles[j].favorite) {
+                    $(".sl-tab").last().addClass("sl-tab-favorite");
                 }
+                if (lastOpenedFiles[j].main) {
+                    $("#sl-tabs").children().eq(j).addClass("sl-tab-mainfile");
+                }
+                if (openIndex == -1) setActiveTab(0);
             }
         }
-        $(openfiles[0].el).click(); 
+        if (openfiles.length > 0)$(openfiles[0].el).click(); 
     }
     
 }
