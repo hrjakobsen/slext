@@ -1,18 +1,20 @@
 {
-  "name": "ShareLatexOptimizr",
+  "name": "SLext",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Extension for making ShareLatex more awesome",
-  "homepage_url": "http://aaq.dk",
+  "description": "Extension for adding features to ShareLatex",
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/SLext16.png",
+    "48": "icons/SLext48.png",
+    "128": "icons/SLext128.png"
   },
   "default_locale": "en",
   "permissions": [
     "https://www.sharelatex.com/project/*"
   ],
+  "browser_action": {
+    "default_icon": "icons/SLext48.png"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -26,5 +28,5 @@
       ]
     }
   ],
-  "web_accessible_resources": ["src/inject/injected.js", "icons/loading.gif"]
+  "web_accessible_resources": ["src/inject/injected.js"]
 }

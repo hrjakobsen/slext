@@ -10,7 +10,7 @@ var timer = setInterval(function() {
 		//run some other function 
 		clearInterval(timer);
 		
-		var fragment = create('<div id="sl-loadscreen"><div id="sl-loadingicon">ShareLatex Optimizr is loading<br><i class="fa fa-cogs" aria-hidden="true"></i></div></div>');
+		var fragment = create('<div id="sl-loadscreen"><div id="sl-loadingicon">SLext is loading<br><i class="fa fa-cogs" aria-hidden="true"></i></div></div>');
 		document.body.insertBefore(fragment, document.body.childNodes[0]);
 
 		injectJs(chrome.extension.getURL('src/inject/injected.js'));
