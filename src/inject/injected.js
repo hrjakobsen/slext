@@ -64,16 +64,26 @@ function newFile(el) {
 }
 
 $(window).keydown(function(event) {
-  if(event.altKey && event.keyCode == 80) { /* p */
-    event.preventDefault();
-    startFuzzySearch();
-  } else if(event.altKey && event.keyCode == 87) { /* w */
-    event.preventDefault();
-    $(".sl-tab.sl-tab-active").find(".sl-tab-remove")[0].click();
-  } else if (event.altKey && event.keyCode == 68) { /* d */
-    event.preventDefault();
-    favoriteCurrentTab();
-  }
+    if(event.altKey && event.keyCode == 80) { /* p */
+        event.preventDefault();
+        startFuzzySearch();
+    } else if(event.altKey && event.keyCode == 87) { /* w */
+        event.preventDefault();
+        $(".sl-tab.sl-tab-active").find(".sl-tab-remove")[0].click();
+    } else if (event.altKey && event.keyCode == 68) { /* d */
+        event.preventDefault();
+        favoriteCurrentTab();
+    } else if (event.altKey && event.keyCode == 72) { /* h */
+        var prev = $('.sl-tab-active').prev();
+        if(prev.length) {
+            prev.find('.sl-tab-title').click();
+        }
+    } else if (event.altKey && event.keyCode == 76) { /* l */
+        var next = $('.sl-tab-active').next();
+        if(next.length) {
+            next.find('.sl-tab-title').click();
+        }
+    }
 });
 
 function favoriteCurrentTab() {
