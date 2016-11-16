@@ -12,6 +12,12 @@ function updatePath() {
     placeElement.text(getDir(selectedElement));
 }
 
+$("#editor").keydown(function(event) {
+    if (!event.altKey && !event.ctrlKey && !event.shiftKey) {
+        $(".sl-tab-active").removeClass("sl-tab-temp");
+    }
+});
+
 function getDir(selectedElement) {
     var folders = $(selectedElement).parentsUntil().filter("div[ng-controller='FileTreeFolderController']");
     var path = "";
@@ -31,10 +37,27 @@ insertTab($('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-dra
 $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
     var el = this;
     var index = openfiles.findIndex(function(file) {return file.el == el;});
+    if (index == currentActiveFile) {
+        $(".sl-tab-active").removeClass("sl-tab-temp");
+        return;
+    }
     if (!evt.shiftKey) {
         if (index == -1) {
-            insertTab(this);
-            setActiveTab(openfiles.length - 1);
+            if (!$(".sl-tab-active").hasClass("sl-tab-temp")) {
+                var tempTab = $(".sl-tab-temp");
+                if (tempTab.length == 1) {
+                    var tempIndex = $(".sl-tab").index(tempTab.parent());
+                    replaceTab(tempIndex, this);
+                    setActiveTab(tempIndex);
+                    updateTabNames();
+                } else {
+                    insertTab(this);
+                    setActiveTab(openfiles.length - 1);
+                    $(".sl-tab-active").addClass("sl-tab-temp");
+                }
+            } else {
+                replaceTab(currentActiveFile, this);
+            }
         } else {
             if (index != currentActiveFile) {
                 setActiveTab(index);
@@ -42,12 +65,8 @@ $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-h
         }
     } else {
         if (index == -1) {
-            if (!$("#sl-tabs").children().eq(currentActiveFile).hasClass("sl-tab-favorite")) {
-                replaceTab(currentActiveFile, this)
-            } else {
-                insertTab(this);
-                setActiveTab(openfiles.length - 1);                
-            }
+            insertTab(this);
+            setActiveTab(openfiles.length - 1);                
         } else {
             if (index != currentActiveFile) {
                 setActiveTab(index);
@@ -323,7 +342,8 @@ function SaveOpenedTabs() {
     var openPaths = [];
     var tabs = $("#sl-tabs").children();
     for (var i = 0; i < openfiles.length; i++) {
-        openPaths.push({path: openfiles[i].path, favorite: tabs.eq(i).hasClass("sl-tab-favorite"), main : tabs.eq(i).hasClass("sl-tab-mainfile")});
+        if (!tabs.eq(i).hasClass("sl-tab-temp"))
+            openPaths.push({path: openfiles[i].path, favorite: tabs.eq(i).hasClass("sl-tab-favorite"), main : tabs.eq(i).hasClass("sl-tab-mainfile")});
     }
     localStorage.setItem('openedFiles', JSON.stringify(openPaths));
 }

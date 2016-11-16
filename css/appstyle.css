@@ -32,6 +32,10 @@
 	cursor: default;
 }
 
+.sl-tab-temp {
+    font-style: italic;
+}
+
 .sl-tab-favorite>.sl-tab-remove::before {
     content: "\f004";
 }
