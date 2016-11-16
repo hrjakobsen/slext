@@ -22,9 +22,8 @@
 }
 
 #sl-tabs::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
- 
 
 .sl-tab-title {
 	line-height:35px;
