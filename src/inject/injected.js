@@ -12,11 +12,21 @@ function updatePath() {
     placeElement.text(getDir(selectedElement));
 }
 
-$("#editor").keydown(function(event) {
-    if (!event.altKey && !event.ctrlKey && !event.shiftKey) {
-        $(".sl-tab-active").removeClass("sl-tab-temp");
+var editorListener;
+
+function bindEditorListener() {
+    if (typeof editorListener == 'undefined' || editorListener == null) {
+        editorListener = $("#editor").keydown(function(event) {
+            if (!event.altKey && !event.ctrlKey && !event.shiftKey) {
+                $(".sl-tab-active").removeClass("sl-tab-temp");
+                editorListener.unbind();
+                editorListener = null;
+            }
+        });   
     }
-});
+}
+
+
 
 function getDir(selectedElement) {
     var folders = $(selectedElement).parentsUntil().filter("div[ng-controller='FileTreeFolderController']");
@@ -54,6 +64,7 @@ $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-h
                     insertTab(this);
                     setActiveTab(openfiles.length - 1);
                     $(".sl-tab-active").addClass("sl-tab-temp");
+                    bindEditorListener();
                 }
             } else {
                 replaceTab(currentActiveFile, this);
@@ -132,6 +143,7 @@ $(window).keydown(function(event) {
 
 function favoriteCurrentTab() {
     var tab = $(".sl-tab-active");
+    tab.removeClass("sl-tab-temp");
     if (tab.hasClass("sl-tab-favorite")) {
         tab.removeClass("sl-tab-favorite");
     } else {
@@ -141,6 +153,7 @@ function favoriteCurrentTab() {
 
 function setMainTabToCurrentTab() {
     var tab = $(".sl-tab-active");
+    tab.removeClass("sl-tab-temp");
     if (tab.hasClass("sl-tab-mainfile")) {
         tab.removeClass("sl-tab-mainfile");
     } else {
