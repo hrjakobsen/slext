@@ -17,7 +17,7 @@ var editorListener;
 function bindEditorListener() {
     if (typeof editorListener == 'undefined' || editorListener == null) {
         editorListener = $("#editor").keydown(function(event) {
-            if (!event.altKey && !event.ctrlKey && !event.shiftKey) {
+            if (!event.altKey && !event.ctrlKey && !event.shiftKey && $(".sl-tab-active").hasClass("sl-tab-temp")) {
                 $(".sl-tab-active").removeClass("sl-tab-temp");
                 editorListener.unbind();
                 editorListener = null;
