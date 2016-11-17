@@ -127,3 +127,7 @@ function getDir(selectedElement) {
     }
     return path;
 }
+
+function insertStylerules(style) {
+    $("<style type='text/css'> " + style + "</style>").appendTo("head");
+}

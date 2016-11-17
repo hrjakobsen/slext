@@ -2,6 +2,69 @@ function TabModule(slext) {
     if (!$("#sl-tabs").length) {
         $("header").append('<ul id="sl-tabs"></ul>');
     }
+
+    insertStylerules(`
+
+        header {
+            height: 80px !important;
+        }
+        .sl-tab {
+            display: inline-block;
+            background-color: #2B2B2B;
+            padding: 0 5px;
+            color:#bbb;
+        }
+        .sl-tab:hover {
+            background-color: #333333;
+        }
+        #sl-tabs {
+            position: absolute;
+            bottom: 0;
+            margin-bottom:0;
+            left:0;
+            padding-left: 0px;
+            border-top:2px solid #666666;
+            width:100%;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+            height: 40px;
+        }
+
+        #sl-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        #ide-body {
+            margin-top: 40px;
+        }
+
+        .sl-tab-title {
+            line-height:35px;
+            margin:7px;
+            cursor: default;
+        }
+
+        .sl-tab-temp {
+            font-style: italic;
+        }
+
+        .sl-tab-favorite>.sl-tab-remove::before {
+            content: "\\f004";
+        }
+
+        .sl-tab-mainfile>.sl-tab-remove::before {
+            content: "\\f015" !important;
+        }
+
+        .sl-tab-active {
+            border-bottom:3px solid #A93529;
+            color:#eee;
+        }
+        .sl-tab-remove {
+            text-decoration: none !important;
+        }
+        `)
+
     this.tabs= $("#sl-tabs");
     this.CurrentTab = 0;
     var self = this;

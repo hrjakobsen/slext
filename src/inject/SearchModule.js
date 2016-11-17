@@ -1,5 +1,73 @@
 function SearchModule(slext) {
     var self = this;
+
+    insertStylerules(`
+        #filesearchbox {
+            position: fixed;
+            width: 500px;
+            height: 200px;
+            margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+            left: 0;
+            right: 0;
+        }
+
+        /*
+        filesearchbox
+        */
+        .searchbox {
+            position: absolute;
+            background: #2F343F;
+            left: 0;
+            right: 0;
+            top: 100px;
+            margin: auto;
+            width: 35%;
+            min-width: 650px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px -3px whitesmoke;
+        }
+
+        .searchboxInput {
+            width: 99%;
+            height: 40px;
+            border-radius: 10px;
+            margin: 0.5%;
+            text-indent: 10px;
+            color:#eee;
+            background-color: #525662;
+            border: 0;
+            outline: 0;
+        }
+
+        .searchboxResultsList {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .searchboxResultsList > li {
+            width: 99%;
+            height: 40px;
+            line-height: 40px;
+            margin: 0.5%;
+            color: #949eb6;
+            text-indent: 10px;
+        }
+        .searchboxResultsList > li:not(.search-result-selected) {
+            background-color: #383C4A;
+        }
+
+        .searchboxResultsList > li:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+        .search-result-selected, .searchboxResultsList > li:hover {
+            background-color: #4C505E;
+        }`
+    );
+
     this.startFuzzySearch = function() {
         $('.searchbox').remove();
         $('body').append(`<div class="searchbox" id="sl-search"><input type="text" class="searchboxInput" /><ul class="searchboxResultsList"></ul></div>`);
@@ -68,7 +136,3 @@ function SearchModule(slext) {
         }
     });
 }
-
-
-
-    

@@ -1,56 +1,3 @@
-.sl-tab {
-	display: inline-block;
-	background-color: #2B2B2B;
-	padding: 0 5px;
-	color:#bbb;
-}
-.sl-tab:hover {
-	background-color: #333333;
-}
-#sl-tabs {
-	position: absolute;
-	bottom: 0;
-	margin-bottom:0;
-	left:0;
-	padding-left: 0px;
-	border-top:2px solid #666666;
-	width:100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
-    height: 40px;
-}
-
-#sl-tabs::-webkit-scrollbar {
-    display: none;
-}
-
-.sl-tab-title {
-	line-height:35px;
-	margin:7px;
-	cursor: default;
-}
-
-.sl-tab-temp {
-    font-style: italic;
-}
-
-.sl-tab-favorite>.sl-tab-remove::before {
-    content: "\f004";
-}
-
-.sl-tab-mainfile>.sl-tab-remove::before {
-    content: "\f015" !important;
-}
-
-.sl-tab-active {
-	border-bottom:3px solid #A93529;
-	color:#eee;
-}
-.sl-tab-remove {
-	text-decoration: none !important;
-}
-
 .ui-layout-container, .toolbar, .ui-layout-resizer {
 	background-color:#333333 !important;
 }
@@ -72,12 +19,6 @@
 ::-webkit-scrollbar-thumb {
   background: #535353; 
 }
-#ide-body {
-	margin-top: 40px;
-}
-header {
-	height: 80px !important;
-}
 
 .loading-panel, .loading-screen {
 	background-color: #2B2B2B !important;
@@ -86,70 +27,7 @@ header {
     color:white;
 }
 
-#filesearchbox {
-	position: fixed;
-	width: 500px;
-	height: 200px;
-	margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
-	left: 0;
-	right: 0;
-}
 
-/*
-filesearchbox
-*/
-.searchbox {
-    position: absolute;
-    background: #2F343F;
-    left: 0;
-    right: 0;
-    top: 100px;
-    margin: auto;
-    width: 35%;
-    min-width: 650px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 10px -3px whitesmoke;
-}
-
-.searchboxInput {
-    width: 99%;
-    height: 40px;
-    border-radius: 10px;
-    margin: 0.5%;
-    text-indent: 10px;
-    color:#eee;
-    background-color: #525662;
-    border: 0;
-    outline: 0;
-}
-
-.searchboxResultsList {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    width: 100%;
-    overflow: hidden;
-}
-
-.searchboxResultsList > li {
-    width: 99%;
-    height: 40px;
-    line-height: 40px;
-    margin: 0.5%;
-    color: #949eb6;
-    text-indent: 10px;
-}
-.searchboxResultsList > li:not(.search-result-selected) {
-    background-color: #383C4A;
-}
-
-.searchboxResultsList > li:last-child {
-    border-radius: 0 0 10px 10px;
-}
-.search-result-selected, .searchboxResultsList > li:hover {
-    background-color: #4C505E;
-}
 #sl-loadscreen {
     position: fixed;
     top: 0;
