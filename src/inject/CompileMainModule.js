@@ -12,7 +12,7 @@ function CompileMainModule(slextModule, tabModule) {
 	}
 
 	this.addButton();
-	this.listener = $(document).on("click", ".sl-compile-main", function() {
+	$(document).on("click", ".sl-compile-main", function() {
 		var pdfOpen = slextModule.isFullScreenPdf();
 		var currentTab = $(".sl-tab-active");
 	    var mainFile = $(".sl-tab-mainfile");
