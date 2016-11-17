@@ -10,10 +10,15 @@ var timer = setInterval(function() {
 		//run some other function 
 		clearInterval(timer);
 		
-		var fragment = create('<div id="sl-loadscreen"><div id="sl-loadingicon">SLext is loading<br><i class="fa fa-cogs" aria-hidden="true"></i></div></div>');
+		/*var fragment = create('<div id="sl-loadscreen"><div id="sl-loadingicon">SLext is loading<br><i class="fa fa-cogs" aria-hidden="true"></i></div></div>');
 		document.body.insertBefore(fragment, document.body.childNodes[0]);
-
-		injectJs(chrome.extension.getURL('src/inject/injected.js'));
+		*/
+		injectJs(chrome.extension.getURL('src/inject/Slext.js'));
+		injectJs(chrome.extension.getURL('src/inject/TabModule.js'));
+		injectJs(chrome.extension.getURL('src/inject/SearchModule.js'));
+		injectJs(chrome.extension.getURL('src/inject/PersistenceModule.js'));
+		injectJs(chrome.extension.getURL('src/inject/CompileMainModule.js'));
+		injectJs(chrome.extension.getURL('src/inject/modulemaster.js'));
 	}
 }, 200);
 
