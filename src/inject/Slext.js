@@ -72,6 +72,16 @@ function Slext() {
     this.getCurrentFile = function() {
         return newFile($('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0]);
     }
+    this.isFullScreenPdf = function() {
+        var pdfButton = $('li[ng-controller="PdfViewToggleController"]');
+        return (pdfButton.length && pdfButton.hasClass("selected"));
+    }
+    this.goToFullScreenPdf = function() {
+        var pdfButton = $('div[ng-click="togglePdfView()"]');
+        if (pdfButton.length) {
+            pdfButton.click();
+        }
+    }
 }
 
 Slext.prototype = new Dispatcher();

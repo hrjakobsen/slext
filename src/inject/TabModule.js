@@ -30,6 +30,10 @@ function TabModule(slext) {
             self.setActive(lastindex);
             self.CurrentTab = lastindex;
         } else {
+            if (self.OpenFiles[index].temporary) {
+                self.OpenFiles[index].temporary = false;
+                $(".sl-tab-temp").removeClass("sl-tab-temp");
+            }
             self.setActive(index);
             self.CurrentTab = index;
         }
@@ -50,8 +54,8 @@ function TabModule(slext) {
         } else {
             self.OpenFiles.push(file);
             self.AddTab(file);
-            self.CurrentTab = self.OpenFiles.length;
-            self.setActive(self.OpenFiles.length);
+            self.CurrentTab = self.OpenFiles.length - 1;
+            self.setActive(self.OpenFiles.length - 1);
         }
     }
 

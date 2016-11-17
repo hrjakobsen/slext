@@ -1,4 +1,4 @@
-function CompileMainModule(tabModule) {
+function CompileMainModule(slextModule, tabModule) {
 	var self = this;
 	$(document).on("click", 'a[ng-click="switchToFlatLayout()"]', function() {
 		self.addButton();
@@ -13,6 +13,7 @@ function CompileMainModule(tabModule) {
 
 	this.addButton();
 	this.listener = $(document).on("click", ".sl-compile-main", function() {
+		var pdfOpen = slextModule.isFullScreenPdf();
 		var currentTab = $(".sl-tab-active");
 	    var mainFile = $(".sl-tab-mainfile");
 
@@ -25,6 +26,9 @@ function CompileMainModule(tabModule) {
 	    setTimeout(function() {
 	        $("a[ng-click='recompile()']").click();
 	        currentTab.click();
+	        setTimeout(function() {
+	        	if (pdfOpen) slextModule.goToFullScreenPdf();
+	        }, 200);
 	    }, 200);
 	});
 }
