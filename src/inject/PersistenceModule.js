@@ -28,13 +28,16 @@ function PersistenceModule(slextModule, tabModule) {
 	                if (openIndex == -1) {
 	                	tabModule.OpenFiles.push(newFile(slextModule.Files[index].el));
 	                	tabModule.AddTab(newFile(slextModule.Files[index].el));
+	                	openIndex = tabModule.OpenFiles.length - 1;
 	                }
 	                    
 	                if (lastOpenedFiles[j].favorite) {
 	                    $(".sl-tab").last().addClass("sl-tab-favorite");
+	                    tabModule.OpenFiles[openIndex].favorite = true;
 	                }
 	                if (lastOpenedFiles[j].main) {
 	                    $("#sl-tabs").children().eq(j).addClass("sl-tab-mainfile");
+	                    tabModule.OpenFiles[openIndex].mainfile = true;
 	                }
 	            }
 	        }
