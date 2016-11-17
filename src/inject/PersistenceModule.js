@@ -11,14 +11,13 @@ function PersistenceModule(slextModule, tabModule) {
 	        if (!tabs.eq(i).hasClass("sl-tab-temp"))
 	            openPaths.push({path: tabModule.OpenFiles[i].path, favorite: tabs.eq(i).hasClass("sl-tab-favorite"), main : tabs.eq(i).hasClass("sl-tab-mainfile")});
 	    }
-	    console.log(JSON.stringify(openPaths));
 	    localStorage.setItem('openedFiles', JSON.stringify(openPaths));
 	}
 
 	this.ReloadTabs = function() {
-	    var lastOpenedFiles = JSON.parse(localStorage.getItem('openedFiles'));
-	    console.log(lastOpenedFiles);
-	    if (lastOpenedFiles != null) {
+		var itemString = localStorage.getItem('openedFiles');
+	    var lastOpenedFiles = JSON.parse(itemString);
+	    if (lastOpenedFiles != null && itemString != "") {
 	        openfiles = []
 	        $("#sl-tabs").empty();
 	        tabModule.OpenFiles = []
@@ -26,7 +25,6 @@ function PersistenceModule(slextModule, tabModule) {
 	            var index = slextModule.Files.findIndex(function(file) {return file.path == lastOpenedFiles[j].path;});
 	            if (index != -1) {
 	                var openIndex = tabModule.OpenFiles.findIndex(function(file) {return file.path == lastOpenedFiles[j].path});
-	                console.log(openIndex);
 	                if (openIndex == -1) {
 	                	tabModule.OpenFiles.push(newFile(slextModule.Files[index].el));
 	                	tabModule.AddTab(newFile(slextModule.Files[index].el));

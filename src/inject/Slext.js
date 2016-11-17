@@ -60,14 +60,14 @@ function Slext() {
         setTimeout(function() {
             var selected = $('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0];
             self.dispatch("PdfClicked", newFile(selected));
-        }, 500);
+        }, 1000);
     });
 
-    $("html").on("click", ".online-user", function() {
+    $("html").on("click", 'a[ng-click="gotoUser(user)"]', function() {
         setTimeout(function() {
             var selected = $('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0];
             self.dispatch("UserClicked", newFile(selected));
-        }, 500);
+        }, 1000);
     });
     this.getCurrentFile = function() {
         return newFile($('.selected').find(".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle")[0]);
