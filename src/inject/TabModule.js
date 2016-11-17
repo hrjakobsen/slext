@@ -1,6 +1,6 @@
 function TabModule(slext) {
     if (!$("#sl-tabs").length) {
-        $("header").append('<ul id="sl-tabs"></ul>');
+        $("header").append('<ul id="sl-tabs"></ul><a id="sl-right" class="sl-tab-navigator" href="#"><i class="fa fa-arrow-right" aria-hidden="true"></i></a><a class="sl-tab-navigator" id="sl-left" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>');
     }
 
     insertStylerules(`
@@ -24,13 +24,27 @@ function TabModule(slext) {
             left:0;
             padding-left: 0px;
             border-top:2px solid #666666;
-            width:100%;
+            width:calc(100% - 25px);
             overflow-x: scroll;
             overflow-y: hidden;
             white-space: nowrap;
             height: 40px;
         }
-
+        .sl-tab-navigator {
+            width:25px;
+            position:absolute !important;
+            right:0;
+            height: 20px;
+            line-height: 20px;
+            text-align:center;
+            font-size:14px;            
+        }
+        #sl-right {
+            bottom: 20px;
+        }
+        #sl-left {
+            bottom: 0;
+        }
         #sl-tabs::-webkit-scrollbar {
             display: none;
         }
@@ -63,7 +77,27 @@ function TabModule(slext) {
         .sl-tab-remove {
             text-decoration: none !important;
         }
-        `)
+        `);
+    
+    timeout = {};
+
+    $(document).on("mousedown", ".sl-tab-navigator", function(event) {
+        console.log("moving");
+        var scrollspeed = 50;
+        var right = $(event.target).is("#sl-right") || $(event.target).parent().is("#sl-right");
+        timeout = setInterval(function () {
+            var leftPos = $('#sl-tabs').scrollLeft();
+            if (right) leftPos += scrollspeed;
+            else leftPos -= scrollspeed;
+            $("#sl-tabs").animate({scrollLeft: leftPos}, 500);
+        }, 500);
+        return false;
+    });
+
+    $(document).mouseup(function(){
+        clearInterval(timeout);
+        return false;
+    });
 
     this.tabs= $("#sl-tabs");
     this.CurrentTab = 0;
