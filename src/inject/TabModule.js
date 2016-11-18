@@ -79,23 +79,27 @@ function TabModule(slext) {
         }
         `);
     
-    timeout = {};
-
+    var tabsMowing = false;
     $(document).on("mousedown", ".sl-tab-navigator", function(event) {
         console.log("moving");
-        var scrollspeed = 50;
+        var scrollspeed = 5;
         var right = $(event.target).is("#sl-right") || $(event.target).parent().is("#sl-right");
-        timeout = setInterval(function () {
+        tabsMowing = true;
+
+        function accelerate() {
+            scrollspeed++;
             var leftPos = $('#sl-tabs').scrollLeft();
             if (right) leftPos += scrollspeed;
             else leftPos -= scrollspeed;
-            $("#sl-tabs").animate({scrollLeft: leftPos}, 500);
-        }, 500);
+            $("#sl-tabs").animate({scrollLeft: leftPos}, 50, "linear", function() {if(tabsMowing) accelerate();});
+        }
+
+        accelerate();
         return false;
     });
 
     $(document).mouseup(function(){
-        clearInterval(timeout);
+        tabsMowing = false;
         return false;
     });
 
