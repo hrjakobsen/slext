@@ -7,7 +7,7 @@ function GotoFileModule(slext) {
         var col = e.getCursorPosition().column;
         var text = e.session.getLine(row);
 
-        var matches = text.match(/[a-z0-9 \/.]+/ig);
+        var matches = text.match(/([a-z0-9 ]{2})[a-z0-9 \/.]*/ig);
         relevantMatch = -1;
         for(var i = 0; i < matches.length; i++) {
             if(text.search(matches[i]) <= col && text.search(matches[i])+matches[i].length >= col) {
