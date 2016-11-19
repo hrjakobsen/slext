@@ -1,6 +1,6 @@
 function TabModule(slext) {
     if (!$("#sl-tabs").length) {
-        $("header").append('<ul id="sl-tabs"></ul><a id="sl-right" class="sl-tab-navigator" href="#"><i class="fa fa-arrow-right" aria-hidden="true"></i></a><a class="sl-tab-navigator" id="sl-left" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>');
+        $("header").append('<div id="sl-tab-container"><ul id="sl-tabs"></ul><a id="sl-right" class="sl-tab-navigator" href="#"><i class="fa fa-arrow-right" aria-hidden="true"></i></a><a class="sl-tab-navigator" id="sl-left" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></div>');
     }
 
     insertStylerules(`
@@ -18,18 +18,23 @@ function TabModule(slext) {
             background-color: #333333;
         }
         #sl-tabs {
-            position: absolute;
-            bottom: 0;
-            margin-bottom:0;
-            left:0;
-            padding-left: 0px;
-            border-top:2px solid #666666;
             width:calc(100% - 25px);
             overflow-x: scroll;
             overflow-y: hidden;
             white-space: nowrap;
-            height: 40px;
+            height:40px;
+            padding-left:0;
         }
+        #sl-tab-container {
+            height: 40px;
+            width:100%;
+            position: absolute;
+            bottom: 0;
+            margin-bottom:0;
+            left:0;
+            border-top:2px solid #666666;
+        }
+
         .sl-tab-navigator {
             width:25px;
             position:absolute !important;
