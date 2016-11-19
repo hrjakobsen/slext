@@ -19,6 +19,7 @@ var timer = setInterval(function() {
 		injectJs(chrome.extension.getURL('src/inject/PersistenceModule.js'));
 		injectJs(chrome.extension.getURL('src/inject/CompileMainModule.js'));
 		injectJs(chrome.extension.getURL('src/inject/GotoFileModule.js'));
+		injectJs(chrome.extension.getURL('src/inject/CurrentPathModule.js'));
 		injectJs(chrome.extension.getURL('src/inject/modulemaster.js'));
 	}
 }, 200);
