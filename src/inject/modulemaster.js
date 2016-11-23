@@ -150,9 +150,10 @@ $(document).on("click", "#sl-settings-savebutton", function () {
     }
 });
 
+var options = new SettingsModule();
 if (settings == null) {
-	var o = new Slext();
-	var t = new TabModule(o);
+	var o = new Slext(options);
+	var t = new TabModule(o, options);
 	var p = new PersistenceModule(o, t);
 	var c = new CompileMainModule(o, t);
 	var s = new SearchModule(o);
@@ -160,9 +161,9 @@ if (settings == null) {
 	var c = new CurrentPathModule(o);	
 } else {
 	if (settings.slext) {
-		var o = new Slext();
+		var o = new Slext(options);
 		if (settings.tabs) {
-			var t = new TabModule(o);
+			var t = new TabModule(o, options);
 			if (settings.save) new PersistenceModule(o, t);
 			if (settings.compilemain) new CompileMainModule(o, t);
 		}

@@ -1,31 +1,4 @@
-.ui-layout-container, .toolbar, .ui-layout-resizer {
-	background-color:#333333 !important;
-}
-.entity-name {
-	color:#A4A4A4 !important;
-}
-.entity-name:hover {
-	color:#a93529 !important;
-}
 
-::-webkit-scrollbar {
-  width: 10px;
-}
- 
-::-webkit-scrollbar-track {
-  background: #313131;
-}
- 
-::-webkit-scrollbar-thumb {
-  background: #535353; 
-}
-
-.loading-panel, .loading-screen {
-	background-color: #2B2B2B !important;
-}
-.loading-screen .container h3 {
-    color:white;
-}
 
 
 #sl-loadscreen {

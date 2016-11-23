@@ -35,7 +35,36 @@ Dispatcher.prototype.dispatch = function(event, data) {
     }
 }
 
-function Slext() {
+function Slext(settings) {
+    insertStylerules(`
+        .ui-layout-container, .toolbar, .ui-layout-resizer {
+            background-color:${settings.backgroundColor} !important;
+        }
+        .entity-name {
+            color:${settings.fileColor} !important;
+        }
+        .entity-name:hover {
+            color: ${settings.fileColorHover} !important;
+        }
+
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+         
+        ::-webkit-scrollbar-track {
+          background: ${settings.scrollbarBackgroundColor};
+        }
+         
+        ::-webkit-scrollbar-thumb {
+          background: ${settings.scrollbarThumbColor}; 
+        }
+
+        .loading-panel, .loading-screen {
+            background-color: ${settings.loadingBackgroundColor} !important;
+        }
+        .loading-screen .container h3 {
+            color:${settings.loadingTextColor};
+        }`);
     var self = this;
     Dispatcher.call(this);
 

@@ -1,4 +1,4 @@
-function TabModule(slext) {
+function TabModule(slext, settings) {
     if (!$("#sl-tabs").length) {
         $("header").append('<div id="sl-tab-container"><ul id="sl-tabs"></ul><a id="sl-right" class="sl-tab-navigator" href="#"><i class="fa fa-arrow-right" aria-hidden="true"></i></a><a class="sl-tab-navigator" id="sl-left" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></div>');
     }
@@ -10,12 +10,12 @@ function TabModule(slext) {
         }
         .sl-tab {
             display: inline-block;
-            background-color: #2B2B2B;
+            background-color: ${settings.tabBackgroundColor};
             padding: 0 5px;
-            color:#bbb;
+            color:${settings.tabTextColor};
         }
         .sl-tab:hover {
-            background-color: #333333;
+            background-color: ${settings.tabHover};
         }
         #sl-tabs {
             width:calc(100% - 25px);
@@ -61,6 +61,7 @@ function TabModule(slext) {
             line-height:35px;
             margin:7px;
             cursor: default;
+            color: ${settings.tabTextColor};
         }
 
         .sl-tab-temp {
