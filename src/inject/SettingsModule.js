@@ -7,14 +7,14 @@ function SettingsModule() {
 		switch (this.theme) {
 			case "chrome":
 			case "clouds":
-			case "crimson editor":
+			case "crimson_editor":
 			case "dawn":
 			case "deamweaver":
 			case "eclipse":
 			case "github":
 			case "katzenmilch":
 			case "kuroir":
-			case "solarized light":
+			case "solarized_light":
 			case "textmate":
 			case "tomorrow":
 			case "xcode":
