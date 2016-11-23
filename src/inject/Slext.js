@@ -36,7 +36,12 @@ Dispatcher.prototype.dispatch = function(event, data) {
 }
 
 function Slext(settings) {
-    insertStylerules(`
+    this.style = null;
+    this.setStyles = function() {
+        if (this.style != null) {
+            this.style.remove();
+        }
+        this.style = insertStylerules(`
         .ui-layout-container, .toolbar, .ui-layout-resizer {
             background-color:${settings.backgroundColor} !important;
         }
@@ -65,6 +70,13 @@ function Slext(settings) {
         .loading-screen .container h3 {
             color:${settings.loadingTextColor};
         }`);
+    }
+    this.setStyles();
+
+    settings.addEventListener("themeChanged", function() {
+        self.setStyles();
+    });
+
     var self = this;
     Dispatcher.call(this);
 
@@ -158,5 +170,7 @@ function getDir(selectedElement) {
 }
 
 function insertStylerules(style) {
-    $("<style type='text/css'> " + style + "</style>").appendTo("head");
+    var style = $("<style type='text/css'> " + style + "</style>");
+    style.appendTo("head");
+    return style;
 }
