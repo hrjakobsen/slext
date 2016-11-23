@@ -26,13 +26,13 @@ function SettingsModule() {
 		case "textmate":
 		case "tomorrow":
 		case "xcode":
-			this.backgroundColor = "#white";
-			this.fileColor = "black";
-			this.fileColorHover = "black";
-			this.scrollbarBackgroundColor = "#F4F4F4";
-			this.scrollbarThumbColor = "#C4C4C4";
-			this.loadingBackgroundColor = "#2B2B2B";
-			this.loadingTextColor = "white";
+			this.backgroundColor = "";
+			this.fileColor = "";
+			this.fileColorHover = "";
+			this.scrollbarBackgroundColor = "#";
+			this.scrollbarThumbColor = "#";
+			this.loadingBackgroundColor = "#";
+			this.loadingTextColor = "";
 			this.tabBackgroundColor = "#EEE";
 			this.tabTextColor = "#555";
 			this.tabHover = "#DDD";

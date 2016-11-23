@@ -158,7 +158,7 @@ if (settings == null) {
 	var c = new CompileMainModule(o, t);
 	var s = new SearchModule(o);
 	var g = new GotoFileModule(o);
-	var c = new CurrentPathModule(o);	
+	var c = new CurrentPathModule(o, options);	
 } else {
 	if (settings.slext) {
 		var o = new Slext(options);
@@ -169,6 +169,6 @@ if (settings == null) {
 		}
 		if (settings.search) new SearchModule(o);
 		if (settings.goto) new GotoFileModule(o);
-		if (settings.path) new CurrentPathModule(o);
+		if (settings.path) new CurrentPathModule(o, options);
 	}
 }

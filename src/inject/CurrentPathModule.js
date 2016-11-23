@@ -1,11 +1,11 @@
-function CurrentPathModule(slext) {
+function CurrentPathModule(slext, settings) {
     var self = this;
     insertStylerules(`
         #sl-path:before {
             content: "\\1F5C1 ";
         }
         #sl-path {
-            color:#bbb;
+            color:${settings.tabTextColor};
             position:relative;
             z-index:100000;
             background-color:inherit;
