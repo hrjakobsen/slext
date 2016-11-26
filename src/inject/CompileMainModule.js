@@ -1,5 +1,6 @@
 function CompileMainModule(slextModule, tabModule) {
 	var self = this;
+
 	$(document).on("click", 'a[ng-click="switchToFlatLayout()"]', function() {
 		self.addButton();
 	});
@@ -28,8 +29,16 @@ function CompileMainModule(slextModule, tabModule) {
 	        currentTab.click();
 	        setTimeout(function() {
 	        	if (pdfOpen) slextModule.goToFullScreenPdf();
-	        }, 200);
-	    }, 200);
+	        }, 300);
+	    }, 300);
 	});
+
+
+    $(window).keydown(function(event) {
+        if(event.altKey && event.keyCode == 13) { /* enter */
+            event.preventDefault();
+            $('.sl-compile-main').click();
+        }
+    });
 }
 

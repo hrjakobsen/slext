@@ -1,83 +1,101 @@
-function TabModule(slext) {
+function TabModule(slext, settings) {
     if (!$("#sl-tabs").length) {
-        $("header").append('<ul id="sl-tabs"></ul><a id="sl-right" class="sl-tab-navigator" href="#"><i class="fa fa-arrow-right" aria-hidden="true"></i></a><a class="sl-tab-navigator" id="sl-left" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>');
+        $("header").append('<div id="sl-tab-container"><ul id="sl-tabs"></ul><a id="sl-right" class="sl-tab-navigator" href="#"><i class="fa fa-arrow-right" aria-hidden="true"></i></a><a class="sl-tab-navigator" id="sl-left" href="#"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></div>');
+    }
+    this.style = null;
+    this.setStyles = function() {
+        if (this.style != null) {
+            this.style.remove();
+        }
+        this.style = insertStylerules(`
+            header {
+                height: 80px !important;
+            }
+            .sl-tab {
+                display: inline-block;
+                background-color: ${settings.tabBackgroundColor};
+                padding: 0 5px;
+                color:${settings.tabTextColor};
+            }
+            .sl-tab:hover {
+                background-color: ${settings.tabHover};
+            }
+            #sl-tabs {
+                width:calc(100% - 25px);
+                overflow-x: scroll;
+                overflow-y: hidden;
+                white-space: nowrap;
+                height:40px;
+                padding-left:0;
+            }
+            #sl-tab-container {
+                height: 40px;
+                width:100%;
+                position: absolute;
+                bottom: 0;
+                margin-bottom:0;
+                left:0;
+                border-top:2px solid #666666;
+            }
+
+            .sl-tab-navigator {
+                width:25px;
+                position:absolute !important;
+                right:0;
+                height: 20px;
+                line-height: 20px;
+                text-align:center;
+                font-size:14px;            
+            }
+            #sl-right {
+                bottom: 20px;
+            }
+            #sl-left {
+                bottom: 0;
+            }
+            #sl-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            #ide-body {
+                margin-top: 40px;
+            }
+
+            .sl-tab-title {
+                line-height:35px;
+                margin:7px;
+                cursor: default;
+                color: ${settings.tabTextColor};
+            }
+
+            .sl-tab-temp {
+                font-style: italic;
+            }
+
+            .sl-tab-favorite>.sl-tab-remove::before {
+                content: "\\f004";
+            }
+
+            .sl-tab-mainfile>.sl-tab-remove::before {
+                content: "\\f015" !important;
+            }
+
+            .sl-tab-active {
+                border-bottom:3px solid #A93529;
+                color:#eee;
+            }
+            .sl-tab-remove {
+                text-decoration: none !important;
+            }
+        `);
     }
 
-    insertStylerules(`
+    this.setStyles();
 
-        header {
-            height: 80px !important;
-        }
-        .sl-tab {
-            display: inline-block;
-            background-color: #2B2B2B;
-            padding: 0 5px;
-            color:#bbb;
-        }
-        .sl-tab:hover {
-            background-color: #333333;
-        }
-        #sl-tabs {
-            position: absolute;
-            bottom: 0;
-            margin-bottom:0;
-            left:0;
-            padding-left: 0px;
-            border-top:2px solid #666666;
-            width:calc(100% - 25px);
-            overflow-x: scroll;
-            overflow-y: hidden;
-            white-space: nowrap;
-            height: 40px;
-        }
-        .sl-tab-navigator {
-            width:25px;
-            position:absolute !important;
-            right:0;
-            height: 20px;
-            line-height: 20px;
-            text-align:center;
-            font-size:14px;            
-        }
-        #sl-right {
-            bottom: 20px;
-        }
-        #sl-left {
-            bottom: 0;
-        }
-        #sl-tabs::-webkit-scrollbar {
-            display: none;
-        }
-        #ide-body {
-            margin-top: 40px;
-        }
+    settings.addEventListener("themeChanged", function() {
+        self.setStyles();
+    });
 
-        .sl-tab-title {
-            line-height:35px;
-            margin:7px;
-            cursor: default;
-        }
-
-        .sl-tab-temp {
-            font-style: italic;
-        }
-
-        .sl-tab-favorite>.sl-tab-remove::before {
-            content: "\\f004";
-        }
-
-        .sl-tab-mainfile>.sl-tab-remove::before {
-            content: "\\f015" !important;
-        }
-
-        .sl-tab-active {
-            border-bottom:3px solid #A93529;
-            color:#eee;
-        }
-        .sl-tab-remove {
-            text-decoration: none !important;
-        }
-        `);
+    
     
     var tabsMowing = false;
     $(document).on("mousedown", ".sl-tab-navigator", function(event) {
