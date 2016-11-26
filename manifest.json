@@ -1,6 +1,6 @@
 {
   "name": "SLext",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "manifest_version": 2,
   "description": "Extension for adding features to ShareLatex",
   "icons": {
