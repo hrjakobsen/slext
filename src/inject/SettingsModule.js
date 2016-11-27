@@ -21,9 +21,9 @@ function SettingsModule() {
 				this.backgroundColor = "";
 				this.fileColor = "";
 				this.fileColorHover = "";
-				this.scrollbarBackgroundColor = "#";
-				this.scrollbarThumbColor = "#";
-				this.loadingBackgroundColor = "#";
+				this.scrollbarBackgroundColor = "#DDD";
+				this.scrollbarThumbColor = "#BBB";
+				this.loadingBackgroundColor = "";
 				this.loadingTextColor = "";
 				this.tabBackgroundColor = "#EEE";
 				this.tabTextColor = "#555";
