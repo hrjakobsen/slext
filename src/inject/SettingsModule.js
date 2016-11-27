@@ -9,7 +9,7 @@ function SettingsModule() {
 			case "clouds":
 			case "crimson_editor":
 			case "dawn":
-			case "deamweaver":
+			case "dreamweaver":
 			case "eclipse":
 			case "github":
 			case "katzenmilch":
