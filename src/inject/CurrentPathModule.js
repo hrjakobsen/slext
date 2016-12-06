@@ -23,7 +23,7 @@ function CurrentPathModule(slext, settings) {
     settings.addEventListener("themeChanged", function() {
         self.setStyles();
     });
-    $('a[tooltip="Back to projects"]').after("<span id='sl-path'></span>")
+    $('header div a[href="/project"]').after("<span id='sl-path'></span>")
     slext.addEventListener("FileClicked", function(data) {
         $("#sl-path").text(data.file.path);
     });
