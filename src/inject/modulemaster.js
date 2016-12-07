@@ -36,7 +36,7 @@ $("body").append(`
 </div>
 `);
 $("header>div.toolbar-right").prepend(`
-	<a href="#" id="sl-settings-button" class="btn btn-full-height" >SLext settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+	<a href="#" id="sl-settings-button" class="btn btn-full-height" ><i class="fa fa-cog" aria-hidden="true"></i><p class="toolbar-label">SLext settings</p></a>
 `);
 
 $("#sl-settings-button").click(function() {
