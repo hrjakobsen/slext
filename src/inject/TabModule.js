@@ -195,6 +195,16 @@ function TabModule(slext, settings) {
             self.RemoveTab($(".sl-tab").index($(evt.target).parent()));
             return;
         }
+        var elClicked = self.OpenFiles[$(".sl-tab").index(this)].el;
+        if (!$(elClicked).hasClass("ui-draggable")) {
+            slext.Files = indexAllFiles();
+            for (var i = 0; i < self.OpenFiles.length; i++) {
+                var index = slext.Files.findIndex(function(file) {return file.path == self.OpenFiles[i].path});
+                if (index != -1) {
+                    self.OpenFiles[i].el = slext.Files[index].el;
+                }
+            }
+        }
         self.OpenFiles[$(".sl-tab").index(this)].el.click();
     });
 }
