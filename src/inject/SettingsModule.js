@@ -9,7 +9,7 @@ function SettingsModule() {
 			case "clouds":
 			case "crimson_editor":
 			case "dawn":
-			case "deamweaver":
+			case "dreamweaver":
 			case "eclipse":
 			case "github":
 			case "katzenmilch":
@@ -21,9 +21,9 @@ function SettingsModule() {
 				this.backgroundColor = "";
 				this.fileColor = "";
 				this.fileColorHover = "";
-				this.scrollbarBackgroundColor = "#";
-				this.scrollbarThumbColor = "#";
-				this.loadingBackgroundColor = "#";
+				this.scrollbarBackgroundColor = "#DDD";
+				this.scrollbarThumbColor = "#BBB";
+				this.loadingBackgroundColor = "";
 				this.loadingTextColor = "";
 				this.tabBackgroundColor = "#EEE";
 				this.tabTextColor = "#555";
