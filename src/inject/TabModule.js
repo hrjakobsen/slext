@@ -260,6 +260,10 @@ TabModule.prototype.SetMainTabToCurrentTab = function() {
         tab.removeClass("sl-tab-mainfile");
         this.OpenFiles[this.CurrentTab].mainfile = false;
     } else {
+        for (var i = 0; i < this.OpenFiles.length; i++) {
+            this.OpenFiles[i].mainfile = false;
+        }
+        $(".sl-tab-mainfile").removeClass("sl-tab-mainfile");
         tab.addClass("sl-tab-mainfile");
         this.OpenFiles[this.CurrentTab].mainfile = true;
     }
