@@ -22,7 +22,7 @@ function TabModule(slext, settings) {
             }
             #sl-tabs {
                 width:calc(100% - 25px);
-                overflow-x: scroll;
+                overflow-x: auto;
                 overflow-y: hidden;
                 white-space: nowrap;
                 height:40px;
