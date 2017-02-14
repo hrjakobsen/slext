@@ -41,11 +41,21 @@ $("header>div.toolbar-right").prepend(`
 
 $("#sl-settings-button").click(function() {
 	$("#sl-settings-container").css("display", "block");
+	closeListener = $(document).keyup(function(e) {
+	  if (e.keyCode === 27) {
+	  	$("#sl-settings-container").css("display", "none");
+	  	closeListener.unbind();
+	  }
+	});
 });
 
 $("#sl-settings-exit").click(function() {
 	$("#sl-settings-container").css("display", "none");
 });
+
+var closeListener;
+
+
 
 insertStylerules(`
 	#sl-settings-exit {
