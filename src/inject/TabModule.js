@@ -22,7 +22,7 @@ function TabModule(slext, settings) {
             }
             #sl-tabs {
                 width:calc(100% - 25px);
-                overflow-x: scroll;
+                overflow-x: auto;
                 overflow-y: hidden;
                 white-space: nowrap;
                 height:40px;
@@ -260,6 +260,10 @@ TabModule.prototype.SetMainTabToCurrentTab = function() {
         tab.removeClass("sl-tab-mainfile");
         this.OpenFiles[this.CurrentTab].mainfile = false;
     } else {
+        for (var i = 0; i < this.OpenFiles.length; i++) {
+            this.OpenFiles[i].mainfile = false;
+        }
+        $(".sl-tab-mainfile").removeClass("sl-tab-mainfile");
         tab.addClass("sl-tab-mainfile");
         this.OpenFiles[this.CurrentTab].mainfile = true;
     }
