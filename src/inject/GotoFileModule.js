@@ -17,15 +17,29 @@ function GotoFileModule(slext) {
         }
         if(relevantMatch < 0)
             return;
-        for(var j = 0; j < slext.Files.length; j++) {
-            if(slext.Files[j].path.length < matches[relevantMatch].length)
-                continue;
 
-            var endOfFilePath = new RegExp(".{"+matches[relevantMatch].length+"}$").exec(slext.Files[j].path.toLowerCase())[0];
-            if(endOfFilePath.includes(matches[relevantMatch].toLowerCase())) {
-                slext.Files[j].el.click();
-                return;
+        function searchForFiles(file) {
+            for(var j = 0; j < slext.Files.length; j++) {
+                if(slext.Files[j].path.length < file.length)
+                    continue;
+
+                var endOfFilePath = new RegExp(".{"+file.length+"}$").exec(slext.Files[j].path.toLowerCase())[0];
+                
+                if(endOfFilePath.includes(file.toLowerCase())) {
+                    slext.Files[j].el.click();
+                    return true;
+                }
             }
+            return false;
+        }
+
+        if (searchForFiles(matches[relevantMatch])) return;
+
+        //Didn't match anything, maybe it is missing a file extension
+        var fileToSearchFor = matches[relevantMatch];
+        if (fileToSearchFor.indexOf(".") < 0) {
+            fileToSearchFor = fileToSearchFor + ".tex";
+            searchForFiles(fileToSearchFor);
         }
     }
 
