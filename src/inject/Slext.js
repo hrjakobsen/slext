@@ -32,6 +32,10 @@ function Slext(settings) {
         }
         .loading-screen .container h3 {
             color:${settings.loadingTextColor};
+        }
+        
+        .spelling-highlight {
+            z-index: 2;
         }`);
     }
     this.setStyles();
