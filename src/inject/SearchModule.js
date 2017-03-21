@@ -99,7 +99,7 @@ function SearchModule(slext) {
 
         var close = function() {
             h1.unbind();
-            clickListener.unbind();
+            $(document).off("click.searchbox");
             $('.searchbox').remove();
         };
 
@@ -117,7 +117,7 @@ function SearchModule(slext) {
             };
         });
 
-        var clickListener = $(document).click(function(e) {
+        $(document).on("click.searchbox", function(e) {
             if (!(e.target.id == "sl-search" || $(e.target).parents("#sl-search").size())) { 
                 close();
             }
