@@ -38,13 +38,13 @@ $("body").append(`
 		    <li>
 		    	<input type="radio" id="sl-theme3" value="3" name="sl-theme" />
 		    	<label for="sl-theme3">
-		    		<span class="sl-color" style="background-color: #333;"></span><span class="sl-color" style="background-color: #c9f1c9;"></span><span class="sl-color" style="background-color: #a4a4a4;"></span>
+		    		<span class="sl-color" style="background-color: #002b36;"></span><span class="sl-color" style="background-color: #586e75;"></span><span class="sl-color" style="background-color: #657b83;"></span>
 		    	</label>
 		    </li>
 		    <li>
 		    	<input type="radio" id="sl-theme4" value="4" name="sl-theme" />
 		    	<label for="sl-theme4">
-		    		<span class="sl-color" style="background-color: #fff;"></span><span class="sl-color" style="background-color: #c9f1c9;"></span><span class="sl-color" style="background-color: #a4a4a4;"></span>
+		    		<span class="sl-color" style="background-color: #fdf6e3;"></span><span class="sl-color" style="background-color: #eee8d5;"></span><span class="sl-color" style="background-color: #93a1a1;"></span>
 		    	</label>
 		    </li>
 		</ul>
@@ -189,7 +189,9 @@ if (settingsString != "" && settingsString != null) {
 	$("#sl-module-search").prop("checked", settings.search);
 	$("#sl-module-goto").prop("checked", settings.goto);
 	$("#sl-module-path").prop("checked", settings.path);
-	$("#sl-theme" + settings.theme || 1).prop("checked", true);
+	$("#sl-theme" + settings.theme).prop("checked", true);
+} else {
+	$("#sl-theme2").prop("checked", true);
 }
 
 $(document).on("click", "#sl-settings-savebutton", function () {
@@ -215,71 +217,80 @@ $(document).on("click", "#sl-settings-savebutton", function () {
 function SettingsModule() {
     Dispatcher.call(this);
     var self = this;
+    this.css = {};
 	this.setSettings = function(theme) {
 		if (theme == 1) {
-			this.backgroundColor = "";
-			this.fileColor = "";
-			this.fileColorHover = "";
-			this.scrollbarBackgroundColor = "";
-			this.scrollbarThumbColor = "";
-			this.loadingBackgroundColor = "";
-			this.loadingTextColor = "";
-			this.accentColor = "#a93529";
-			this.accentHover = "#6b221a";
-			this.accentActive = "white";
-			this.textColor = "";
-			this.tabBackgroundColor = "#ccc";
-			this.tabTextColor = "grey";
-			this.tabBackgroundHover = "#ddd";
-			this.activeTabTextColor = "black";
-		} else if (theme == 2) {
-			this.backgroundColor = "#333";
-			this.fileColor = "#a4a4a4";
-			this.fileColorHover = "#a93529";
-			this.scrollbarBackgroundColor = "#313131";
-			this.scrollbarThumbColor = "#535353";
-			this.loadingBackgroundColor = "#2b2b2b";
-			this.loadingTextColor = "white";
-			this.accentColor = "#a93529";
-			this.accentHover = "#6b221a";
-			this.accentActive = "white";
-			this.textColor = "white";
-			this.tabBackgroundColor = "#2B2B2B";
-			this.tabTextColor = "#bbb";
-			this.tabBackgroundHover = "#333";
-			this.activeTabTextColor = "white";
+			this.css = {
+				backgroundColor: "",
+				fileColor: "",
+				fileColorHover: "",
+				scrollbarBackgroundColor: "",
+				scrollbarThumbColor: "",
+				loadingBackgroundColor: "",
+				loadingTextColor: "",
+				accentColor: "#a93529",
+				accentHover: "#6b221a",
+				accentActive: "white",
+				textColor: "",
+				tabBackgroundColor: "#ccc",
+				tabTextColor: "grey",
+				tabBackgroundHover: "#ddd",
+				activeTabTextColor: "black"
+			}
 		} else if (theme == 3) {
-			this.backgroundColor = "";
-			this.fileColor = "";
-			this.fileColorHover = "";
-			this.scrollbarBackgroundColor = "";
-			this.scrollbarThumbColor = "";
-			this.loadingBackgroundColor = "";
-			this.loadingTextColor = "";
-			this.accentColor = "";
-			this.accentHover = "";
-			this.accentActive = "";
-			this.textColor = "";
-			this.tabBackgroundColor = "";
-			this.tabTextColor = "";
-			this.tabBackgroundHover = "";
-			this.activeTabTextColor = "";
-		} else {
-			this.backgroundColor = "";
-			this.fileColor = "";
-			this.fileColorHover = "";
-			this.scrollbarBackgroundColor = "";
-			this.scrollbarThumbColor = "";
-			this.loadingBackgroundColor = "";
-			this.loadingTextColor = "";
-			this.accentColor = "";
-			this.accentHover = "";
-			this.accentActive = "";
-			this.textColor = "";
-			this.tabBackgroundColor = "";
-			this.tabTextColor = "";
-			this.tabBackgroundHover = "";
-			this.activeTabTextColor = "";
+			this.css = {
+				backgroundColor: "#002b36",
+				fileColor: "#586e75",
+				fileColorHover: "#657b83",
+				scrollbarBackgroundColor: "#073642",
+				scrollbarThumbColor: "#586e75",
+				loadingBackgroundColor: "#002b36",
+				loadingTextColor: "#657b83",
+				accentColor: "#586e75",
+				accentHover: "#657b83",
+				accentActive: "#839496",
+				textColor: "#657b83",
+				tabBackgroundColor: "#073642",
+				tabTextColor: "grey",
+				tabBackgroundHover: "#002b36",
+				activeTabTextColor: "white"
+			}
+		} else if (theme == 4) {
+			this.css = {
+				backgroundColor: "#fdf6e3",
+				fileColor: "#839496",
+				fileColorHover: "#93a1a1",
+				scrollbarBackgroundColor: "#839496",
+				scrollbarThumbColor: "#93a1a1",
+				loadingBackgroundColor: "#eee8d5",
+				loadingTextColor: "#93a1a1",
+				accentColor: "#839496",
+				accentHover: "#93a1a1",
+				accentActive: "#93a1a1",
+				textColor: "#839496",
+				tabBackgroundColor: "#eee8d5",
+				tabTextColor: "#839496",
+				tabBackgroundHover: "#93a1a1",
+				activeTabTextColor: "#5b6c6e"
+			}
+		} else { //2 or default
+			this.css = {
+				backgroundColor: "#333",
+				fileColor: "#a4a4a4",
+				fileColorHover: "#a93529",
+				scrollbarBackgroundColor: "#313131",
+				scrollbarThumbColor: "#535353",
+				loadingBackgroundColor: "#2b2b2b",
+				loadingTextColor: "white",
+				accentColor: "#a93529",
+				accentHover: "#6b221a",
+				accentActive: "white",
+				textColor: "white",
+				tabBackgroundColor: "#2b2b2b",
+				tabTextColor: "#666",
+				tabBackgroundHover: "#333",
+				activeTabTextColor: "white"
+			}
 		}
 		self.dispatch("themeChanged");
 	}	

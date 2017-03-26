@@ -1,5 +1,6 @@
 var options = new SettingsModule();
 if (settings == null) {
+	options.setSettings(2);
 	var o = new Slext(options);
 	var t = new TabModule(o, options);
 	var p = new PersistenceModule(o, t);
@@ -10,7 +11,7 @@ if (settings == null) {
 } else {
 	if (settings.slext) {
 		var o = new Slext(options);
-		options.setSettings(settings.theme || 1);
+		options.setSettings(settings.theme || 2);
 		if (settings.tabs) {
 			var t = new TabModule(o, options);
 			if (settings.save) new PersistenceModule(o, t);
