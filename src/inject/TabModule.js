@@ -13,12 +13,11 @@ function TabModule(slext, settings) {
             }
             .sl-tab {
                 display: inline-block;
-                background-color: ${settings.tabBackgroundColor};
+                background-color: ${settings.css.tabBackgroundColor};
                 padding: 0 5px;
-                color:${settings.tabTextColor};
             }
             .sl-tab:hover {
-                background-color: ${settings.tabHover};
+                background-color: ${settings.css.tabHover};
             }
             #sl-tabs {
                 width:calc(100% - 25px);
@@ -64,7 +63,7 @@ function TabModule(slext, settings) {
                 line-height:35px;
                 margin:7px;
                 cursor: default;
-                color: ${settings.tabTextColor};
+                color: ${settings.css.tabTextColor};
             }
 
             .sl-tab-temp {
@@ -80,8 +79,10 @@ function TabModule(slext, settings) {
             }
 
             .sl-tab-active {
-                border-bottom:3px solid #A93529;
-                color:#eee;
+                border-bottom:3px solid ${settings.css.accentColor};
+            }
+            .sl-tab-active .sl-tab-title {
+                color: ${settings.css.activeTabTextColor};
             }
             .sl-tab-remove {
                 text-decoration: none !important;
