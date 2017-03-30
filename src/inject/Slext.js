@@ -36,7 +36,7 @@ function Slext(settings) {
 }
 
 .spelling-highlight {
-    z-index: 2;
+    z-index: 6;
 }
 
 .sl-review-icon {
