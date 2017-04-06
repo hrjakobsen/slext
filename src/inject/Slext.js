@@ -51,20 +51,22 @@ function Slext(settings) {
 .toolbar .btn-full-height .sl-stroke {
     stroke:${settings.css.accentColor};
 }
-.toolbar .btn-full-height:hover .sl-fill {
+.toolbar .btn-full-height:hover .sl-fill,
+.toolbar .btn-full-height.active:hover .sl-fill {
     fill:${settings.css.accentHover};
 }
-.toolbar .btn-full-height:hover .sl-stroke {
+.toolbar .btn-full-height:hover .sl-stroke,
+.toolbar .btn-full-height.active:hover .sl-stroke {
     stroke:${settings.css.accentHover};
 }
-/*
-.toolbar .btn-full-height:active .sl-fill {
+
+.toolbar .btn-full-height.active .sl-fill {
     fill:${settings.css.accentActive};
 }
-.toolbar .btn-full-height:active .sl-stroke {
+.toolbar .btn-full-height.active .sl-stroke {
     stroke:${settings.css.accentActive};
 }
-*/
+
 a {
     color: ${settings.css.accentColor};
 }
