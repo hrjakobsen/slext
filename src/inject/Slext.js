@@ -505,6 +505,7 @@ a:hover {
             self.dispatch("FileTreeChanged");
         }
     });
+    console.log($(".file-tree-inner"));
     obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
 
     var fileClickListener = $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
