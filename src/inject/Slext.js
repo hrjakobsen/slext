@@ -36,7 +36,7 @@ function Slext(settings) {
 }
 
 .spelling-highlight {
-    z-index: 2;
+    z-index: 6;
 }
 
 .sl-review-icon {
@@ -51,20 +51,22 @@ function Slext(settings) {
 .toolbar .btn-full-height .sl-stroke {
     stroke:${settings.css.accentColor};
 }
-.toolbar .btn-full-height:hover .sl-fill {
+.toolbar .btn-full-height:hover .sl-fill,
+.toolbar .btn-full-height.active:hover .sl-fill {
     fill:${settings.css.accentHover};
 }
-.toolbar .btn-full-height:hover .sl-stroke {
+.toolbar .btn-full-height:hover .sl-stroke,
+.toolbar .btn-full-height.active:hover .sl-stroke {
     stroke:${settings.css.accentHover};
 }
-/*
-.toolbar .btn-full-height:active .sl-fill {
+
+.toolbar .btn-full-height.active .sl-fill {
     fill:${settings.css.accentActive};
 }
-.toolbar .btn-full-height:active .sl-stroke {
+.toolbar .btn-full-height.active .sl-stroke {
     stroke:${settings.css.accentActive};
 }
-*/
+
 a {
     color: ${settings.css.accentColor};
 }
@@ -503,6 +505,7 @@ a:hover {
             self.dispatch("FileTreeChanged");
         }
     });
+    console.log($(".file-tree-inner"));
     obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
 
     var fileClickListener = $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
