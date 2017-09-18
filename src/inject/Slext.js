@@ -505,8 +505,12 @@ a:hover {
             self.dispatch("FileTreeChanged");
         }
     });
-    console.log($(".file-tree-inner"));
-    obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
+    let interval = setInterval(function() {
+        if ($(".file-tree-inner").length != 0) {
+            obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
+            clearInterval(interval);
+        }
+    }, 100);
 
     var fileClickListener = $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
         var el = this;

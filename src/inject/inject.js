@@ -1,10 +1,9 @@
 function injectJs(link, callback) {
-var scr = document.createElement('script');
-scr.type="text/javascript";
-scr.src=chrome.extension.getURL(link);
-scr.onload = callback || null;
-document.getElementsByTagName('head')[0].appendChild(scr)
-//document.body.appendChild(scr);
+	var scr = document.createElement('script');
+	scr.type="text/javascript";
+	scr.src=chrome.extension.getURL(link);
+	scr.onload = callback || null;
+	document.getElementsByTagName('head')[0].appendChild(scr);
 }
 
 
@@ -31,7 +30,6 @@ possibleIcons = [
 
 //bgContainer.css("background-image", "url('" + chrome.extension.getURL('src/icons/' + possibleIcons[Math.floor(Math.random()*possibleIcons.length)] + ".png") + "')");
 var timer = setInterval(function() {
-	console.log("Checking");
 	if (!/^.*sharelatex\.com\/project\/\S+$/.test(window.location.href)) return;
 	if ($(".loading-screen-lion").length) return;
 	//run some other function 
