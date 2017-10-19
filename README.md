@@ -10,7 +10,7 @@ To install from source, clone the repository:
 ```bash
 git clone git@github.com:hrjakobsen/slext.git
 ```
-Then in Chrome, go to [chrome://extension](chrome://extensions)
+Then in Chrome, go to [chrome://extensions](chrome://extensions)
 
 Click on "Load Unpacked Extension" and choose the sl-optimizr folder
 
