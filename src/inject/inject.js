@@ -48,6 +48,7 @@ var timer = setInterval(function() {
 			'src/inject/CompileMainModule.js',
 			'src/inject/GotoFileModule.js',
 			'src/inject/CurrentPathModule.js',
+			'src/inject/HideNamesModule.js',
 			'src/inject/SettingsModule.js'
 		], function() {
 			injectJs('src/inject/modulemaster.js');

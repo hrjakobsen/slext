@@ -17,6 +17,11 @@ $("body").append(`
 					<li><input type="checkbox" checked id="sl-module-search" class="sl-module"><label for="option"> File search</label></li>
 					<li><input type="checkbox" checked id="sl-module-goto" class="sl-module"><label for="option"> Go to file feature</label></li>
 					<li><input type="checkbox" checked id="sl-module-path" class="sl-module"><label for="option"> Show current path</label></li>
+					<li><input type="checkbox" checked id="sl-module-hide-names" class="sl-module"><label for="option"> Hide flags of other people</label>
+						<ul>
+						<li><input type="checkbox" checked id="sl-module-hide-cursors" class="sl-module"><label for="option"> Hide cursors as well</label>
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>
@@ -190,6 +195,10 @@ if (settingsString != "" && settingsString != null) {
 	$("#sl-module-goto").prop("checked", settings.goto);
 	$("#sl-module-path").prop("checked", settings.path);
 	$("#sl-theme" + settings.theme).prop("checked", true);
+
+	$("#sl-module-hide-names").prop("checked", settings.hideNames);
+	$("#sl-module-hide-cursors").prop("checked", settings.hideCursors);
+	settings.hideNames = settings.hideNames;
 } else {
 	$("#sl-theme2").prop("checked", true);
 }
@@ -204,6 +213,8 @@ $(document).on("click", "#sl-settings-savebutton", function () {
 	settings.goto = $("#sl-module-goto").is(":checked");
 	settings.path = $("#sl-module-path").is(":checked");
 	settings.theme = $('input[name=sl-theme]:checked').val();
+	settings.hideNames = $('#sl-module-hide-names').is(":checked");
+	settings.hideCursors = $('#sl-module-hide-cursors').is(":checked");
 
     localStorage.setItem('sl-settings', JSON.stringify(settings));
 
