@@ -495,8 +495,12 @@ a:hover {
 
     var self = this;
     Dispatcher.call(this);
-
-    this.Files = indexAllFiles();
+    var int = setInterval(() => {
+        this.Files = indexAllFiles();
+        if (this.Files.length) {
+            clearInterval(int);
+        }
+    }, 1000);
     // watch for changes in file tree
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     var obs = new MutationObserver(function(mutations, observer) {
