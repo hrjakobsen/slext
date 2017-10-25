@@ -5,6 +5,10 @@ function Slext(settings) {
             this.style.remove();
         }
         this.style = insertStylerules(`
+
+* {
+    font-variant-ligatures: none;
+}
 /*main layout*/
 .ui-layout-container, .toolbar, .ui-layout-resizer {
     background-color:${settings.css.backgroundColor} !important;

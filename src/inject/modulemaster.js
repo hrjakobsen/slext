@@ -8,6 +8,7 @@ if (settings == null) {
 	var s = new SearchModule(o);
 	var g = new GotoFileModule(o);
 	var c = new CurrentPathModule(o, options);	
+	var h = new HideNamesModule(o, options);	
 } else {
 	if (settings.slext) {
 		var o = new Slext(options);
@@ -20,5 +21,6 @@ if (settings == null) {
 		if (settings.search) new SearchModule(o);
 		if (settings.goto) new GotoFileModule(o);
 		if (settings.path) new CurrentPathModule(o, options);
+		if (settings.hideNames) new HideNamesModule(o, options);
 	}
 }
