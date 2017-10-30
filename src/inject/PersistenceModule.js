@@ -1,7 +1,16 @@
 function PersistenceModule(slextModule, tabModule) {
 	var self = this;
+
 	$( window ).unload(function() {
 	    self.SaveOpenedTabs();
+	});
+
+	loaded = false;
+
+	slextModule.addEventListener("FilesLoaded", () => {
+		if (loaded) return;
+		loaded = true;
+		self.ReloadTabs();
 	});
 
 	this.SaveOpenedTabs = function() {
@@ -52,5 +61,4 @@ function PersistenceModule(slextModule, tabModule) {
 	    file.path = getDir(el)+getname(el);
 	    return file;
 	}
-	this.ReloadTabs();
 }

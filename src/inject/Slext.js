@@ -503,6 +503,7 @@ a:hover {
         this.Files = indexAllFiles();
         if (this.Files.length) {
             clearInterval(int);
+            self.dispatch("FilesLoaded");
         }
     }, 1000);
     // watch for changes in file tree
