@@ -519,6 +519,7 @@ a:hover {
             obs.observe( $(".file-tree-inner")[0], { childList:true, subtree:true });
             clearInterval(interval);
         }
+        self.Files = indexAllFiles();
     }, 100);
 
     var fileClickListener = $("html").on("click", ".entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle", function(evt) {
