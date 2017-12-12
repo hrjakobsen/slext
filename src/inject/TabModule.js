@@ -11,6 +11,10 @@ function TabModule(slext, settings) {
             header {
                 height: 80px !important;
             }
+
+            header .toolbar-right, header .toolbar-left {
+                margin-top: -40px;
+            }
             .sl-tab {
                 display: inline-block;
                 background-color: ${settings.css.tabBackgroundColor};

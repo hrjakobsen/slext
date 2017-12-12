@@ -17,7 +17,7 @@ function loadscripts(scripts, callback) {
 	}
 }
 
-var bgContainer = $(".loading-screen-lion");
+var bgContainer = $(".loading-screen");
 
 possibleIcons = [
 	'SLext128',
@@ -31,7 +31,7 @@ possibleIcons = [
 //bgContainer.css("background-image", "url('" + chrome.extension.getURL('src/icons/' + possibleIcons[Math.floor(Math.random()*possibleIcons.length)] + ".png") + "')");
 var timer = setInterval(function() {
 	if (!/^.*sharelatex\.com\/project\/\S+$/.test(window.location.href)) return;
-	if ($(".loading-screen-lion").length) return;
+	if ($(".loading-screen").length) return;
 	//run some other function 
 	clearInterval(timer);
 	var icon = $(".review-icon");
