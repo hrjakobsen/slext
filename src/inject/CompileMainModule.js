@@ -33,6 +33,12 @@ function CompileMainModule(slextModule, tabModule) {
 	    }, 300);
 	});
 
+	this.style = insertStylerules(`
+		.sl-compile-main {
+			margin-right: 8px;
+		}
+	`);
+	
 
     $(window).keydown(function(event) {
         if(event.altKey && event.keyCode == 13) { /* enter */
