@@ -1,0 +1,111 @@
+import { Slext } from './slext';
+import { File } from './file';
+import * as $ from 'jquery';
+import { Utils } from './utils';
+import { PersistenceService } from './persistence.service';
+import { Container, Service, Inject } from "typedi";
+import { Settings } from './settings';
+import { TabModule } from './tabs';
+
+interface ThemeStructure {
+    [key: string]: string;
+    accentColor: string;
+    accentColorHover: string;
+    accentColorActive: string;
+    textColor: string;
+    backgroundColor: string;
+    fileColor: string;
+    fileColorHover: string;
+    scrollbarBackgroundColor: string;
+    scrollbarThumbColor: string;
+}
+
+interface Theme {
+    name: string;
+    theme: ThemeStructure;
+}
+
+@Service()
+export class ThemeModule {
+    static themes: Theme[] = [
+        {
+            name: 'Dark',
+            theme: {
+                accentColor: '#a93529',
+                accentColorHover: '#6b221a',
+                accentColorActive: 'white',
+                textColor: 'white',
+                backgroundColor: '#333',
+                fileColor: '#a4a4a4',
+                fileColorHover: '#a93529',
+                scrollbarBackgroundColor: '#313131',
+                scrollbarThumbColor: '#535353',
+                buttonBorder: '#cfcfcf'
+            }
+        },
+        {
+            name: 'Light',
+            theme: {
+                accentColor: '#a93529',
+                accentColorHover: '#6b221a',
+                accentColorActive: 'white',
+                textColor: 'black',
+                backgroundColor: 'white',
+                fileColor: '#a4a4a4',
+                fileColorHover: '#a93529',
+                scrollbarBackgroundColor: '#eee',
+                scrollbarThumbColor: '#ccc',
+                buttonBorder: '#cfcfcf'
+            }
+        },
+        {
+            name: 'Blue',
+            theme: {
+                accentColor: '#586e75',
+                accentColorHover: '#add3e1',
+                accentColorActive: '#839496',
+                textColor: '#657b83',
+                backgroundColor: '#002b36',
+                fileColor: '#586e75',
+                fileColorHover: '#add3e1',
+                scrollbarBackgroundColor: '#073642',
+                scrollbarThumbColor: '#586e75',
+                buttonBorder: '#cfcfcf'
+            }
+        }
+    ];
+
+    private settings: Settings;
+
+    constructor(private slext: Slext) {
+        // This does not work with constructor injection, and I don't know why
+        this.settings = Container.get(Settings);
+        var self = this;
+        this.fixIcon();
+        PersistenceService.load('theme', function (response: number) {
+            if (!response) {
+                response = 0;
+            }
+            self.setTheme(response);
+        });
+
+        this.settings.addEventListener("themeChanged", self.setTheme);
+    }
+
+    public setTheme(index) {
+        PersistenceService.save('theme', index, null);
+        for (let key in ThemeModule.themes[index].theme) {
+            document.documentElement.style.setProperty(
+                `--${key}`,
+                ThemeModule.themes[index].theme[key]
+            );
+        }
+    }
+
+    private fixIcon() {
+        var icon = $('.review-icon');
+        icon.addClass('sl-review-icon');
+        icon.removeClass('review-icon');
+        icon.html(require('../templates/icon.html'));
+    }
+}

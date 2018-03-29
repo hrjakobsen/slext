@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "noImplicitUseStrict": true,
+        "noImplicitReturns": true,
+        "strictNullChecks": false,
+        "jsx": "react",
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+    },
+    "exclude": [
+        "app/scripts/injected.js"
+    ]
+}

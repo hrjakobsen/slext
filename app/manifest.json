@@ -1,0 +1,39 @@
+{
+    "name": "SLext",
+    "short_name": "SLext",
+    "description": "SLext enhances your editing experience on ShareLatex by providing tabs, themes and more to the ShareLatex website.",
+    "version": "0.5.0",
+    "manifest_version": 2,
+    "icons": {
+        "16": "images/icon-16.png",
+        "32": "images/icon-32.png",
+        "64": "images/icon-64.png",
+        "128": "images/icon-128.png"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.sharelatex.com/project/*"
+            ],
+            "css": [
+                "styles/contentscript.css",
+                "styles/theme.css"
+            ],
+            "js": [
+                "scripts/loader.js",
+                "scripts/fontawesome.js"
+            ],
+            "run_at": "document_end",
+            "all_frames": false
+        }
+    ],
+    "web_accessible_resources": [
+        "scripts/injected.js"
+    ],
+    "browser_action": {
+        "default_icon": "images/icon-32.png"
+    }
+}

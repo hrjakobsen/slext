@@ -1,0 +1,460 @@
+/* Custom theming */
+:root {
+    --accentColor: #a93529;
+    --accentColorHover: #6b221a;
+    --accentColorActive: white;
+
+    --textColor: white;
+
+    --backgroundColor: #333;
+    --fileColor: #a4a4a4;
+    --fileColorHover: #a93529;
+    --scrollbarBackgroundColor: #313131;
+    --scrollbarThumbColor: #535353;
+    --buttonBorder: #cfcfcf;
+}
+* {
+    font-variant-ligatures: none;
+}
+/*main layout*/
+.ui-layout-container,
+.toolbar,
+.ui-layout-resizer {
+    background-color: var(--backgroundColor) !important;
+}
+.entity-name {
+    color: var(--fileColor) !important;
+}
+.entity-name:hover {
+    color: var(--fileColorHover) !important;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbarBackgroundColor);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbarThumbColor);
+}
+
+.spelling-highlight {
+    z-index: 6;
+}
+
+.sl-review-icon {
+    float: left;
+    height: 30px;
+    width: 30px;
+    margin: 0;
+}
+
+.toolbar .btn-full-height {
+    stroke: var(--accentColor);
+    fill: var(--accentColor);
+    color: var(--accentColor);
+    border-left: 1px solid var(--buttonBorder);
+}
+.toolbar .btn-full-height:active,
+.toolbar .btn-full-height:hover:active {
+    fill: var(--accentColorActive);
+    stroke: var(--accentColorActive);
+}
+
+.toolbar .btn-full-height:hover {
+    fill: var(--accentColorHover);
+    stroke: var(--accentColorHover);
+}
+
+a {
+    color: var(--accentColor);
+}
+
+.text-primary {
+    color: var(--accentColor);
+}
+
+.label-primary {
+    background-color: var(--accentColor);
+}
+
+.bg-primary {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.progress-bar {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.btn-primary {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+    border-color: var(--accentColorHover);
+}
+
+.btn-primary:hover {
+    background-color: var(--accentColorHover);
+}
+.btn-primary:active {
+    background-color: var(--accentColor);
+    color: var(--accentColorActive);
+}
+
+.btn-primary .badge {
+    color: var(--accentColor);
+    background-color: var(--textColor);
+}
+
+.btn-link {
+    color: var(--accentColor);
+}
+
+/*Nav bar*/
+.nav-tabs > li > a:hover {
+    border-color: var(--accentColor) var(--accentColor) #ddd;
+}
+
+.nav-pills > li > a {
+    border: 2px solid var(--accentColor);
+}
+
+.navbar-toggle {
+    border: 2px solid var(--accentColor);
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: var(--accentColor);
+}
+
+@media (min-width: 768px) {
+    .navbar-default .navbar-nav > li > a {
+        border-color: var(--accentColor);
+    }
+}
+
+.navbar-default .navbar-toggle {
+    border-color: var(--accentColor);
+    color: var(--accentColor);
+}
+
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: var(--accentColor);
+    }
+}
+
+.navbar-default .navbar-link {
+    color: var(--accentColor);
+}
+
+/*Extra*/
+.qq-upload-list li.qq-upload-fail {
+    background-color: var(--accentColor);
+    color: var(--textColor);
+}
+
+tags-input .tags .tag-item .remove-button:active {
+    color: var(--accentColorActive);
+}
+
+tags-input[disabled] .tags .tag-item .remove-button:active {
+    color: var(--accentColorActive);
+}
+
+tags-input .autocomplete .suggestion-item.selected {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+ul.folders-menu > li.active {
+    background-color: var(--accentColor);
+}
+
+.user_details_auto_complete .autocomplete ul > li.active {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.announcements-badge {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+aside.file-tree ul.file-tree-list li i.fa-folder,
+aside.file-tree ul.file-tree-list li i.fa-folder-open {
+    color: var(--accentColor);
+}
+
+aside.file-tree:not(.multi-selected)
+    ul.file-tree-list
+    li.selected
+    > .entity
+    > .entity-name {
+    color: var(--accentColor);
+    border-right: 4px solid var(--accentColor);
+}
+
+#history aside.change-list ul li.selected {
+    border-left: 4px solid var(--accentColor);
+}
+
+#history aside.change-list ul li.selected .selectors .range {
+    background-color: var(--accentColor);
+}
+
+.toolbar.toolbar-header .btn-full-height {
+    border-right: 1px solid #cfcfcf;
+    color: var(--accentColor);
+}
+
+#left-menu form.settings .form-controls:hover {
+    background-color: var(--accentColor);
+}
+
+.pdf-viewer .progress-thin .progress-bar {
+    background-color: var(--accentColor);
+}
+
+.rp-toggle-hidden-input:checked + .rp-toggle-btn {
+    background-color: var(--accentColor);
+    border-color: var(--textColor);
+}
+
+.references-search-modal
+    .search-results
+    .search-result-hit.selected-search-result-hit {
+    background-color: var(--accentColor);
+    color: var(--textColor);
+}
+
+.plans .circle {
+    text-shadow: 0 -1px 1px var(--accentColorHover);
+    background-color: var(--accentColor);
+    color: var(--textColor);
+}
+
+.recurly button.submit {
+    border: 1px solid var(--accentColorHover);
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.recurly button.submit .badge {
+    color: var(--accentColor);
+    background-color: var(--textColor);
+}
+
+.template-thumbnail a h3 {
+    color: var(--accentColor);
+}
+
+.searchResult h1 {
+    color: var(--accentColor);
+}
+
+.payment-method-toggle-switch-selected {
+    color: var(--accentColor);
+}
+
+.rfp-section-blockquote {
+    background-color: var(--accentColor);
+}
+
+.rfp-cta {
+    background-color: var(--accentColor);
+    color: var(--textColor);
+}
+
+.btn-primary.disabled,
+.btn-primary.disabled.active,
+.btn-primary.disabled:active,
+.btn-primary.disabled:focus,
+.btn-primary.disabled:hover,
+.btn-primary[disabled],
+.btn-primary[disabled].active,
+.btn-primary[disabled]:active,
+.btn-primary[disabled]:focus,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary,
+fieldset[disabled] .btn-primary.active,
+fieldset[disabled] .btn-primary:active,
+fieldset[disabled] .btn-primary:focus,
+fieldset[disabled] .btn-primary:hover {
+    background-color: var(--accentColor);
+    border-color: var(--accentColorHover);
+}
+
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu > .active > a:hover {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.nav > li > a:focus,
+.nav > li > a:hover {
+    background-color: var(--accentColor);
+    color: var(--textColor);
+}
+
+.nav .open > a,
+.nav .open > a:focus,
+.nav .open > a:hover {
+    background-color: var(--accentColor);
+    border-color: var(--accentColor);
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:focus,
+.nav-pills > li.active > a:hover {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+a.thumbnail.active,
+a.thumbnail:focus,
+a.thumbnail:hover {
+    border-color: var(--accentColor);
+}
+
+aside.file-tree:not(.multi-selected)
+    ul.file-tree-list
+    li.selected
+    > .entity
+    > .entity-name
+    i.fa,
+aside.file-tree:not(.multi-selected)
+    ul.file-tree-list
+    li.selected
+    > .entity
+    > .entity-name
+    i.fa-folder-open {
+    color: var(--accentColor);
+}
+
+.toolbar .toolbar-left > a:not(.btn).active,
+.toolbar .toolbar-left > a:not(.btn):active,
+.toolbar .toolbar-right > a:not(.btn).active,
+.toolbar .toolbar-right > a:not(.btn):active,
+.toolbar > a:not(.btn).active,
+.toolbar > a:not(.btn):active {
+    color: var(--textColor);
+    background-color: var(--accentColorActive);
+}
+
+.toolbar.toolbar-header .btn-full-height.active,
+.toolbar.toolbar-header .btn-full-height:active {
+    background-color: var(--accentColor);
+}
+
+#left-menu ul.nav a:active,
+#left-menu ul.nav a:hover {
+    background-color: var(--accentColorActive);
+    color: var(--textColor);
+}
+
+.services h1,
+.services h2,
+.services h3,
+.services h4 {
+    color: var(--accentColor);
+}
+
+.plans .card.features i,
+.plans .plans-header h1,
+.plans .plans-header h2 {
+    color: var(--accentColor);
+}
+
+.recurly button.submit.disabled,
+.recurly button.submit.disabled.active,
+.recurly button.submit.disabled:active,
+.recurly button.submit.disabled:focus,
+.recurly button.submit.disabled:hover,
+.recurly button.submit[disabled],
+.recurly button.submit[disabled].active,
+.recurly button.submit[disabled]:active,
+.recurly button.submit[disabled]:focus,
+.recurly button.submit[disabled]:hover,
+fieldset[disabled] .recurly button.submit,
+fieldset[disabled] .recurly button.submit.active,
+fieldset[disabled] .recurly button.submit:active,
+fieldset[disabled] .recurly button.submit:focus,
+fieldset[disabled] .recurly button.submit:hover {
+    background-color: var(--accentColor);
+    border-color: var(--accentColorHover);
+}
+
+.contact-suggestion-list-item:focus,
+.contact-suggestion-list-item:hover {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
+.payment-method-toggle-switch-selected:focus,
+.payment-method-toggle-switch-selected:hover {
+    color: var(--accentColor);
+}
+
+a:focus,
+a:hover {
+    color: var(--accentColorHover);
+    text-decoration: underline;
+}
+
+.btn-link:focus,
+.btn-link:hover {
+    color: var(--accentColorHover);
+}
+
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+    color: var(--textColor);
+    background-color: var(--accentColorHover);
+    border: 2px solid var(--accentColorHover);
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+    color: var(--textColor);
+    background-color: var(--accentColorHover);
+}
+
+.navbar-default .navbar-toggle.active,
+.navbar-default .navbar-toggle:hover {
+    background-color: var(--accentColorHover);
+    border-color: var(--accentColorHover);
+    color: var(--textColor);
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
+    background-color: var(--accentColorHover);
+    color: var(--textColor);
+}
+
+.navbar-default .navbar-link:hover {
+    color: var(--accentColorHover);
+}
+
+.toolbar.toolbar-header .btn-full-height:hover {
+    background-color: var(--textColor);
+    color: var(--accentColorHover);
+}
+
+.label-danger {
+    background-color: #99736e;
+}
