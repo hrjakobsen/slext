@@ -7,6 +7,7 @@ import { Search } from './search';
 import { ThemeModule } from './theme';
 import { EditorCommands } from './editorcommands';
 import { PageHook } from './pagehook.service';
+import { RemoveFlagsModule } from './removeflags';
 
 (function () {
     PageHook.initialize();
@@ -19,5 +20,6 @@ import { PageHook } from './pagehook.service';
         let tabs = Container.get(TabModule);
         let search = Container.get(Search);
         let editorcommands = Container.get(EditorCommands);
+        let removeFlags = Container.get(RemoveFlagsModule);
     }, 100);
 })();

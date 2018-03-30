@@ -3,8 +3,7 @@ export default class Dispatcher {
 
     protected dispatch(event: string, data?: any) {
         if (!this.listeners.has(event)) return;
-        console.log('dispatching to', this.listeners.get(event));
-        this.listeners.get(event)!.forEach(function(listener) {
+        this.listeners.get(event)!.forEach(function (listener) {
             listener(data);
         });
     }

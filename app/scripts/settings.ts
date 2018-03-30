@@ -8,6 +8,7 @@ import { Slext } from './slext';
 import { TabModule } from './tabs';
 import { ThemeModule } from './theme';
 import { Utils } from './utils';
+import { PersistenceService } from './persistence.service';
 
 class Plugin {
     name: string;
@@ -73,7 +74,30 @@ export class Settings extends Dispatcher {
             menu.addClass('slext-settings--active');
         });
 
+        this.setUpFlagsSettings(menu);
+
         $('body').append(menu);
+    }
+
+    private setUpFlagsSettings(menu) {
+        let self = this;
+        PersistenceService.load("flags", function (hidden) {
+            hidden = hidden || false;
+            $("#sl_flags").prop("checked", hidden);
+        });
+
+        PersistenceService.load("cursors", function (hidden) {
+            hidden = hidden || false;
+            $("#sl_cursors").prop("checked", hidden);
+        });
+
+        menu.on("change", "#sl_flags", function () {
+            self.dispatch("flagsChanged", (this as HTMLInputElement).checked);
+        });
+
+        menu.on("change", "#sl_cursors", function () {
+            self.dispatch("cursorsChanged", (this as HTMLInputElement).checked);
+        });
     }
 
     private static generatePluginList(plugin: Plugin): JQuery<HTMLElement> {

@@ -240,3 +240,42 @@ header.toolbar.toolbar-tabs {
         padding: 0;
     }
 }
+
+#editor.flags_hidden {
+    .annotation-label {
+        display: none;
+    }
+}
+
+#editor.cursors_hidden {
+    .remote-cursor {
+        display: none;
+    }
+}
+.slext-settings {
+    /* 
+    * Replace standard checkboxes with font-awesome icons. 
+    * Code from https://codepen.io/jamesbarnett/pen/yILjk
+    */
+    /* to hide the checkbox itself */
+    input[type=checkbox] {
+        display:none;
+    }
+
+    input[type=checkbox] + label:before {
+      font-family: FontAwesome;
+      display: inline-block;
+    }
+
+    input[type=checkbox] + label:before {
+        content: "\f096"; width: 1.5em;
+    } /* unchecked icon */
+
+    input[type=checkbox]:checked + label:before {
+        content: "\f046";
+    }/* checked icon */
+
+    input[type=checkbox]:checked + label:before {
+        letter-spacing: 5px;
+    } /* allow space for check mark */
+}
