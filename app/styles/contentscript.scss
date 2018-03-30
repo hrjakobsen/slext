@@ -152,6 +152,7 @@ header.toolbar.toolbar-tabs {
         list-style: none;
         margin-right: 20px;
         cursor: pointer;
+        margin-bottom: 25px;
     }
 
     &__theme-name {
@@ -160,6 +161,11 @@ header.toolbar.toolbar-tabs {
 
     &__section {
         clear: both;
+        margin-top: 25px;
+
+        h2 {
+            line-height: 1.5;
+        }
     }
 
     code {
@@ -253,8 +259,8 @@ header.toolbar.toolbar-tabs {
     }
 }
 .slext-settings {
-    /* 
-    * Replace standard checkboxes with font-awesome icons. 
+    /*
+    * Replace standard checkboxes with font-awesome icons.
     * Code from https://codepen.io/jamesbarnett/pen/yILjk
     */
     /* to hide the checkbox itself */
