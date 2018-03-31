@@ -22,9 +22,14 @@ header.toolbar.toolbar-tabs {
         height: 39px;
         line-height: 39px;
         cursor: default;
-
+        
+        .slext-tabs__tab-cross {
+            margin-left: 10px;
+        }
+        
         .slext-tabs__tab-cross .fa:before {
             content: '\f00d';
+            cursor: pointer;
         }
 
         & div {
