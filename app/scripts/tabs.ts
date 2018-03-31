@@ -21,6 +21,7 @@ export class TabModule {
     protected tabBar: JQuery<HTMLElement>;
     private currentFile: File = null;
     private maintab: Tab = null;
+    private draggedtab: Tab = null;
     constructor(protected slext: Slext) {
         let self = this;
         this.setupListeners();
@@ -121,8 +122,14 @@ export class TabModule {
 
     private openTab(file: File) {
         let el = $(Utils.format(TabModule.tabTemplate, file));
+        el[0].ondragstart = (e) => this.dragstart(e);
+        el[0].ondragenter = (e) => this.dragenter(e);
+        el[0].ondragleave = (e) => this.dragleave(e);
+        el[0].ondragover = (e) => e.preventDefault();
+        el[0].ondrop = (e) => this.drop(e);
+        el[0].ondragend = (e) => this.dragend(e);
         this.tabBar.append(el);
-        let t = { tab: el, file: file, favorite: false };
+        let t: Tab = { tab: el, file: file, favorite: false };
         el.data('tab', t);
         this._tabs.push(t);
         this.selectTab(this._tabs.length - 1);
@@ -209,5 +216,67 @@ export class TabModule {
     private setFavoriteTab(tab: Tab) {
         tab.favorite = !tab.favorite;
         tab.tab.toggleClass('slext-tabs__tab--favorite');
+    }
+
+    private dragstart(e: DragEvent) {
+        this.draggedtab = $(e.srcElement).data('tab') as Tab;
+        this.draggedtab.tab.addClass("slext-tabs__tab--dragged");
+    }
+
+    private dragenter(e: DragEvent) {
+        $(e.target).parents('.slext-tabs__tab').addClass("slext-tabs__tab--hovered");
+    }
+
+    private dragleave(e: DragEvent) {
+        $(e.target).parents('.slext-tabs__tab').removeClass("slext-tabs__tab--hovered");
+    }
+
+    private drop(e) {
+        this.dragleave(e);
+        e.preventDefault();
+        let target = $(e.target).parents('.slext-tabs__tab').data('tab') as Tab;
+        let indexTarget = this._tabs.indexOf(target);
+        if (indexTarget == -1) {
+            console.error("Could not find target tab as an open tab");
+            return true;
+        }
+        let indexSrc = this._tabs.indexOf(this.draggedtab);
+        if (indexSrc == -1) {
+            console.error("Could not find source tab as an open tab");
+            return true;
+        }
+
+        this.moveTab(indexSrc, indexTarget);
+
+        return true;
+    }
+
+    private moveTab(src: number, target: number) {
+        if (src == target) return; // No need to do anything
+        let srcEl = this._tabs[src].tab;
+        let targetEl = this._tabs[target].tab;
+
+        if (src < target) {
+            //We should place the src after the target
+            this.arrmove(this._tabs, src, target);
+            srcEl.insertAfter(targetEl);
+        } else {
+            //We should place the src before the target
+            this.arrmove(this._tabs, src, target - 1);
+            srcEl.insertBefore(targetEl);
+        }
+    }
+
+    private arrmove(arr: Array<any>, src: number, target: number) {
+        if (src == target) return;
+        let element = arr[src];
+        if (src < target) target--;
+        arr.splice(src, 1);
+        arr.splice(target + 1, 0, element);
+    }
+
+    private dragend(e) {
+        this.draggedtab.tab.removeClass("slext-tabs__tab--dragged");
+        this.draggedtab = null;
     }
 }

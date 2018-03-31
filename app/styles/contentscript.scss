@@ -47,6 +47,14 @@ header.toolbar.toolbar-tabs {
             }
         }
 
+        &--dragged {
+            opacity: 0.6;
+        }
+
+        &--hovered {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
         &-cross {
             color: var(--accentColor);
         }
