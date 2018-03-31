@@ -53,7 +53,7 @@ export class TabModule {
             });
         });
 
-        $(window).on('unload', () => this.saveTabs());
+        window.onbeforeunload = () => this.saveTabs();
 
         setTimeout(() => this.ensureRightTab(), 2000);
         slext.addEventListener("editorChanged", () => this.ensureRightTab());
