@@ -7,16 +7,17 @@ export class PersistenceService {
     }
 
     public static save(key: string, object: any, callback: any) {
+        if (!callback) callback = (response) => null;
         let project = PersistenceService.getProjectId();
         let projectKey = project + key;
         let obj: any = {};
 
         obj[projectKey] = object;
-
         chrome.storage.local.set(obj, callback);
     }
 
     public static load(key: string, callback: any): any {
+        if (!callback) callback = (response) => null;
         let project = PersistenceService.getProjectId();
         let projectKey = project + key;
 

@@ -28,14 +28,14 @@ export class TabModule {
         this.addTabBar();
         this.addCompileMainButton();
 
-        PersistenceService.load('tabs_openFiles', function (files: string[]) {
+        PersistenceService.load('tabs_openFiles', function (files: [any]) {
             if (!files) return;
             if (files.length < 1) return;
             let allfiles = self.slext.getFiles();
             files.forEach(file => {
-                let fileMatch = allfiles.find(x => x.path == file);
+                let fileMatch = allfiles.find(x => x.path == file.path);
                 if (fileMatch == null) return;
-                self.openTab(fileMatch);
+                self.openTab(fileMatch, file.favorite);
             });
 
             PersistenceService.load('tabs_currentTab', function (path: string) {
@@ -44,11 +44,18 @@ export class TabModule {
                 self.currentFile = self._tabs[tab].file || null;
                 self.selectTab(tab);
             });
+
+            PersistenceService.load('tabs_mainTab', function (path: string) {
+                let tab = self._tabs.findIndex(x => x.file.path == path);
+                if (tab != -1) {
+                    self.setMainTab(self._tabs[tab]);
+                }
+            });
         });
 
         $(window).on('unload', () => this.saveTabs());
 
-        this.ensureRightTab();
+        setTimeout(() => this.ensureRightTab(), 2000);
         slext.addEventListener("editorChanged", () => this.ensureRightTab());
     }
 
@@ -69,13 +76,19 @@ export class TabModule {
     protected saveTabs() {
         PersistenceService.save(
             'tabs_openFiles',
-            this._tabs.map(t => t.file.path),
+            this._tabs.map(t => { return { path: t.file.path, favorite: t.favorite } }),
             null
         );
 
         PersistenceService.save(
             'tabs_currentTab',
             this._currentTab.file.path,
+            null
+        );
+
+        PersistenceService.save(
+            'tabs_mainTab',
+            this.maintab.file.path,
             null
         );
     }
@@ -121,7 +134,12 @@ export class TabModule {
         });
     }
 
-    private openTab(file: File) {
+    private openTab(file: File, favorite?: boolean) {
+        //Check if file is already open
+        if (this._tabs.filter(f => f.file.path == file.path).length) return;
+
+        favorite = favorite || false;
+
         let el = $(Utils.format(TabModule.tabTemplate, file));
         el[0].ondragstart = (e) => this.dragstart(e);
         el[0].ondragenter = (e) => this.dragenter(e);
@@ -131,6 +149,7 @@ export class TabModule {
         el[0].ondragend = (e) => this.dragend(e);
         this.tabBar.append(el);
         let t: Tab = { tab: el, file: file, favorite: false };
+        if (favorite) this.setFavoriteTab(t);
         el.data('tab', t);
         this._tabs.push(t);
         this.selectTab(this._tabs.length - 1);
