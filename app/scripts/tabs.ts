@@ -48,7 +48,8 @@ export class TabModule {
 
         $(window).on('unload', () => this.saveTabs());
 
-        setInterval(() => this.ensureRightTab(), 5000);
+        this.ensureRightTab();
+        slext.addEventListener("editorChanged", () => this.ensureRightTab());
     }
 
     protected ensureRightTab() {

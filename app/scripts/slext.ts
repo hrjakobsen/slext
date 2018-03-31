@@ -42,20 +42,6 @@ export class Slext extends Dispatcher {
         return this.id;
     }
 
-    public getEditor(): Promise<AceAjax.Editor> {
-        let promise = new Promise<AceAjax.Editor>((accept, reject) => {
-            PageHook.evaluateJS("_debug_editors[0]")
-                .then(x => {
-                    if (!x) {
-                        reject();
-                    } else {
-                        accept(x as AceAjax.Editor)
-                    }
-                });
-        });
-        return promise;
-    }
-
     private loadingFinished() {
         let mo = new MutationObserver(function (mutations, observer) {
             if (
@@ -81,12 +67,17 @@ export class Slext extends Dispatcher {
                 self.dispatch('FileSelected', file);
             }
         );
+
+        document.addEventListener("slext_editorChanged", function (e) {
+            self.dispatch("editorChanged");
+        });
     }
 
     private updateFiles() {
         this._files = this.indexFiles();
         this.dispatch('FilesChanged');
     }
+
 
     private indexFiles() {
         let self = this;
