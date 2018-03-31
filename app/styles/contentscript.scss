@@ -9,19 +9,32 @@ header.toolbar.toolbar-tabs {
 }
 
 .slext-tabs {
-    width: 100%;
+    width: calc(100vw - 20px);
     clear: both;
     background-color: var(--backgroundColor);
     height: 40px;
     box-sizing: border-box;
-    border-top: 1px solid var(--buttonBorder);
+    white-space: nowrap;
+    font-size: 0;
+    overflow-x: hidden;
+    position: relative;
+    display: inline-block;
+
+    &__wrapper {
+        border-top: 1px solid var(--buttonBorder);
+        font-size: 0;
+    }
+    
     &__tab {
+        font-size: 1rem;
         background-color: rgba(0, 0, 0, 0.1);
         padding: 0 10px;
-        float: left;
+        display: inline-block;
         height: 39px;
         line-height: 39px;
         cursor: default;
+        z-index: 10;
+        position: relative;
         
         .slext-tabs__tab-cross {
             margin-left: 10px;
@@ -68,9 +81,32 @@ header.toolbar.toolbar-tabs {
             background-color: rgba(0, 0, 0, 0.15);
         }
     }
+
+    &__scroller {
+        display: inline-block;
+        height: 39px;
+        width: 20px;
+        font-size: 20px;
+        line-height: 20px;
+        overflow: hidden;
+        z-index: 100;
+        background-color: var(--backgroundColor);
+        color: var(--accentColor);
+    }
+
+    &__caret {
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+        text-align: center;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
 }
 
 .slext-settings {
+    z-index: 1000;
     // reset
     h1,
     h2,

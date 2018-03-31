@@ -132,6 +132,16 @@ export class TabModule {
                 .data('tab') as Tab;
             self.closeTab(tab);
         });
+
+        $('html').on("click", ".slext-tabs__caret--next", function (evt) {
+            let bar = $(".slext-tabs");
+            bar.scrollLeft(bar.scrollLeft() + 100);
+        });
+
+        $('html').on("click", ".slext-tabs__caret--prev", function (evt) {
+            let bar = $(".slext-tabs");
+            bar.scrollLeft(Math.max(bar.scrollLeft() - 100, 0));
+        });
     }
 
     private openTab(file: File, favorite?: boolean) {
@@ -147,7 +157,7 @@ export class TabModule {
         el[0].ondragover = (e) => e.preventDefault();
         el[0].ondrop = (e) => this.drop(e);
         el[0].ondragend = (e) => this.dragend(e);
-        this.tabBar.append(el);
+        this.tabBar.find('.slext-tabs').append(el);
         let t: Tab = { tab: el, file: file, favorite: false };
         if (favorite) this.setFavoriteTab(t);
         el.data('tab', t);
