@@ -48,6 +48,10 @@ export class TabModule {
             PersistenceService.load('tabs_currentTab', function (path: string) {
                 let tab = self._tabs.findIndex(x => x.file.path == path);
                 if (tab != -1) tab = 0;
+
+                // If no tabs are open, we cannot do anything
+                if (!self._tabs.length) return;
+
                 self.currentFile = self._tabs[tab].file || null;
                 self.selectTab(tab);
             });
@@ -199,6 +203,8 @@ export class TabModule {
                     self.temporarytab = null;
                     t.tab.removeClass("slext-tabs__tab--temporary");
                     editorListener.unbind();
+                    tabListener.unbind();
+
                 }
             };
 
@@ -206,7 +212,7 @@ export class TabModule {
                 removeTemp(e);
             });
 
-            t.tab.on("dblclick", function (e) {
+            tabListener = t.tab.on("dblclick", function (e) {
                 removeTemp(e);
             });
 
