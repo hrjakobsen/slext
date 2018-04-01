@@ -52,7 +52,7 @@ export class EditorCommands {
             let row: number = x.row;
             let text: string = x.text;
 
-            let possibleMatches = text.match(/\{([a-zA-Z0-9_\.]+)\}/ig) || [];
+            let possibleMatches = text.match(/\{([a-zA-Z0-9_\.\/]+)\}/ig) || [];
             possibleMatches = possibleMatches.map(x => x.replace(/[{()}]/g, ''));
             possibleMatches.forEach(match => {
                 let firstPossibleStartPos = col - match.length;
