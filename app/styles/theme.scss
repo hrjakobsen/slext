@@ -3,6 +3,7 @@
     --accentColor: #a93529;
     --accentColorHover: #6b221a;
     --accentColorActive: white;
+    --buttonColorHover: white;
 
     --textColor: white;
 
@@ -59,12 +60,15 @@
     border-left: 1px solid var(--buttonBorder);
 }
 .toolbar .btn-full-height:active,
-.toolbar .btn-full-height:hover:active {
+.toolbar .btn-full-height:hover:active,
+.toolbar .btn-full-height.active,
+ {
+    color: var(--accentColorActive) !important;
     fill: var(--accentColorActive);
     stroke: var(--accentColorActive);
 }
 
-.toolbar .btn-full-height:hover {
+.toolbar .btn-full-height:not(.active):not(:active):hover {
     fill: var(--accentColorHover);
     stroke: var(--accentColorHover);
 }
@@ -450,8 +454,8 @@ a:hover {
     color: var(--accentColorHover);
 }
 
-.toolbar.toolbar-header .btn-full-height:hover {
-    background-color: var(--textColor);
+.toolbar.toolbar-header .btn-full-height:not(:active):hover {
+    background-color: var(--buttonColorHover);
     color: var(--accentColorHover);
 }
 

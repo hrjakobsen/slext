@@ -40,7 +40,8 @@ export class ThemeModule {
                 fileColorHover: '#a93529',
                 scrollbarBackgroundColor: '#313131',
                 scrollbarThumbColor: '#535353',
-                buttonBorder: '#cfcfcf'
+                buttonBorder: '#cfcfcf',
+                buttonColorHover: 'white'
             }
         },
         {
@@ -55,7 +56,8 @@ export class ThemeModule {
                 fileColorHover: '#a93529',
                 scrollbarBackgroundColor: '#eee',
                 scrollbarThumbColor: '#ccc',
-                buttonBorder: '#cfcfcf'
+                buttonBorder: '#cfcfcf',
+                buttonColorHover: 'rgba(0,0,0,0.1)'
             }
         },
         {
@@ -70,7 +72,8 @@ export class ThemeModule {
                 fileColorHover: '#add3e1',
                 scrollbarBackgroundColor: '#073642',
                 scrollbarThumbColor: '#586e75',
-                buttonBorder: '#cfcfcf'
+                buttonBorder: '#cfcfcf',
+                buttonColorHover: '#657b83'
             }
         }
     ];
