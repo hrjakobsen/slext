@@ -9,38 +9,35 @@ To install from source, clone the repository:
 
 ```bash
 git clone git@github.com:hrjakobsen/slext.git
+cd slext
+gulp pack --vendor=chrome --production
 ```
+
 Then in Chrome, go to [chrome://extensions](chrome://extensions)
 
-Click on "Load Unpacked Extension" and choose the sl-optimizr folder
+Drag the packed chrome extension from the 'packages' folder onto the page to install the extension.
 
 ### Firefox
 Clone repository
 ```bash
 git clone git@github.com:hrjakobsen/slext.git
+cd slext
+gulp pack --vendor=firefox --production
 ```
-Then in Firefox, go to [about:config](about:config)
+Then in Firefox, go to [about:addons](about:addons)
 
-Click on "Load Temporary Add-on" and choose the manifest.json file in the slext folder
-
-To make it persistent, you have to create a Firefox extension on [addons.mozilla.org](https://addons.mozilla.org/en-US/developers/addon/submit/distribution).
+Click on the settings and press 'Install Add-on From File' then select the .xpi file in the packages folder.
 
 # Development
+The extension is developed for Google Chrome. If you wish to ensure that everything works in other browsers as well, great! But the following section described the development process in Chrome, so you will have to modify some of the steps to develop for other browsers.
 
 ## Install dependencies
+```bash
+$ npm install
+```
+## Testing
 
-	$ npm install
-
-## Usage
-
-Run `$ gulp --watch` and load the `dist`-directory into chrome.
-
-## Entryfiles (bundles)
-
-There are two kinds of entryfiles that create bundles.
-
-1. All ts-files in the root of the `./app/scripts` directory
-2. All css-,scss- and less-files in the root of the `./app/styles` directory
+Run `$ gulp --watch` and load the `dist`-directory into Chrome as an unpacked extension on [chrome://extensions](chrome://extensions). After making changes to the code it will automatically be compiled, but you need to refresh the extension where you loaded it.
 
 ## Tasks
 
@@ -51,7 +48,7 @@ There are two kinds of entryfiles that create bundles.
 
 | Option         | Description                                                                                                                                           |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `--watch`      | Starts a livereload server and watches all assets. <br>To reload the extension on change include `livereload.js` in your bundle.                      |
+| `--watch`      | Starts a livereload server and watches all assets.                       |
 | `--production` | Minifies all assets                                                                                                                                   |
 | `--verbose`    | Log additional data to the console.                                                                                                                   |
 | `--vendor`     | Compile the extension for different vendors (chrome, firefox, opera, edge)  Default: chrome                                                                 |
