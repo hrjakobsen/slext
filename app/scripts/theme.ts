@@ -18,6 +18,8 @@ interface ThemeStructure {
     fileColorHover: string;
     scrollbarBackgroundColor: string;
     scrollbarThumbColor: string;
+    buttonColorHover: string;
+    buttonBorder: string;
 }
 
 interface Theme {
