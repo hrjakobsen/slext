@@ -16,11 +16,14 @@
             </div>
             <div class="slext-settings__section">
                 <h2>Show/hide cursors and flags</h2>
-                <input type="checkbox" id="sl_flags" name="slext-settings__flags" class="slext-settings__flags" />
+                <input type="checkbox" id="sl_flags" />
                 <label for="sl_flags">Hide Flags</label>
                 <br>
-                <input type="checkbox" id="sl_cursors" name="slext-settings__cursors" class="slext-settings__cursors" />
+                <input type="checkbox" id="sl_cursors" />
                 <label for="sl_cursors">Hide Cursors</label>
+                <br>
+                <input type="checkbox" id="sl_temporary_tabs" />
+                <label for="sl_temporary_tabs">Open new tabs as temporary tabs</label>
                 <br>
             </div>
             <div class="slext-settings__section">
@@ -76,6 +79,8 @@
                 <h4>version 0.5.0</h4>
                 <ul>
                     <li>Rewrote SLext in TypeScript</li>
+                    <li>Settings are now saved per-project instead of globally</li>
+                    <li>Tabs are also saved per-project, so that tabs does not disappear when opening other project</li>
                     <li>Added new command for wrapping selections in LaTeX command</li>
                     <li>Removed setting for disabling plugins, plugins will instead offer sections in settings menu for disabling
                         features

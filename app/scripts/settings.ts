@@ -74,29 +74,31 @@ export class Settings extends Dispatcher {
             menu.addClass('slext-settings--active');
         });
 
-        this.setUpFlagsSettings(menu);
+        this.setUpCheckboxes(menu);
 
         $('body').append(menu);
     }
 
-    private setUpFlagsSettings(menu) {
+    private setUpCheckboxes(menu) {
+        let settings = [
+            "flags",
+            "cursors",
+            "temporary_tabs"
+        ]
         let self = this;
-        PersistenceService.load("flags", function (hidden) {
-            hidden = hidden || false;
-            $("#sl_flags").prop("checked", hidden);
-        });
 
-        PersistenceService.load("cursors", function (hidden) {
-            hidden = hidden || false;
-            $("#sl_cursors").prop("checked", hidden);
-        });
+        settings.forEach(setting => {
+            PersistenceService.load(setting, function (toggled) {
+                toggled = toggled || false;
+                let el = menu.find("#sl_" + setting);
+                el.prop("checked", toggled);
+            });
 
-        menu.on("change", "#sl_flags", function () {
-            self.dispatch("flagsChanged", (this as HTMLInputElement).checked);
-        });
-
-        menu.on("change", "#sl_cursors", function () {
-            self.dispatch("cursorsChanged", (this as HTMLInputElement).checked);
+            menu.on("change", "#sl_" + setting, function () {
+                let checked = (this as HTMLInputElement).checked;
+                self.dispatch(setting + "Changed", checked);
+                PersistenceService.save(setting, checked);
+            });
         });
     }
 

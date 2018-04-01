@@ -1,10 +1,11 @@
 import { Slext } from './slext';
-import { Service } from 'typedi';
+import { Service, Container } from 'typedi';
 import { File } from './file';
 import * as $ from 'jquery';
 import { Utils } from './utils';
 import { PersistenceService } from './persistence.service';
 import { setInterval } from 'timers';
+import { Settings } from './settings';
 
 interface Tab {
     file: File;
@@ -24,8 +25,12 @@ export class TabModule {
     private maintab: Tab = null;
     private draggedtab: Tab = null;
     private temporarytab: Tab = null;
+    private temporaryTabsEnabled: boolean;
+    private settings: Settings;
+
     constructor(protected slext: Slext) {
         let self = this;
+        this.settings = Container.get(Settings);
         this.setupListeners();
         this.addTabBar();
         this.addCompileMainButton();
@@ -103,7 +108,7 @@ export class TabModule {
 
             if (index == -1) {
                 // File is not already opened
-                self.openTab(selectedFile, false, true);
+                self.openTab(selectedFile, false, self.temporaryTabsEnabled);
             } else {
                 // File is already open. Focus it instead
                 self.selectTab(index);
@@ -143,6 +148,13 @@ export class TabModule {
             let bar = $(".slext-tabs");
             bar.scrollLeft(Math.max(bar.scrollLeft() - 100, 0));
         });
+
+        PersistenceService.load("temporary_tabs", function (enabled) {
+            self.temporaryTabsEnabled = enabled || false;
+        });
+        self.settings.addEventListener("temporary_tabsChanged", function (enabled) {
+            self.temporaryTabsEnabled = enabled;
+        });
     }
 
     private openTab(file: File, favorite?: boolean, temporary?: boolean) {
@@ -165,11 +177,13 @@ export class TabModule {
         this._tabs.push(t);
         this.selectTab(this._tabs.length - 1);
 
-        if (temporary) {
+        if (this.temporarytab) {
+            this.closeTab(this.temporarytab);
+            this.temporarytab = null;
+        }
+
+        if (t.temporary) {
             let self = this;
-            if (this.temporarytab != null) {
-                this.closeTab(this.temporarytab);
-            }
 
             this.temporarytab = t;
             t.tab.addClass("slext-tabs__tab--temporary");

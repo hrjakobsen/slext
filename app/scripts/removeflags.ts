@@ -45,7 +45,6 @@ export class RemoveFlagsModule {
 
     private setElement(element: string, hidden: boolean) {
         let self = this;
-        PersistenceService.save(element, hidden);
         self.setClasses(element, hidden);
     }
 
