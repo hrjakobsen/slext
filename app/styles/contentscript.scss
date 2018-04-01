@@ -48,9 +48,14 @@ header.toolbar.toolbar-tabs {
         & div {
             display: inline-block;
         }
+        
         &--active {
             border-bottom: 4px solid var(--accentColor);
             color: var(--accentColorActive);
+        }
+
+        &--temporary {
+            font-style: italic;
         }
 
         &--main {

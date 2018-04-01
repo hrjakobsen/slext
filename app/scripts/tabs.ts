@@ -10,6 +10,7 @@ interface Tab {
     file: File;
     tab: JQuery<HTMLElement>;
     favorite: boolean;
+    temporary: boolean;
 }
 
 @Service()
@@ -22,6 +23,7 @@ export class TabModule {
     private currentFile: File = null;
     private maintab: Tab = null;
     private draggedtab: Tab = null;
+    private temporarytab: Tab = null;
     constructor(protected slext: Slext) {
         let self = this;
         this.setupListeners();
@@ -77,7 +79,6 @@ export class TabModule {
         PersistenceService.save(
             'tabs_openFiles',
             this._tabs.map(t => { return { path: t.file.path, favorite: t.favorite } })
-
         );
 
         PersistenceService.save(
@@ -102,7 +103,7 @@ export class TabModule {
 
             if (index == -1) {
                 // File is not already opened
-                self.openTab(selectedFile);
+                self.openTab(selectedFile, false, true);
             } else {
                 // File is already open. Focus it instead
                 self.selectTab(index);
@@ -144,7 +145,7 @@ export class TabModule {
         });
     }
 
-    private openTab(file: File, favorite?: boolean) {
+    private openTab(file: File, favorite?: boolean, temporary?: boolean) {
         //Check if file is already open
         if (this._tabs.filter(f => f.file.path == file.path).length) return;
 
@@ -158,11 +159,44 @@ export class TabModule {
         el[0].ondrop = (e) => this.drop(e);
         el[0].ondragend = (e) => this.dragend(e);
         this.tabBar.find('.slext-tabs').append(el);
-        let t: Tab = { tab: el, file: file, favorite: false };
+        let t: Tab = { tab: el, file: file, favorite: false, temporary: temporary || false };
         if (favorite) this.setFavoriteTab(t);
         el.data('tab', t);
         this._tabs.push(t);
         this.selectTab(this._tabs.length - 1);
+
+        if (temporary) {
+            let self = this;
+            if (this.temporarytab != null) {
+                this.closeTab(this.temporarytab);
+            }
+
+            this.temporarytab = t;
+            t.tab.addClass("slext-tabs__tab--temporary");
+
+            let editorListener, tabListener;
+
+            let removeTemp = function (event) {
+                //Ignore commands
+                if (event.altKey || event.ctrlKey) return;
+
+                if (self._currentTab == t) {
+                    t.temporary = false;
+                    self.temporarytab = null;
+                    t.tab.removeClass("slext-tabs__tab--temporary");
+                    editorListener.unbind();
+                }
+            };
+
+            editorListener = $("#editor").on("keydown", function (e) {
+                removeTemp(e);
+            });
+
+            t.tab.on("dblclick", function (e) {
+                removeTemp(e);
+            });
+
+        }
     }
 
     private selectTab(index: number) {
