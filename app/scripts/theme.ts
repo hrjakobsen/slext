@@ -93,7 +93,7 @@ export class ThemeModule {
     }
 
     public setTheme(index) {
-        PersistenceService.save('theme', index, null);
+        PersistenceService.save('theme', index);
         for (let key in ThemeModule.themes[index].theme) {
             document.documentElement.style.setProperty(
                 `--${key}`,

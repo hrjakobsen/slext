@@ -76,21 +76,21 @@ export class TabModule {
     protected saveTabs() {
         PersistenceService.save(
             'tabs_openFiles',
-            this._tabs.map(t => { return { path: t.file.path, favorite: t.favorite } }),
-            null
+            this._tabs.map(t => { return { path: t.file.path, favorite: t.favorite } })
+
         );
 
         PersistenceService.save(
             'tabs_currentTab',
-            this._currentTab.file.path,
-            null
+            this._currentTab.file.path
         );
 
-        PersistenceService.save(
-            'tabs_mainTab',
-            this.maintab.file.path,
-            null
-        );
+        if (this.maintab != null && this.maintab !== undefined) {
+            PersistenceService.save(
+                'tabs_mainTab',
+                this.maintab.file.path
+            );
+        }
     }
 
     protected setupListeners() {

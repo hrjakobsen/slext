@@ -6,24 +6,19 @@ export class PersistenceService {
         return matches[1];
     }
 
-    public static save(key: string, object: any, callback: any) {
-        if (!callback) callback = (response) => null;
+    public static save(key: string, object: any) {
         let project = PersistenceService.getProjectId();
-        let projectKey = project + key;
-        let obj: any = {};
-
-        obj[projectKey] = object;
-        chrome.storage.local.set(obj, callback);
+        let projectKey = "slext_" + project + key;
+        localStorage.setItem(projectKey, JSON.stringify(object));
     }
 
     public static load(key: string, callback: any): any {
         if (!callback) callback = (response) => null;
         let project = PersistenceService.getProjectId();
-        let projectKey = project + key;
+        let projectKey = "slext_" + project + key;
 
-        chrome.storage.local.get(projectKey, res => {
-            if (res[projectKey]) callback(res[projectKey]);
-            else callback(null);
-        });
+        let item = localStorage.getItem(projectKey);
+        if (item === undefined || item == null) callback(null);
+        callback(JSON.parse(item));
     }
 }
