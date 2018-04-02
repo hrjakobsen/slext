@@ -9,7 +9,7 @@ header.toolbar.toolbar-tabs {
 }
 
 .slext-tabs {
-    width: calc(100vw - 20px);
+    width: calc(100% - 20px);
     clear: both;
     background-color: var(--backgroundColor);
     height: 40px;
@@ -23,6 +23,7 @@ header.toolbar.toolbar-tabs {
     &__wrapper {
         border-top: 1px solid var(--buttonBorder);
         font-size: 0;
+        width:100%;
     }
     
     &__tab {
