@@ -6,6 +6,7 @@ import { Utils } from './utils';
 import { PersistenceService } from './persistence.service';
 import { setInterval } from 'timers';
 import { Settings } from './settings';
+import { Logger } from './logger';
 
 interface Tab {
     file: File;
@@ -121,6 +122,7 @@ export class TabModule {
 
         $('html').on('click', '.slext-tabs__tab', function (evt) {
             let clickedTab = $(this).data('tab') as Tab;
+            Logger.debug("Clicked on ", clickedTab);
             $(clickedTab.file.handle)[0].click();
         });
 
@@ -321,12 +323,12 @@ export class TabModule {
         let target = $(e.target).parents('.slext-tabs__tab').data('tab') as Tab;
         let indexTarget = this._tabs.indexOf(target);
         if (indexTarget == -1) {
-            console.error("Could not find target tab as an open tab");
+            Logger.error("Could not find target tab as an open tab");
             return true;
         }
         let indexSrc = this._tabs.indexOf(this.draggedtab);
         if (indexSrc == -1) {
-            console.error("Could not find source tab as an open tab");
+            Logger.error("Could not find source tab as an open tab");
             return true;
         }
 
