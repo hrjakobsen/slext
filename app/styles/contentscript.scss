@@ -128,6 +128,15 @@ header.toolbar.toolbar-tabs {
         font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     }
 
+    a {
+        color: var(--accentColor);
+        font-weight: bold;
+
+        &:hover, &:focus, &:active {
+            color: var(--accentColorHover);
+        }
+    }
+
     &--active {
         display: block;
     }
