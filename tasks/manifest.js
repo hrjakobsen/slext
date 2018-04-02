@@ -17,11 +17,18 @@ gulp.task('manifest', () => {
       }
     }))
     .pipe(
-      jsonTransform(
-        applyBrowserPrefixesFor(args.vendor),
-        2 /* whitespace */
-      )
+    jsonTransform(
+      applyBrowserPrefixesFor(args.vendor),
+      2 /* whitespace */
     )
+    )
+    .pipe(jsonTransform(function (data, file) {
+      if (args.beta) {
+        data.name += " BETA";
+        data.short_name += " BETA";
+      }
+      return data;
+    }))
     .pipe(gulp.dest(`dist/${args.vendor}`))
     .pipe(gulpif(args.watch, livereload()))
 })

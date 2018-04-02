@@ -4,7 +4,7 @@ import zip from 'gulp-zip'
 import packageDetails from '../package.json'
 import args from './lib/args'
 
-function getPackFileType () {
+function getPackFileType() {
   switch (args.vendor) {
     case 'firefox':
       return '.xpi'
@@ -17,7 +17,7 @@ gulp.task('pack', ['build'], () => {
   let name = packageDetails.name
   let version = packageDetails.version
   let filetype = getPackFileType()
-  let filename = `${name}-${version}-${args.vendor}${filetype}`
+  let filename = `${name}-${version}-${args.vendor}${args.beta ? "-BETA" : ""}${filetype}`
   return gulp.src(`dist/${args.vendor}/**/*`)
     .pipe(zip(filename))
     .pipe(gulp.dest('./packages'))

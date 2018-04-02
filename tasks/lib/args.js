@@ -31,6 +31,12 @@ const args = yargs
     describe: 'Force the creation of sourcemaps'
   })
 
+  .option('beta', {
+    describe: 'Appends "BETA" to name in created extension',
+    boolean: true,
+    default: false
+  })
+
   .argv
 
 // Use production flag for sourcemaps
