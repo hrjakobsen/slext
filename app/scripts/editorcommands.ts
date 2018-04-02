@@ -3,7 +3,7 @@ import { Service } from 'typedi';
 import { File } from './file';
 import * as $ from 'jquery';
 import { PageHook } from './pagehook.service';
-var _debug_editors: [AceAjax.Editor];
+declare var _debug_editors: [AceAjax.Editor];
 
 
 @Service()
