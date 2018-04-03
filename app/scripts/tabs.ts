@@ -245,7 +245,7 @@ export class TabModule {
                     Compile main
                 </a>
             </div>
-        `)
+        `);
         $(".btn-recompile-group").after(compileMainButton);
         compileMainButton.on('click', function () {
             if (self.maintab == null || self.maintab === undefined) {
@@ -254,9 +254,9 @@ export class TabModule {
             }
             let cur = self._currentTab;
             self.maintab.tab.click();
-            setInterval(() => {
-                $(".btn-recompile").click();
-                setInterval(() => {
+            setTimeout(() => {
+                $("a[ng-click='recompile()']")[0].click();
+                setTimeout(() => {
                     cur.tab.click();
                 }, 1000);
             }, 1000);
