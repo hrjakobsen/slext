@@ -45,9 +45,9 @@ export class Settings extends Dispatcher {
         menu
             .find('.slext-settings__plugins')
             .append(
-            Settings.pluginStructure.map(x =>
-                Settings.generatePluginList(x)
-            )
+                Settings.pluginStructure.map(x =>
+                    Settings.generatePluginList(x)
+                )
             );
         menu.on(
             'click',
@@ -69,7 +69,7 @@ export class Settings extends Dispatcher {
             themeSection.append(themeElement);
         }
 
-        $('header.toolbar .toolbar-right').prepend(button);
+        $('header.toolbar .toolbar-right .btn.btn-full-height').first().before(button);
         button.click(function () {
             menu.addClass('slext-settings--active');
         });
