@@ -59,7 +59,7 @@ header.toolbar.toolbar-tabs {
             font-style: italic;
         }
 
-        &--main {
+        &--main, &--main.slext-tabs__tab--favorite {
             .slext-tabs__tab-cross .fa:before {
                 content: '\f015';
             }
