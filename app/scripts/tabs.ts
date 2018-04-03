@@ -27,6 +27,7 @@ export class TabModule {
     private draggedtab: Tab = null;
     private temporarytab: Tab = null;
     private temporaryTabsEnabled: boolean;
+    private mainTabFirst: boolean;
     private settings: Settings;
 
     constructor(protected slext: Slext) {
@@ -160,6 +161,17 @@ export class TabModule {
         });
         self.settings.addEventListener("temporary_tabsChanged", function (enabled) {
             self.temporaryTabsEnabled = enabled;
+        });
+
+        PersistenceService.load("main_tab_first", function (enabled) {
+            self.mainTabFirst = enabled || false;
+        });
+        self.settings.addEventListener("main_tab_firstChanged", function (enabled) {
+            self.mainTabFirst = enabled;
+            if (self.mainTabFirst && self.maintab != null && self.maintab !== undefined) {
+                let index = self._tabs.indexOf(self.maintab);
+                self.moveTab(index, 0);
+            }
         });
     }
 
@@ -297,6 +309,10 @@ export class TabModule {
         }
         this.maintab = tab;
         this.maintab.tab.addClass('slext-tabs__tab--main');
+        if (this.mainTabFirst) {
+            let tabIndex = this._tabs.indexOf(tab);
+            this.moveTab(tabIndex, 0);
+        }
     }
 
     private setFavoriteTab(tab: Tab) {
@@ -321,6 +337,10 @@ export class TabModule {
         this.dragleave(e);
         e.preventDefault();
         let target = $(e.target).parents('.slext-tabs__tab').data('tab') as Tab;
+
+        //Tried to move maintab away
+        if ((target == this.maintab || this.draggedtab == this.maintab) && this.mainTabFirst) return true;
+
         let indexTarget = this._tabs.indexOf(target);
         if (indexTarget == -1) {
             Logger.error("Could not find target tab as an open tab");
