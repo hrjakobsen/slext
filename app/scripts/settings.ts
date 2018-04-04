@@ -51,7 +51,7 @@ export class Settings extends Dispatcher {
             );
         menu.on(
             'click',
-            '.slext-settings__wrapper, .slext-settings__close *',
+            '.slext-settings__wrapper, .slext-settings__close *, .slext-settings__close',
             function (e) {
                 if (e.target != this) return true;
                 menu.removeClass('slext-settings--active');
