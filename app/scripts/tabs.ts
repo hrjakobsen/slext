@@ -326,17 +326,17 @@ export class TabModule {
     }
 
     private dragenter(e: DragEvent) {
-        $(e.target).parents('.slext-tabs__tab').addClass("slext-tabs__tab--hovered");
+        $(e.target).addClass("slext-tabs__tab--hovered");
     }
 
     private dragleave(e: DragEvent) {
-        $(e.target).parents('.slext-tabs__tab').removeClass("slext-tabs__tab--hovered");
+        $(e.target).removeClass("slext-tabs__tab--hovered");
     }
 
     private drop(e) {
         this.dragleave(e);
         e.preventDefault();
-        let target = $(e.target).parents('.slext-tabs__tab').data('tab') as Tab;
+        let target = $(e.target).data('tab') as Tab;
 
         //Tried to move maintab away
         if ((target == this.maintab || this.draggedtab == this.maintab) && this.mainTabFirst) return true;
