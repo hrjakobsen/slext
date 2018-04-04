@@ -173,6 +173,10 @@ export class TabModule {
                 self.moveTab(index, 0);
             }
         });
+
+        self.slext.addEventListener("layoutChanged", function () {
+            self.addCompileMainButton();
+        });
     }
 
     private openTab(file: File, favorite?: boolean, temporary?: boolean) {
@@ -249,6 +253,12 @@ export class TabModule {
     }
 
     protected addCompileMainButton() {
+        //Check if button is already there
+        if ($('.btn-compile-main').length > 0) {
+            console.log("already there, skipping");
+            return;
+        }
+
         let self = this;
         let compileMainButton = $(`
             <div class="btn-recompile-group btn-compile-main">
@@ -260,6 +270,7 @@ export class TabModule {
         `);
         $(".btn-recompile-group").after(compileMainButton);
         compileMainButton.on('click', function () {
+            let fullscreen = self.slext.isFullScreenPDF();
             if (self.maintab == null || self.maintab === undefined) {
                 alert("Select a main file first!");
                 return;
@@ -270,8 +281,11 @@ export class TabModule {
                 $("a[ng-click='recompile()']")[0].click();
                 setTimeout(() => {
                     cur.tab.click();
-                }, 1000);
-            }, 1000);
+                    setTimeout(() => {
+                        self.slext.goToFullScreenPDF();
+                    }, 500);
+                }, 500);
+            }, 500);
         });
     }
 

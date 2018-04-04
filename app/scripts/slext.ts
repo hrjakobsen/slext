@@ -42,6 +42,14 @@ export class Slext extends Dispatcher {
         return this.id;
     }
 
+    public isFullScreenPDF(): boolean {
+        return $(".full-size.ng-scope:not(.ng-hide)[ng-show=\"ui.view == 'pdf'\"]").length > 0;
+    }
+
+    public goToFullScreenPDF() {
+        $("[ng-click=\"togglePdfView()\"]").click();
+    }
+
     private loadingFinished() {
         let mo = new MutationObserver(function (mutations, observer) {
             if (
@@ -70,6 +78,10 @@ export class Slext extends Dispatcher {
 
         document.addEventListener("slext_editorChanged", function (e) {
             self.dispatch("editorChanged");
+        });
+
+        $(document).on('click', '[ng-click="switchToSideBySideLayout()"], [ng-click="switchToFlatLayout()"]', function () {
+            self.dispatch("layoutChanged");
         });
     }
 
