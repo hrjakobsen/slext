@@ -326,7 +326,11 @@ export class TabModule {
     }
 
     private dragenter(e: DragEvent) {
-        $(e.target).addClass("slext-tabs__tab--hovered");
+        let el = $(e.target);
+        if (!el.hasClass('slext-tabs__tab')) {
+            el = el.parents('.slext-tabs__tab');
+        }
+        el.addClass("slext-tabs__tab--hovered");
     }
 
     private dragleave(e: DragEvent) {
@@ -336,7 +340,11 @@ export class TabModule {
     private drop(e) {
         this.dragleave(e);
         e.preventDefault();
-        let target = $(e.target).data('tab') as Tab;
+        let el = $(e.target);
+        if (!el.hasClass('slext-tabs__tab')) {
+            el = el.parents('.slext-tabs__tab');
+        }
+        let target = el.data('tab') as Tab;
 
         //Tried to move maintab away
         if ((target == this.maintab || this.draggedtab == this.maintab) && this.mainTabFirst) return true;
