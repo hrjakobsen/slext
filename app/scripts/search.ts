@@ -40,17 +40,16 @@ export class Search {
             if (e.which == 13) {
                 //Enter press
                 self.selectFile();
-                return;
             }
             if (e.which == 38) {
                 // Up
                 self.select(self.currentSelected - 1);
-                return;
+                e.preventDefault();
             }
             if (e.which == 40) {
                 // Down
                 self.select(self.currentSelected + 1);
-                return;
+                e.preventDefault();
             }
         });
 
