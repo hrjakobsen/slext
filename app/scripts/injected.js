@@ -16,10 +16,10 @@ var int = setInterval(function () {
                 var event = new Event("slext_editorChanged");
                 document.dispatchEvent(event);
             });
-
         }
+        tries++;
     } catch (e) {
         if (!(e instanceof ReferenceError)) throw e;
-        if (limit++ >= limit) clearInterval(int);
+        if (tries++ >= limit) clearInterval(int);
     }
 }, 100);
