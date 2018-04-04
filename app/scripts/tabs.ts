@@ -233,7 +233,6 @@ export class TabModule {
             tabListener = t.tab.on("dblclick", function (e) {
                 removeTemp(e);
             });
-
         }
     }
 
@@ -255,7 +254,7 @@ export class TabModule {
     protected addCompileMainButton() {
         //Check if button is already there
         if ($('.btn-compile-main').length > 0) {
-            console.log("already there, skipping");
+            Logger.debug("Main button already present, no need to add it again");
             return;
         }
 
