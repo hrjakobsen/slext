@@ -4,6 +4,7 @@ import { File } from './file';
 import * as $ from 'jquery';
 import { Utils } from './utils';
 import { PersistenceService } from './persistence.service';
+import { Logger } from './logger';
 
 @Service()
 export class Search {
@@ -51,15 +52,17 @@ export class Search {
                 self.select(self.currentSelected + 1);
                 return;
             }
+        });
+
+        this.box.on('input', '.searchbox__field', function (e) {
             let inputfield = $(this);
             let text = inputfield.val() as string;
 
             let fileMatches = self.slext
                 .getFiles()
                 .filter(function (file, index) {
-                    return file.path.toLowerCase().includes(text.toLowerCase());
+                    return file.path.toLowerCase().startsWith(text.toLowerCase()) || file.name.startsWith(text.toLowerCase());
                 });
-
             self.resultlist.empty();
             self.createList(fileMatches).forEach(x => {
                 self.resultlist.append(x);
