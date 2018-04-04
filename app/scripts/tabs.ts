@@ -280,9 +280,11 @@ export class TabModule {
                 $("a[ng-click='recompile()']")[0].click();
                 setTimeout(() => {
                     cur.tab.click();
-                    setTimeout(() => {
-                        self.slext.goToFullScreenPDF();
-                    }, 500);
+                    if (fullscreen) {
+                        setTimeout(() => {
+                            self.slext.goToFullScreenPDF();
+                        }, 500);
+                    }
                 }, 500);
             }, 500);
         });
