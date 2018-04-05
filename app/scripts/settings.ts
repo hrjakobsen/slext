@@ -74,6 +74,12 @@ export class Settings extends Dispatcher {
             menu.addClass('slext-settings--active');
         });
 
+        $(document).keydown(function (e) {
+            if (e.which == 27) { //Escape key
+                menu.removeClass('slext-settings--active');
+            }
+        });
+
         this.setUpCheckboxes(menu);
 
         $('body').append(menu);
