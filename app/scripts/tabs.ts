@@ -311,6 +311,9 @@ export class TabModule {
             this._tabs.splice(index, 1);
             tab.tab.remove();
         }
+        if (tab == this.temporarytab) {
+            this.temporarytab = null;
+        }
     }
 
     private setMainTab(tab: Tab) {
