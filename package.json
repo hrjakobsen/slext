@@ -1,7 +1,7 @@
 {
   "name": "slext",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enhances the ShareLatex experience",
   "scripts": {
     "start": "npm run dev:chrome",
