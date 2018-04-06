@@ -20,9 +20,6 @@ export class Slext extends Dispatcher {
         this.id = Slext.id++;
         let loading = true;
         let loadingTimer = setInterval(function () {
-            // First check if a project has been selected
-            if (!/^.*sharelatex\.com\/project\/\S+$/.test(window.location.href))
-                return;
 
             // Then check if the SL loading screen has finished
             if (document.getElementsByClassName('loading-screen').length)
@@ -68,7 +65,7 @@ export class Slext extends Dispatcher {
         let self = this;
         let fileClickListener = $('html').on(
             'click',
-            '.entity-name.ng-isolate-scope.ui-draggable.ui-draggable-handle',
+            '.entity-name.ng-isolate-scope',
             function (evt) {
                 var el = this;
                 let file = FileUtils.newFile(el);

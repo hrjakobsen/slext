@@ -37,7 +37,7 @@ export class TabModule {
         this.addTabBar();
         this.addCompileMainButton();
 
-        PersistenceService.load('tabs_openFiles', function (files: [any]) {
+        PersistenceService.loadLocal('tabs_openFiles', function (files: [any]) {
             if (!files) return;
             if (files.length < 1) return;
             let allfiles = self.slext.getFiles();
@@ -47,18 +47,20 @@ export class TabModule {
                 self.openTab(fileMatch, file.favorite);
             });
 
-            PersistenceService.load('tabs_currentTab', function (path: string) {
+            PersistenceService.loadLocal('tabs_currentTab', function (path: string) {
                 let tab = self._tabs.findIndex(x => x.file.path == path);
-                if (tab != -1) tab = 0;
+                if (tab == -1) tab = 0;
 
                 // If no tabs are open, we cannot do anything
                 if (!self._tabs.length) return;
 
+
                 self.currentFile = self._tabs[tab].file || null;
+
                 self.selectTab(tab);
             });
 
-            PersistenceService.load('tabs_mainTab', function (path: string) {
+            PersistenceService.loadLocal('tabs_mainTab', function (path: string) {
                 let tab = self._tabs.findIndex(x => x.file.path == path);
                 if (tab != -1) {
                     self.setMainTab(self._tabs[tab]);
@@ -87,18 +89,18 @@ export class TabModule {
     }
 
     protected saveTabs() {
-        PersistenceService.save(
+        PersistenceService.saveLocal(
             'tabs_openFiles',
             this._tabs.map(t => { return { path: t.file.path, favorite: t.favorite } })
         );
 
-        PersistenceService.save(
+        PersistenceService.saveLocal(
             'tabs_currentTab',
             this._currentTab.file.path
         );
 
         if (this.maintab != null && this.maintab !== undefined) {
-            PersistenceService.save(
+            PersistenceService.saveLocal(
                 'tabs_mainTab',
                 this.maintab.file.path
             );
