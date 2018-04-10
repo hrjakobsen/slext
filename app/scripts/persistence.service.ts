@@ -3,13 +3,13 @@ export class PersistenceService {
         let url: string = location.href;
 
         let matches = url.match(/.*\.sharelatex\.com\/project\/([a-zA-Z0-9]*)/);
-        if (matches != null && matches.length < 2) return matches[1];
+        if (matches != null && matches.length >= 2) return matches[1];
 
         matches = url.match(/.*\.sharelatex\.com\/read\/([a-zA-Z0-9]*)/);
-        if (matches != null && matches.length < 2) return matches[1];
+        if (matches != null && matches.length >= 2) return matches[1];
 
         matches = url.match(/.*\.sharelatex\.com\/([0-9]{10}[a-z]{12})/);
-        if (matches != null && matches.length < 2) return matches[1];
+        if (matches != null && matches.length >= 2) return matches[1];
 
         return '';
 
