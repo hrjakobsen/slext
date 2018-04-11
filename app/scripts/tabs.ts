@@ -7,6 +7,8 @@ import { PersistenceService } from './persistence.service';
 import { setInterval } from 'timers';
 import { Settings } from './settings';
 import { Logger } from './logger';
+import { NotificationService } from './notification.service';
+
 
 interface Tab {
     file: File;
@@ -191,6 +193,7 @@ export class TabModule {
 
     private reindexTabs() {
         this.slext.updateFiles();
+        let filesRemoved: number = 0;
         for (let i = 0; i < this._tabs.length; i++) {
             let tab = this._tabs[i];
             let index = this.slext.getFiles().findIndex(f => f.path == tab.file.path);
@@ -199,9 +202,13 @@ export class TabModule {
                 if (tab.favorite) this.setFavoriteTab(tab);
                 if (this._tabs.length <= 1) this.ensureRightTab();
                 this.closeTab(tab);
+                filesRemoved++;
             } else {
                 tab.file = this.slext.getFiles()[i];
             }
+        }
+        if (filesRemoved > 0) {
+            NotificationService.warn(filesRemoved + " dead tabs was just closed.");
         }
     }
 

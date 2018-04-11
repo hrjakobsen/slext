@@ -363,3 +363,94 @@ header.toolbar.toolbar-tabs {
         letter-spacing: 5px;
     } /* allow space for check mark */
 }
+
+.slext__notifications {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 400px;
+
+    .slext__notification {
+        position: relative;
+        width: 100%;
+        color: white;
+        min-height: 50px;
+        padding-top: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+        &--warning {
+            background: #FBC02D;
+
+            .slext__notification__icon>.fa:before {
+                content: "\f06a";
+            }
+            .slext__notification__title:before {
+                content: "Warning";
+            }
+        }
+        &--info {
+            background: #2196f3;
+            .slext__notification__icon>.fa:before {
+                content: "\f05a";
+            }
+            .slext__notification__title:before {
+                content: "Info";
+            }
+        }
+        &--error {
+            background: #f44336;
+            .slext__notification__icon>.fa:before {
+                content: "\f057";
+            }
+            .slext__notification__title:before {
+                content: "Error";
+            }
+        }
+
+        &:after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    }
+
+    .slext__notification__icon {
+        display: block;
+        float: left;
+        width: 20%;
+        text-align: center;
+        font-size: 48px;
+        line-height: 48px;
+    }
+
+    .slext__notification__content {
+        width: 80%;
+        float: right;
+        display: block;
+    }
+
+    .slext__notification__title {
+        padding: 0;
+        margin: 0;
+        line-height: 48px;
+        font-size: 48px;
+        font-family: sans-serif;
+        color: inherit;
+
+        &:after {
+            text-transform: uppercase;
+        }
+    }
+
+    .slext__notification__close {
+        line-height: 32px;
+        width: 32px;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: inherit;
+        font-size: 32px;
+    }
+}
