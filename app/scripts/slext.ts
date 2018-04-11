@@ -82,7 +82,7 @@ export class Slext extends Dispatcher {
         });
     }
 
-    private updateFiles() {
+    public updateFiles() {
         this._files = this.indexFiles();
         this.dispatch('FilesChanged');
     }

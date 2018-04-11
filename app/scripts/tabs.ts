@@ -126,7 +126,15 @@ export class TabModule {
         $('html').on('click', '.slext-tabs__tab', function (evt) {
             let clickedTab = $(this).data('tab') as Tab;
             Logger.debug("Clicked on ", clickedTab);
-            $(clickedTab.file.handle)[0].click();
+            if (document.contains(clickedTab.file.handle)) {
+                $(clickedTab.file.handle)[0].click();
+            } else {
+                //File tree has been updated while tabs have not
+                self.reindexTabs();
+                if (self._tabs.includes(clickedTab)) {
+                    $(clickedTab.file.handle)[0].click();
+                }
+            }
         });
 
         $(document).keydown(function (e) {
@@ -179,6 +187,22 @@ export class TabModule {
         self.slext.addEventListener("layoutChanged", function () {
             self.addCompileMainButton();
         });
+    }
+
+    private reindexTabs() {
+        this.slext.updateFiles();
+        for (let i = 0; i < this._tabs.length; i++) {
+            let tab = this._tabs[i];
+            let index = this.slext.getFiles().findIndex(f => f.path == tab.file.path);
+            if (index == -1) {
+                if (this.maintab == tab) this.setMainTab(tab);
+                if (tab.favorite) this.setFavoriteTab(tab);
+                if (this._tabs.length <= 1) this.ensureRightTab();
+                this.closeTab(tab);
+            } else {
+                tab.file = this.slext.getFiles()[i];
+            }
+        }
     }
 
     private openTab(file: File, favorite?: boolean, temporary?: boolean) {
