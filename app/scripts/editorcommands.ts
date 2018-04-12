@@ -36,6 +36,15 @@ export class EditorCommands {
         PageHook.call(injectedFunction, [command]);
     }
 
+    public characterCount() {
+        let injectedFunction = function () {
+            var editor = _debug_editors[0];
+            var text = editor.getSession().getDocument().getTextRange(editor.getSelectionRange());
+            return text.length;
+        }
+        return PageHook.call(injectedFunction);
+    }
+
     public jumpToFile() {
         let self = this;
         let findCurrentFile = function () {
