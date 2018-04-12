@@ -26,6 +26,11 @@
                 <input type="checkbox" id="sl_main_tab_first" />
                 <label for="sl_main_tab_first">Keep main tab first in tab bar</label>
                 <br>
+                <h2>Command palette settings</h2>
+                <i>Different types of action in the command palette can be prefixed to filter out results. If you enter
+                    <b>&gt;</b> in the command palette only commands will be shown.</i>
+                <input type="checkbox" id="sl_command_prefix" />
+                <label for="sl_command_prefix">Require prefix in command palette to show other results than files</label>
             </div>
             <div class="slext-settings__section">
                 <h2>Keyboard bindings</h2>
@@ -88,7 +93,8 @@
                 <h4>version 1.1.0</h4>
                 <ul>
                     <li>Replaced the search menu (ctrl-p) with a command palette that can run commands as well as search for
-                        files</li>
+                        files
+                    </li>
                     <li>Added a command to the command palette that can count the number of characters in the selection</li>
                 </ul>
                 <h4>version 1.0.4</h4>

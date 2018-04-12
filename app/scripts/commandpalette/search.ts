@@ -7,6 +7,7 @@ import { PersistenceService } from '../persistence.service';
 import { Logger } from '../logger';
 import { FileBackend } from './filebackend';
 import { CommandBackend } from './commandbackend';
+import { Settings } from '../settings';
 
 export interface CommandItem {
     type: string;
@@ -25,21 +26,27 @@ export interface CommandPaletteBackend {
 export class Search {
     private static box: string = require('../../templates/searchbox.html');
     private static result: string = require('../../templates/searchresult.html');
+    private prefixRequired: boolean;
     box: JQuery<HTMLElement>;
     resultlist: JQuery<HTMLElement>;
     active = false;
     currentSelected = -1;
     private backends: CommandPaletteBackend[];
+    private settings: Settings;
 
     constructor(private slext: Slext) {
         this.backends = [
             Container.get(FileBackend),
             Container.get(CommandBackend),
         ];
+        this.settings = Container.get(Settings);
         let self = this;
         this.box = $(Search.box);
         this.resultlist = this.box.children('.searchbox__results');
         $('body').append(this.box);
+
+        PersistenceService.load("command_prefix", r => self.prefixRequired = r || false);
+        this.settings.addEventListener("command_prefixChanged", r => self.prefixRequired = r || false);
 
         $(document).keydown(function (e) {
             if (e.altKey && e.which == 80) {
@@ -77,17 +84,22 @@ export class Search {
             let inputfield = $(this);
             let text = inputfield.val() as string;
 
-            /*let prefixedBackends = self.backends.filter(backend => {
-                if (text.length == 0) {
-                    return backend.getPrefix() == null;
-                }
-                return backend.getPrefix() == text.slice(0, 1) || backend.getPrefix() == null;
-            });*/
+            let backendsToSearch = self.backends;
+
+            if (self.prefixRequired) {
+                backendsToSearch = backendsToSearch.filter(backend => {
+                    if (text.length == 0) {
+                        return backend.getPrefix() == null;
+                    }
+                    return backend.getPrefix() == null || backend.getPrefix() == text.slice(0, backend.getPrefix().length);
+                })
+            }
 
             self.resultlist.empty();
 
-            self.backends.forEach(backend => {
-                self.resultlist.append(self.createList(backend, backend.getItems(text)).slice(0, 5));
+            backendsToSearch.forEach(backend => {
+                if (self.resultlist.children().length >= 5) return;
+                self.resultlist.append(self.createList(backend, backend.getItems(text)).slice(0, 5 - self.resultlist.children().length));
             });
 
             if (self.resultlist.children().length > 0) {

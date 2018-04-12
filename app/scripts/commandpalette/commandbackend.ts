@@ -16,7 +16,7 @@ export class CommandBackend implements CommandPaletteBackend {
             name: "Character Count",
             func: function () {
                 Container.get(EditorCommands).characterCount().then(response => {
-                    NotificationService.info(response + " characters are selected");
+                    NotificationService.info(response + " character" + (response == "1" ? " is" : "s are") + " selected");
                 });
             },
             description: "Counts the number of selected characters"

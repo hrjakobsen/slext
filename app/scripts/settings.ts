@@ -90,7 +90,8 @@ export class Settings extends Dispatcher {
             "flags",
             "cursors",
             "temporary_tabs",
-            "main_tab_first"
+            "main_tab_first",
+            "command_prefix"
         ]
         let self = this;
 
