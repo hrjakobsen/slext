@@ -3,7 +3,7 @@ import { Container } from 'typedi';
 import { Slext } from './slext';
 import { TabModule } from './tabs';
 import { Settings } from './settings';
-import { Search } from './commandpalette/search';
+import { CommandPalette } from './commandpalette/commandpalette';
 import { ThemeModule } from './theme';
 import { EditorCommands } from './editorcommands';
 import { PageHook } from './pagehook.service';
@@ -27,7 +27,7 @@ function projectLoaded(url) {
                 let settings: Settings = Container.get(Settings);
                 let theme: ThemeModule = Container.get(ThemeModule);
                 let tabs = Container.get(TabModule);
-                let search = Container.get(Search);
+                let search = Container.get(CommandPalette);
                 let editorcommands = Container.get(EditorCommands);
                 let removeFlags = Container.get(RemoveFlagsModule);
             }, 100);

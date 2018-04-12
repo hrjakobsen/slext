@@ -1,4 +1,4 @@
-import { CommandItem, CommandPaletteBackend } from './search';
+import { CommandItem, CommandPaletteBackend } from './commandpalette';
 import { Service, Container } from 'typedi';
 import { EditorCommands } from '../editorcommands';
 import { NotificationService } from '../notification.service';

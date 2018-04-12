@@ -23,7 +23,7 @@ export interface CommandPaletteBackend {
 }
 
 @Service()
-export class Search {
+export class CommandPalette {
     private static box: string = require('../../templates/searchbox.html');
     private static result: string = require('../../templates/searchresult.html');
     private prefixRequired: boolean;
@@ -41,7 +41,7 @@ export class Search {
         ];
         this.settings = Container.get(Settings);
         let self = this;
-        this.box = $(Search.box);
+        this.box = $(CommandPalette.box);
         this.resultlist = this.box.children('.searchbox__results');
         $('body').append(this.box);
 
@@ -138,7 +138,7 @@ export class Search {
         let elements: JQuery<HTMLElement>[] = [];
         for (let i = 0; i < Math.min(5, items.length); i++) {
             let f = items[i];
-            let match = $(Utils.format(Search.result, f));
+            let match = $(Utils.format(CommandPalette.result, f));
             match.click(function (e) {
                 self.select(i);
                 self.close();

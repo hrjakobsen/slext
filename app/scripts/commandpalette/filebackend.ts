@@ -1,4 +1,4 @@
-import { CommandItem, CommandPaletteBackend } from './search';
+import { CommandItem, CommandPaletteBackend } from './commandpalette';
 import { Service } from 'typedi';
 import { Slext } from '../slext';
 import { File } from '../file';
