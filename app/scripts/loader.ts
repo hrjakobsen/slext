@@ -3,7 +3,7 @@ import { Container } from 'typedi';
 import { Slext } from './slext';
 import { TabModule } from './tabs';
 import { Settings } from './settings';
-import { Search } from './search';
+import { Search } from './commandpalette/search';
 import { ThemeModule } from './theme';
 import { EditorCommands } from './editorcommands';
 import { PageHook } from './pagehook.service';

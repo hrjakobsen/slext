@@ -1,21 +1,41 @@
-import { Slext } from './slext';
-import { Service } from 'typedi';
-import { File } from './file';
+import { Slext } from '../slext';
+import { Service, Container } from 'typedi';
+import { File } from '../file';
 import * as $ from 'jquery';
-import { Utils } from './utils';
-import { PersistenceService } from './persistence.service';
-import { Logger } from './logger';
+import { Utils } from '../utils';
+import { PersistenceService } from '../persistence.service';
+import { Logger } from '../logger';
+import { FileBackend } from './filebackend';
+import { CommandBackend } from './commandbackend';
+
+export interface CommandItem {
+    type: string;
+    description: string;
+    name: string;
+    data: any;
+}
+
+export interface CommandPaletteBackend {
+    selected(item: CommandItem): void;
+    getItems(filter: string): CommandItem[];
+    getPrefix(): string;
+}
 
 @Service()
 export class Search {
-    private static box: string = require('../templates/searchbox.html');
-    private static result: string = require('../templates/searchresult.html');
+    private static box: string = require('../../templates/searchbox.html');
+    private static result: string = require('../../templates/searchresult.html');
     box: JQuery<HTMLElement>;
     resultlist: JQuery<HTMLElement>;
     active = false;
     currentSelected = -1;
+    private backends: CommandPaletteBackend[];
 
     constructor(private slext: Slext) {
+        this.backends = [
+            Container.get(FileBackend),
+            Container.get(CommandBackend),
+        ];
         let self = this;
         this.box = $(Search.box);
         this.resultlist = this.box.children('.searchbox__results');
@@ -57,14 +77,17 @@ export class Search {
             let inputfield = $(this);
             let text = inputfield.val() as string;
 
-            let fileMatches = self.slext
-                .getFiles()
-                .filter(function (file, index) {
-                    return file.path.toLowerCase().startsWith(text.toLowerCase()) || file.name.startsWith(text.toLowerCase());
-                });
+            /*let prefixedBackends = self.backends.filter(backend => {
+                if (text.length == 0) {
+                    return backend.getPrefix() == null;
+                }
+                return backend.getPrefix() == text.slice(0, 1) || backend.getPrefix() == null;
+            });*/
+
             self.resultlist.empty();
-            self.createList(fileMatches).forEach(x => {
-                self.resultlist.append(x);
+
+            self.backends.forEach(backend => {
+                self.resultlist.append(self.createList(backend, backend.getItems(text)).slice(0, 5));
             });
 
             if (self.resultlist.children().length > 0) {
@@ -81,8 +104,9 @@ export class Search {
     private selectFile() {
         let selected = $('.searchbox__resultitem--selected');
         this.resultlist.removeClass('searchbox--active');
-        let file = selected.data('t') as File;
-        $(file.handle).click();
+        let file = selected.data('t') as CommandItem;
+        let backend = selected.data('b') as CommandPaletteBackend;
+        backend.selected(file);
         this.close();
     }
 
@@ -97,18 +121,19 @@ export class Search {
         newSelected.classList.add('searchbox__resultitem--selected');
     }
 
-    private createList(files: File[]): JQuery<HTMLElement>[] {
+    private createList(backend: CommandPaletteBackend, items: CommandItem[]): JQuery<HTMLElement>[] {
         let self = this;
         let elements: JQuery<HTMLElement>[] = [];
-        for (let i = 0; i < Math.min(5, files.length); i++) {
-            let f = files[i];
+        for (let i = 0; i < Math.min(5, items.length); i++) {
+            let f = items[i];
             let match = $(Utils.format(Search.result, f));
             match.click(function (e) {
                 self.select(i);
                 self.close();
-                $(f.handle).click();
+                backend.selected(f);
             });
             match.data('t', f);
+            match.data('b', backend);
             elements.push(match);
         }
         return elements;
