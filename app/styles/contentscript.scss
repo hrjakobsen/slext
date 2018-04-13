@@ -12,6 +12,7 @@ header.toolbar.toolbar-tabs {
     width: calc(100% - 20px);
     clear: both;
     background-color: var(--backgroundColor);
+    color: var(--textColor);
     height: 40px;
     box-sizing: border-box;
     white-space: nowrap;
@@ -56,7 +57,7 @@ header.toolbar.toolbar-tabs {
 
         &--active {
             border-bottom: 4px solid var(--accentColor);
-            color: var(--accentColorActive);
+            color: var(--textColorActive);
         }
 
         &--temporary {
@@ -305,6 +306,7 @@ header.toolbar.toolbar-tabs {
         padding: 0 5px;
         outline: none;
         border: 0;
+        color: var(--textColor);
     }
 
     &__resultitem {

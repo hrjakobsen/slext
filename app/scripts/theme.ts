@@ -13,6 +13,7 @@ interface ThemeStructure {
     accentColorHover: string;
     accentColorActive: string;
     textColor: string;
+    textColorActive: string;
     backgroundColor: string;
     fileColor: string;
     fileColorHover: string;
@@ -36,7 +37,8 @@ export class ThemeModule {
                 accentColor: '#a93529',
                 accentColorHover: '#6b221a',
                 accentColorActive: 'white',
-                textColor: 'white',
+                textColor: '#a4a4a4',
+                textColorActive: 'white',
                 backgroundColor: '#333',
                 fileColor: '#a4a4a4',
                 fileColorHover: '#a93529',
@@ -52,9 +54,10 @@ export class ThemeModule {
                 accentColor: '#a93529',
                 accentColorHover: '#6b221a',
                 accentColorActive: 'white',
-                textColor: 'black',
+                textColor: '#808080',
+                textColorActive: '#202020',
                 backgroundColor: 'white',
-                fileColor: '#a4a4a4',
+                fileColor: '#404040',
                 fileColorHover: '#a93529',
                 scrollbarBackgroundColor: '#eee',
                 scrollbarThumbColor: '#ccc',
@@ -65,10 +68,11 @@ export class ThemeModule {
         {
             name: 'Blue',
             theme: {
-                accentColor: '#586e75',
+                accentColor: '#609090',
                 accentColorHover: '#add3e1',
                 accentColorActive: '#839496',
-                textColor: '#657b83',
+                textColor: '#809090',
+                textColorActive: '#ccffff',
                 backgroundColor: '#002b36',
                 fileColor: '#586e75',
                 fileColorHover: '#add3e1',
