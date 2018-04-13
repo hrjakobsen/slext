@@ -147,6 +147,15 @@ export class TabModule {
             } else if (e.altKey && e.which == 68) {
                 e.preventDefault();
                 self.setFavoriteTab(self._currentTab);
+            } else if (e.altKey && (e.which >= 49 && e.which <= 57)) {
+                e.preventDefault();
+                // Subtract 48 to get the value of the number pressed on keyboard
+                // 1 is 49, 9 is 57
+                let tabNumber = e.which - 48;
+                if (tabNumber == 9) tabNumber = self._tabs.length;
+                if (tabNumber <= self._tabs.length) {
+                    $(self._tabs[tabNumber - 1].file.handle).click();
+                }
             }
         });
 
