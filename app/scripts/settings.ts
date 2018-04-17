@@ -39,7 +39,7 @@ export class Settings extends Dispatcher {
         super();
         let self = this;
         let button = $(
-            '<div class="btn btn-full-height"><i class="fa fa-cog"></i><p class="toolbar-label">Slext Settings</p></div>'
+            '<div class="btn btn-full-height"><i class="fa fa-cog"></i><p class="toolbar-label">SLext Settings</p></div>'
         );
         let menu = $(Settings.settingsTemplate);
         menu
@@ -90,7 +90,8 @@ export class Settings extends Dispatcher {
             "flags",
             "cursors",
             "temporary_tabs",
-            "main_tab_first"
+            "main_tab_first",
+            "command_prefix"
         ]
         let self = this;
 

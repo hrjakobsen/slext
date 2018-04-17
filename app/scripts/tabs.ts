@@ -7,6 +7,8 @@ import { PersistenceService } from './persistence.service';
 import { setInterval } from 'timers';
 import { Settings } from './settings';
 import { Logger } from './logger';
+import { NotificationService } from './notification.service';
+
 
 interface Tab {
     file: File;
@@ -126,7 +128,15 @@ export class TabModule {
         $('html').on('click', '.slext-tabs__tab', function (evt) {
             let clickedTab = $(this).data('tab') as Tab;
             Logger.debug("Clicked on ", clickedTab);
-            $(clickedTab.file.handle)[0].click();
+            if (document.contains(clickedTab.file.handle)) {
+                $(clickedTab.file.handle)[0].click();
+            } else {
+                //File tree has been updated while tabs have not
+                self.reindexTabs();
+                if (self._tabs.includes(clickedTab)) {
+                    $(clickedTab.file.handle)[0].click();
+                }
+            }
         });
 
         $(document).keydown(function (e) {
@@ -137,6 +147,15 @@ export class TabModule {
             } else if (e.altKey && e.which == 68) {
                 e.preventDefault();
                 self.setFavoriteTab(self._currentTab);
+            } else if (e.altKey && (e.which >= 49 && e.which <= 57)) {
+                e.preventDefault();
+                // Subtract 48 to get the value of the number pressed on keyboard
+                // 1 is 49, 9 is 57
+                let tabNumber = e.which - 48;
+                if (tabNumber == 9) tabNumber = self._tabs.length;
+                if (tabNumber <= self._tabs.length) {
+                    $(self._tabs[tabNumber - 1].file.handle).click();
+                }
             }
         });
 
@@ -179,6 +198,27 @@ export class TabModule {
         self.slext.addEventListener("layoutChanged", function () {
             self.addCompileMainButton();
         });
+    }
+
+    private reindexTabs() {
+        this.slext.updateFiles();
+        let filesRemoved: number = 0;
+        for (let i = 0; i < this._tabs.length; i++) {
+            let tab = this._tabs[i];
+            let index = this.slext.getFiles().findIndex(f => f.path == tab.file.path);
+            if (index == -1) {
+                if (this.maintab == tab) this.setMainTab(tab);
+                if (tab.favorite) this.setFavoriteTab(tab);
+                if (this._tabs.length <= 1) this.ensureRightTab();
+                this.closeTab(tab);
+                filesRemoved++;
+            } else {
+                tab.file = this.slext.getFiles()[i];
+            }
+        }
+        if (filesRemoved > 0) {
+            NotificationService.warn(filesRemoved + " dead tabs was just closed.");
+        }
     }
 
     private openTab(file: File, favorite?: boolean, temporary?: boolean) {

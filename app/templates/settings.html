@@ -4,7 +4,7 @@
             <button class="slext-settings__close">
                 <i class="fa fa-times"></i>
             </button>
-            <h1>Slext Settings</h1>
+            <h1>SLext Settings</h1>
             <div class="slext-settings__section">
                 <h2>Select ShareLatex Theme</h2>
                 <ul class="slext-settings__themes"></ul>
@@ -26,12 +26,17 @@
                 <input type="checkbox" id="sl_main_tab_first" />
                 <label for="sl_main_tab_first">Keep main tab first in tab bar</label>
                 <br>
+                <h2>Command palette settings</h2>
+                <i>Different types of action in the command palette can be prefixed to filter out results. If you enter
+                    <b>&gt;</b> in the command palette only commands will be shown.</i>
+                <input type="checkbox" id="sl_command_prefix" />
+                <label for="sl_command_prefix">Require prefix in command palette to show other results than files</label>
             </div>
             <div class="slext-settings__section">
                 <h2>Keyboard bindings</h2>
                 <table class="slext-keyboard-bindings">
                     <tr>
-                        <td class="slext-binding-description">Search files</td>
+                        <td class="slext-binding-description">Open command palette (search for files and run commands)</td>
                         <td class="slext-binding-command">
                             <code>alt</code>
                             <code>P</code>
@@ -72,6 +77,15 @@
                             <code>D</code>
                         </td>
                     </tr>
+                    <tr>
+                        <td class="slext-binding-description">Jump to tab</td>
+                        <td class="slext-binding-command">
+                            <code>alt</code>
+                            <code>1</code> -
+                            <code>alt</code>
+                            <code>9</code>
+                        </td>
+                    </tr>
 
                 </table>
             </div>
@@ -85,6 +99,21 @@
             </div>
             <div class="slext-settings__section">
                 <h2>Changelog</h2>
+                <h4>version 1.1.0</h4>
+                <ul>
+                    <li>Replaced the search menu (ctrl-p) with a command palette that can run commands as well as search for
+                        files
+                    </li>
+                    <li>Added a command to the command palette that can count the number of characters in the selection</li>
+                    <li>Added the ability to jump to the n'th tab by pressing alt + 1-9</li>
+                    <li>Updated theme colors to be more distinguishable</li>
+                </ul>
+                <h4>version 1.0.4</h4>
+                <ul>
+                    <li>Fixed a bug with
+                        <i>dead tabs</i> after lost connection to ShareLatex server or files being moved. Moved files will now
+                        be removed from the tabs when clicked, if the file was not moved, the tabs should come back alive.</li>
+                </ul>
                 <h4>version 1.0.2 & 1.0.3</h4>
                 <ul>
                     <li>Reverted settings to be saved globally to match ShareLatex behaviour (tabs are still saved per project)</li>
