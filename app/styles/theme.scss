@@ -463,3 +463,12 @@ a:hover {
 .label-danger {
     background-color: #99736e;
 }
+
+.toolbar .toolbar-left>a:not(.btn).active, 
+.toolbar .toolbar-left>a:not(.btn):active, 
+.toolbar .toolbar-right>a:not(.btn).active, 
+.toolbar .toolbar-right>a:not(.btn):active, 
+.toolbar>a:not(.btn).active, 
+.toolbar>a:not(.btn):active {
+    background-color: var(--accentColor);
+}
