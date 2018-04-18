@@ -23,15 +23,28 @@ export class EditorCommands {
 
     public wrapSelectedText() {
         let command = prompt("Wrapping command");
+        command = command.replace(/ /g, ''); //remove all spaces
         if (command == null) return;
         let injectedFunction = function (command) {
             var editor = _debug_editors[0];
             var range = editor.getSelectionRange();
             var start = range.start,
                 end = range.end;
+               
             editor.getSession().insert(end, "}");
             editor.getSession().insert(start, (command ? "\\" : "") + command + "{");
             editor.clearSelection();
+
+            if(start.row == end.row && start.column == end.column) { //no text selected
+            	editor.gotoLine(start.row + 1, start.column + 2 + command.length); //2 for \{
+            } else {
+              if(command.length > 0) {
+                	editor.gotoLine(end.row + 1, end.column + 3 + command.length); //3 for \{}
+              } else {
+                	editor.gotoLine(end.row + 1, end.column + 2); //2 for {}
+              }
+            }
+
         }
         PageHook.call(injectedFunction, [command]);
     }
