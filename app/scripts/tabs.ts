@@ -63,7 +63,6 @@ export class TabModule {
             });
 
             PersistenceService.loadLocal('tabs_mainTab', function (path: string) {
-                console.log(path);
                 let tab = self._tabs.findIndex(x => x.file.path == path);
                 if (tab != -1) {
                     self.setMainTab(self._tabs[tab]);
