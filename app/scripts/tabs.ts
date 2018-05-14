@@ -1,6 +1,6 @@
 import { Slext } from './slext';
 import { Service, Container } from 'typedi';
-import { File } from './file';
+import { File, FileUtils } from './file';
 import * as $ from 'jquery';
 import { Utils } from './utils';
 import { PersistenceService } from './persistence.service';
@@ -106,6 +106,11 @@ export class TabModule {
                 'tabs_mainTab',
                 this.maintab.file.path
             );
+        } else {
+            PersistenceService.saveLocal(
+                'tabs_mainTab',
+                null
+            );
         }
     }
 
@@ -128,14 +133,13 @@ export class TabModule {
         $('html').on('click', '.slext-tabs__tab', function (evt) {
             let clickedTab = $(this).data('tab') as Tab;
             Logger.debug("Clicked on ", clickedTab);
-            if (document.contains(clickedTab.file.handle)) {
-                $(clickedTab.file.handle)[0].click();
-            } else {
-                //File tree has been updated while tabs have not
+            if (!document.contains(clickedTab.file.handle) ||
+                FileUtils.newFile(clickedTab.file.handle).path != clickedTab.file.path) {
                 self.reindexTabs();
-                if (self._tabs.includes(clickedTab)) {
-                    $(clickedTab.file.handle)[0].click();
-                }
+            }
+
+            if (self._tabs.includes(clickedTab)) {
+                $(clickedTab.file.handle)[0].click();
             }
         });
 
@@ -147,6 +151,9 @@ export class TabModule {
             } else if (e.altKey && e.which == 68) {
                 e.preventDefault();
                 self.setFavoriteTab(self._currentTab);
+            } else if (e.altKey && e.which == 13) {
+                e.preventDefault();
+                self.compileMain();
             } else if (!e.ctrlKey && e.altKey && (e.which >= 49 && e.which <= 57)) {
                 e.preventDefault();
                 // Subtract 48 to get the value of the number pressed on keyboard
@@ -213,7 +220,7 @@ export class TabModule {
                 this.closeTab(tab);
                 filesRemoved++;
             } else {
-                tab.file = this.slext.getFiles()[i];
+                tab.file = this.slext.getFiles()[index];
             }
         }
         if (filesRemoved > 0) {
@@ -293,6 +300,28 @@ export class TabModule {
         $('#ide-body').addClass('ide-tabs');
     }
 
+    private compileMain() {
+        let self = this;
+        let fullscreen = self.slext.isFullScreenPDF();
+        if (self.maintab == null || self.maintab === undefined) {
+            alert("Select a main file first!");
+            return;
+        }
+        let cur = self._currentTab;
+        self.maintab.tab.click();
+        setTimeout(() => {
+            $("a[ng-click='recompile()']")[0].click();
+            setTimeout(() => {
+                cur.tab.click();
+                if (fullscreen) {
+                    setTimeout(() => {
+                        self.slext.goToFullScreenPDF();
+                    }, 500);
+                }
+            }, 500);
+        }, 500);
+    }
+
     protected addCompileMainButton() {
         //Check if button is already there
         if ($('.btn-compile-main').length > 0) {
@@ -311,24 +340,7 @@ export class TabModule {
         `);
         $(".btn-recompile-group").after(compileMainButton);
         compileMainButton.on('click', function () {
-            let fullscreen = self.slext.isFullScreenPDF();
-            if (self.maintab == null || self.maintab === undefined) {
-                alert("Select a main file first!");
-                return;
-            }
-            let cur = self._currentTab;
-            self.maintab.tab.click();
-            setTimeout(() => {
-                $("a[ng-click='recompile()']")[0].click();
-                setTimeout(() => {
-                    cur.tab.click();
-                    if (fullscreen) {
-                        setTimeout(() => {
-                            self.slext.goToFullScreenPDF();
-                        }, 500);
-                    }
-                }, 500);
-            }, 500);
+            self.compileMain();
         });
     }
 
