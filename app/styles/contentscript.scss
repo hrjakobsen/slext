@@ -25,6 +25,7 @@ header.toolbar.toolbar-tabs {
         border-top: 1px solid var(--buttonBorder);
         font-size: 0;
         width:100%;
+        box-shadow: rgba(0,0,0,.23) 0px 10px 8px -8px;
     }
     
     &__tab {

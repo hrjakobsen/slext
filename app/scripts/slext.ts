@@ -4,7 +4,7 @@ import * as $ from 'jquery';
 import { Container, Inject, Service } from 'typedi';
 import * as ace from 'ace-builds/src-noconflict/ace';
 import { PageHook } from './pagehook.service';
-
+import { Utils } from './utils';
 
 @Service()
 export class Slext extends Dispatcher {
@@ -26,6 +26,7 @@ export class Slext extends Dispatcher {
                 return;
 
             clearInterval(loadingTimer);
+            document.body.classList.add(Utils.isShareLatex(window.location.href) ? "sharelatex" : "overleaf");
             self.loadingFinished();
             self.loaded = true;
         }, 200);

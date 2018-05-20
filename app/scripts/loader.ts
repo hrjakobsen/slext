@@ -8,11 +8,11 @@ import { ThemeModule } from './theme';
 import { EditorCommands } from './editorcommands';
 import { PageHook } from './pagehook.service';
 import { RemoveFlagsModule } from './removeflags';
+import { Utils } from './utils';
+
 
 function projectLoaded(url) {
-    return /^.*sharelatex\.com\/project\/\S+$/.test(url)
-        || /^.*sharelatex\.com\/read\/\S+$/.test(window.location.href)
-        || /^.*sharelatex\.com\/[0-9]{10}[a-z]{12}$/.test(window.location.href);
+    return Utils.isShareLatex(url) || Utils.isOverleaf(url);
 }
 
 (function () {

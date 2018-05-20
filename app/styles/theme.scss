@@ -353,7 +353,8 @@ aside.file-tree:not(.multi-selected)
 .toolbar .toolbar-right > a:not(.btn).active,
 .toolbar .toolbar-right > a:not(.btn):active,
 .toolbar > a:not(.btn).active,
-.toolbar > a:not(.btn):active {
+.toolbar > a:not(.btn):active,
+.btn:active>.editor-menu-icon.fa {
     color: var(--textColor);
     background-color: var(--accentColorActive);
 }
@@ -471,4 +472,51 @@ a:hover {
 .toolbar>a:not(.btn).active, 
 .toolbar>a:not(.btn):active {
     background-color: var(--accentColor);
+}
+
+
+.overleaf {
+    .file-tree:not(.multi-selected) ul.file-tree-list li.selected>.entity>.entity-name,
+    .file-tree:not(.multi-selected) ul.file-tree-list li.selected>.entity>.entity-name::before{
+        background-color: unset !important;
+    }
+
+    .file-tree ul.file-tree-list li .entity-name:hover,
+    .file-tree ul.file-tree-list li .entity-name:hover:before {
+        background-color: rgba(0,0,0,0.1) !important; 
+    }
+
+    .file-tree .file-tree-inner {
+        background-color: var(--backgroundColor) !important;
+    }
+
+    .btn-recompile {
+        background-color: var(--accentColor) !important;
+    }
+    
+    .btn.btn-recompile.dropdown-toggle {
+        border-radius: 0;
+    }
+
+    .log-btn {
+        background-color: rgba(0,0,0,0.3);
+    }
+
+    .toolbar-filetree {
+        .fa {
+            color: var(--accentColor);
+        }
+    }
+
+    .btn>.editor-menu-icon.fa {
+        background: var(--accentColor);
+        -webkit-mask-image: url(/img/ol-brand/overleaf-o-white.svg);
+        mask-image: url(/img/ol-brand/overleaf-o-white.svg);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+    }
 }
