@@ -9,4 +9,17 @@ export class Utils {
             return t;
         });
     }
+
+    static isShareLatex(url) {
+        return /^.*sharelatex\.com\/project\/\S+$/.test(url)
+            || /^.*sharelatex\.com\/read\/\S+$/.test(url)
+            || /^.*sharelatex\.com\/[0-9]{10}[a-z]{12}$/.test(url);
+    }
+
+    static isOverleaf(url) {
+        return /^.*v2.overleaf\.com\/project\/\S+$/.test(url)
+            || /^.*v2.overleaf\.com\/read\/\S+$/.test(url)
+            || /^.*v2.overleaf\.com\/[0-9]{10}[a-z]{12}$/.test(url);
+
+    }
 }
