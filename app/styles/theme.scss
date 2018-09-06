@@ -8,12 +8,16 @@
     --textColor: #a4a4a4;
     --textColorActive: white;
 
+    --actionColor: #a93529;
+
     --backgroundColor: #333;
     --fileColor: #a4a4a4;
     --fileColorHover: #a93529;
     --scrollbarBackgroundColor: #313131;
     --scrollbarThumbColor: #535353;
     --buttonBorder: #cfcfcf;
+
+    --headerColor: #333;
 }
 * {
     font-variant-ligatures: none;
@@ -27,8 +31,13 @@
 .entity-name {
     color: var(--fileColor) !important;
 }
-.entity-name:hover {
-    color: var(--fileColorHover) !important;
+
+.toolbar.toolbar-header {
+    background-color: var(--headerColor) !important;
+}
+
+.toolbar-header-back-projects {
+    color: var(--actionColor) !important;
 }
 
 ::-webkit-scrollbar {
@@ -55,9 +64,9 @@
 }
 
 .toolbar .btn-full-height {
-    stroke: var(--accentColor);
-    fill: var(--accentColor);
-    color: var(--accentColor);
+    stroke: var(--actionColor);
+    fill: var(--actionColor);
+    color: var(--actionColor);
     border-left: 1px solid var(--buttonBorder);
 }
 .toolbar .btn-full-height:active,
@@ -96,16 +105,15 @@ a {
     background-color: var(--accentColor);
 }
 
-.btn-primary {
-    color: var(--textColor);
+.btn.btn-primary {
     background-color: var(--accentColor);
     border-color: var(--accentColorHover);
 }
 
-.btn-primary:hover {
+.btn.btn-primary:hover {
     background-color: var(--accentColorHover);
 }
-.btn-primary:active {
+.btn.btn-primary:active {
     background-color: var(--accentColor);
     color: var(--accentColorActive);
 }
@@ -192,7 +200,7 @@ ul.folders-menu > li.active {
 
 aside.file-tree ul.file-tree-list li i.fa-folder,
 aside.file-tree ul.file-tree-list li i.fa-folder-open {
-    color: var(--accentColor);
+    color: var(--textColor);
 }
 
 aside.file-tree:not(.multi-selected)
@@ -200,9 +208,14 @@ aside.file-tree:not(.multi-selected)
     li.selected
     > .entity
     > .entity-name {
-    color: var(--accentColor);
-    border-right: 4px solid var(--accentColor);
+    color: var(--accentColorActive) !important;
+    //border-right: 4px solid var(--accentColor);
 }
+
+aside.file-tree .toolbar > a:not(.btn):active {
+    background-color: var(--accentColor) !important;
+    color: var(--accentColorActive) !important;
+} 
 
 #history aside.change-list ul li.selected {
     border-left: 4px solid var(--accentColor);
@@ -214,7 +227,7 @@ aside.file-tree:not(.multi-selected)
 
 .toolbar.toolbar-header .btn-full-height {
     border-right: 1px solid #cfcfcf;
-    color: var(--accentColor);
+    color: var(--actionColor);
 }
 
 #left-menu form.settings .form-controls:hover {
@@ -345,8 +358,24 @@ aside.file-tree:not(.multi-selected)
     > .entity
     > .entity-name
     i.fa-folder-open {
-    color: var(--accentColor);
+    color: var(--accentColorActive);
 }
+
+
+aside.file-tree:not(.multi-selected)
+    ul.file-tree-list
+    li.selected
+    > .entity
+    > .entity-name,
+    aside.file-tree:not(.multi-selected)
+    ul.file-tree-list
+    li.selected
+    > .entity
+    > .entity-name::before {
+        background-color: var(--accentColor);
+        color: var(--accentColorActive);
+    }
+
 
 .toolbar .toolbar-left > a:not(.btn).active,
 .toolbar .toolbar-left > a:not(.btn):active,
@@ -356,8 +385,9 @@ aside.file-tree:not(.multi-selected)
 .toolbar > a:not(.btn):active,
 .btn:active>.editor-menu-icon.fa {
     color: var(--textColor);
-    background-color: var(--accentColorActive);
+    background-color: var(--accentColorActive) !important;
 }
+
 
 .toolbar.toolbar-header .btn-full-height.active,
 .toolbar.toolbar-header .btn-full-height:active {
@@ -476,14 +506,10 @@ a:hover {
 
 
 .overleaf {
-    .file-tree:not(.multi-selected) ul.file-tree-list li.selected>.entity>.entity-name,
-    .file-tree:not(.multi-selected) ul.file-tree-list li.selected>.entity>.entity-name::before{
-        background-color: unset !important;
-    }
 
-    .file-tree ul.file-tree-list li .entity-name:hover,
-    .file-tree ul.file-tree-list li .entity-name:hover:before {
-        background-color: rgba(0,0,0,0.1) !important; 
+    .file-tree ul.file-tree-list li:not(.selected)>.entity>.entity-name:hover,
+    .file-tree ul.file-tree-list li:not(.selected)>.entity>.entity-name:hover:before {
+        background-color: rgba(0,0,0,0.2) !important; 
     }
 
     .file-tree .file-tree-inner {
@@ -504,7 +530,7 @@ a:hover {
 
     .toolbar-filetree {
         .fa {
-            color: var(--accentColor);
+            color: var(--actionColor);
         }
     }
 
@@ -519,4 +545,8 @@ a:hover {
         -webkit-mask-position: center;
         mask-position: center;
     }
+}
+
+.toggle-switch-selection {
+    background-color: var(--accentColor) !important;
 }
