@@ -15,7 +15,7 @@
         {
             "matches": [
                 "https://www.sharelatex.com/*",
-                "https://v2.overleaf.com/*"
+                "https://*.overleaf.com/*"
             ],
             "css": [
                 "styles/contentscript.css",

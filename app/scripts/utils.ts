@@ -17,9 +17,9 @@ export class Utils {
     }
 
     static isOverleaf(url) {
-        return /^.*v2.overleaf\.com\/project\/\S+$/.test(url)
-            || /^.*v2.overleaf\.com\/read\/\S+$/.test(url)
-            || /^.*v2.overleaf\.com\/[0-9]{10}[a-z]{12}$/.test(url);
+        return /^.*(v2\.)?overleaf\.com\/project\/\S+$/.test(url)
+            || /^.*(v2\.)?overleaf\.com\/read\/\S+$/.test(url)
+            || /^.*(v2\.)?overleaf\.com\/[0-9]{10}[a-z]{12}$/.test(url);
 
     }
 }
