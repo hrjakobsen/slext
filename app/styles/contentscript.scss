@@ -407,41 +407,36 @@ header.toolbar.toolbar-tabs {
     width: 400px;
 
     .slext__notification {
+        display: flex;        
         position: relative;
         width: 100%;
-        color: white;
         min-height: 50px;
-        padding-top: 10px;
+        padding-right: 32px;
         margin-bottom: 10px;
         cursor: pointer;
+        background: #f0f3f5;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 
-        &--warning {
+        &--warning .slext__notification__icon {
             background: #FBC02D;
+            color: white;
 
-            .slext__notification__icon>.fa:before {
+            &>.fa:before {
                 content: "\f06a";
             }
-            .slext__notification__title:before {
-                content: "Warning";
-            }
         }
-        &--info {
+        &--info .slext__notification__icon {
             background: #2196f3;
-            .slext__notification__icon>.fa:before {
+            color: white;
+            &>.fa:before {
                 content: "\f05a";
             }
-            .slext__notification__title:before {
-                content: "Info";
-            }
         }
-        &--error {
+        &--error .slext__notification__icon {
             background: #f44336;
-            .slext__notification__icon>.fa:before {
+            color: white;
+            &>.fa:before {
                 content: "\f057";
-            }
-            .slext__notification__title:before {
-                content: "Error";
             }
         }
 
@@ -453,40 +448,32 @@ header.toolbar.toolbar-tabs {
     }
 
     .slext__notification__icon {
-        display: block;
-        float: left;
-        width: 20%;
+        flex: 0 0 80px;
+        display: flex;
         text-align: center;
         font-size: 48px;
         line-height: 48px;
-    }
+        flex-direction: column;
+        justify-content: center;
 
-    .slext__notification__content {
-        width: 80%;
-        float: right;
-        display: block;
-    }
-
-    .slext__notification__title {
-        padding: 0;
-        margin: 0;
-        line-height: 48px;
-        font-size: 48px;
-        font-family: sans-serif;
-        color: inherit;
-
-        &:after {
-            text-transform: uppercase;
+        .fa:before {
+            flex: 0 0 80px;
         }
     }
 
+    .slext__notification__content {
+        flex: 1 1 auto;
+        display: block;
+        padding: 10px 0 10px 10px;
+    }
+
     .slext__notification__close {
-        line-height: 32px;
-        width: 32px;
+        color: #ccc;
+        line-height: 24px;
+        width: 24px;
         position: absolute;
-        top: 5px;
+        top: 10px;
         right: 5px;
-        color: inherit;
-        font-size: 32px;
+        font-size: 24px;
     }
 }
