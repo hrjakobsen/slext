@@ -283,6 +283,44 @@ export class TabModule {
                 removeTemp(e);
             });
         }
+
+        let overlaps = this._tabs.filter(tab => tab.file.name == t.file.name);
+        if (overlaps.length > 1) {
+            this.fixOverlaps(overlaps);
+        } 
+    }
+
+    private fixOverlaps(overlaps : Tab[]) {
+        //Special case of removal tab that has overlaps
+        if (overlaps.length == 1) {
+            overlaps[0].tab.find('.slext-tabs__tab-name').text(overlaps[0].file.name);
+            return;
+        }
+
+        let parts = overlaps.map(x => x.file.path.split('/'));
+
+        while (this.matchesNLayers(parts, 2)) {
+            for (let i = 0; i < parts.length; i++) {
+                parts[i].splice(0, 1);
+            }
+        }
+
+        for (let i = 0; i < parts.length; i++) {
+            parts[i].splice(parts[i].length - 1, 1);
+            overlaps[i].tab.find('.slext-tabs__tab-name').text(overlaps[i].file.name + " — " + parts[i].join('/'));
+        }
+    }
+
+    private matchesNLayers(arrs, n) {
+        for (let l = 0; l < n; l++) {
+            let val = arrs[0][l];
+            for (let i = 1; i < arrs.length; i++) {
+                if (arrs[i][l] != val) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private selectTab(index: number) {
@@ -345,6 +383,11 @@ export class TabModule {
     }
 
     private closeTab(tab: Tab) {
+        let overlaps = this._tabs.filter(t => t.file.name == tab.file.name && t != tab);
+        if (overlaps.length > 0) {
+            this.fixOverlaps(overlaps); 
+        }
+
         if (tab.favorite || tab == this.maintab) return;
         if (tab == this._currentTab) {
             //Need to select new tab
