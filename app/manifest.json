@@ -2,7 +2,7 @@
     "name": "SLext",
     "short_name": "SLext",
     "description": "SLext enhances your editing experience on ShareLatex by providing tabs, themes and more to the ShareLatex website.",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "manifest_version": 2,
     "icons": {
         "16": "images/icon-16.png",
