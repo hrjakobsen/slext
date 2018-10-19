@@ -49,15 +49,17 @@ export class Slext extends Dispatcher {
     }
 
     private loadingFinished() {
+        let self = this;
         let mo = new MutationObserver(function (mutations, observer) {
             if (
                 mutations[0].addedNodes.length != 0 ||
                 mutations[0].removedNodes.length != 0
             ) {
                 // Files have been added or removed from file tree
-                this.updateFiles();
+                self.updateFiles();
             }
         });
+        mo.observe(document.querySelector(".file-tree"), {childList: true, subtree: true });
         this.updateFiles();
         this.setupListeners();
     }
