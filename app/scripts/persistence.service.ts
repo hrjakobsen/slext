@@ -37,5 +37,6 @@ export class PersistenceService {
         let item = localStorage.getItem(projectKey);
         if (item === undefined || item == null) callback(null);
         callback(JSON.parse(item));
+        return JSON.parse(item);
     }
 }
