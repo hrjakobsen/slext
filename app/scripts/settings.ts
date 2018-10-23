@@ -62,7 +62,7 @@ export class Settings extends Dispatcher {
 
         let themeSection = menu.find('.slext-settings__themes');
         let themeButtons = [];
-        for (let theme in ThemeModule.themes) {
+        for (let theme = 0; theme < ThemeModule.themes.length; theme++) {
             let themeElement = $(Utils.format(Settings.themeTemplate, ThemeModule.themes[theme]));
             themeElement.on("click", function () {
                 self.dispatch("themeChanged", ThemeModule.themes[theme].theme)
@@ -85,14 +85,34 @@ export class Settings extends Dispatcher {
         this.addEventListener("themeChanged", (theme) => this.setTheme(menu, theme));
 
         menu
-            .find(".slext-settings__custom-theme-save-button")
-            .on("click", function() {
+            .on("change", ".color-input", function() {
                 let colors = menu.find('.color-input');
                 // Construct theme
                 let theme = {};
                 colors.each((i, el) => {
                     theme[el.id.replace("color-", "")] = $(el).val();
                 });
+                self.dispatch("themeChanged", theme);
+            });
+
+        menu
+            .find(".slext-settings__custom_theme_string").on("change", function() {
+                let value = $(this).val() as string;
+                let colors = value.split(";").map(x => x.trim());
+                let theme = {};
+
+                //Use theme 0 for default colors
+                let defaultTheme = ThemeModule.themes[0].theme;
+                let count = 0;
+                for (let key in defaultTheme) {
+                    if (count >= colors.length) {
+                        theme[key] = defaultTheme[key];
+                    } else {
+                        theme[key] = colors[count];
+                    }
+                    count++;
+                }
+                self.setTheme(menu, theme);
                 self.dispatch("themeChanged", theme);
             });
         
@@ -122,10 +142,18 @@ export class Settings extends Dispatcher {
             let customThemeColors = menu.find('.slext-settings__custom_theme_colors');
             customThemeColors.empty();
 
+            let colors = [];
+            let tabIndex = 1;
+
             for (let key in theme) {
-                let themeColor = $(Utils.format(Settings.themeColorTemplate, {name: key, color: theme[key]}));
+                colors.push(theme[key])
+                let themeColor = $(Utils.format(Settings.themeColorTemplate, {name: key, color: theme[key], index: tabIndex++}));
                 customThemeColors.append(themeColor);
             }
+
+            menu
+                .find(".slext-settings__custom_theme_string")
+                .val(colors.join("; "));
         }
 
     private setUpCheckboxes(menu) {
