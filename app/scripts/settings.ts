@@ -91,7 +91,8 @@ export class Settings extends Dispatcher {
             "cursors",
             "temporary_tabs",
             "main_tab_first",
-            "command_prefix"
+            "command_prefix",
+            "invert_pdf"
         ]
         let self = this;
 

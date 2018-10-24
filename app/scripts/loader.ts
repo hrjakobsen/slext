@@ -8,6 +8,7 @@ import { ThemeModule } from './theme';
 import { EditorCommands } from './editorcommands';
 import { PageHook } from './pagehook.service';
 import { RemoveFlagsModule } from './removeflags';
+import { InvertPdfModule } from './pdfinverter';
 import { Utils } from './utils';
 
 
@@ -30,6 +31,7 @@ function projectLoaded(url) {
                 let search = Container.get(CommandPalette);
                 let editorcommands = Container.get(EditorCommands);
                 let removeFlags = Container.get(RemoveFlagsModule);
+                let pdfinverter = Container.get(InvertPdfModule);
             }, 100);
         }
     }, 500);
