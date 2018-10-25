@@ -134,10 +134,15 @@ export class Settings extends Dispatcher {
     }
 
     private setTheme(menu, theme) {
-            if (theme == null) {
+            try {
+                if (theme == null) {
+                    theme = ThemeModule.themes[0].theme;
+                } else if (typeof theme === 'number' || !isNaN(parseInt(theme.toString()))) {
+                    theme = ThemeModule.themes[parseInt(theme.toString())].theme;
+                }
+            } catch(err) {
+                // Default to the first theme, if a theme could not be loaded
                 theme = ThemeModule.themes[0].theme;
-            } else if (typeof theme === 'number' || !isNaN(parseInt(theme))) {
-                theme = ThemeModule.themes[parseInt(theme)].theme;
             }
             let customThemeColors = menu.find('.slext-settings__custom_theme_colors');
             customThemeColors.empty();

@@ -138,10 +138,15 @@ export class ThemeModule {
         var self = this;
         this.fixIcon();
         PersistenceService.load('theme', function (theme: number | ThemeStructure) {
-            if (theme == null) {
+            try {
+                if (theme == null) {
+                    theme = ThemeModule.themes[0].theme;
+                } else if (typeof theme === 'number' || !isNaN(parseInt(theme.toString()))) {
+                    theme = ThemeModule.themes[parseInt(theme.toString())].theme;
+                }
+            } catch(err) {
+                // Default to the first theme, if a theme could not be loaded
                 theme = ThemeModule.themes[0].theme;
-            } else if (typeof theme === 'number' || !isNaN(parseInt(theme.toString()))) {
-                theme = ThemeModule.themes[parseInt(theme.toString())].theme;
             }
             self.setTheme(theme);
         });
