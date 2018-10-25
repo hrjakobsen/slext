@@ -30,7 +30,6 @@ export class InvertPdfModule {
     }
 
     private setStyle(hidden) {
-        console.log(hidden);
         if (hidden) {
             $(".pdf, .pdf .toolbar.toolbar-pdf, .pdf-logs").addClass("slext-inverted");
         } else {
