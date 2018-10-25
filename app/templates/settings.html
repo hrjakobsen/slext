@@ -7,7 +7,19 @@
             <h1>SLext Settings</h1>
             <div class="slext-settings__section">
                 <h2>Select Page Theme</h2>
-                <ul class="slext-settings__themes"></ul>
+                <ul class="slext-settings__themes">
+                    <li class="slext-settings__theme" title="Custom">
+                        <ul class="slext-settings__themewrapper">
+                            <li class="slext-settings__custom-theme-button">+</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="slext-settings__custom-theme slext-hidden">
+                    Colors can be entered as CSS colors. The available formats are shown in the <a target="_blank" href="https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits">documentation</a>
+                    <ul class="slext-settings__custom_theme_colors"></ul>
+                    <h3>Theme String</h3>
+                    <input class="slext-settings__custom_theme_string">
+                </div>
             </div>
             <div class="slext-settings__section">
                 <h2>Show/hide remote cursors and flags</h2>
@@ -31,6 +43,9 @@
                     <b>&gt;</b> in the command palette only commands will be shown.</i>
                 <input type="checkbox" id="sl_command_prefix" />
                 <label for="sl_command_prefix">Require prefix in command palette to show other results than files</label>
+                <h2>PDF Settings</h2>
+                <input type="checkbox" id="sl_invert_pdf" />
+                <label for="sl_invert_pdf">Invert PDF colors</label>
             </div>
             <div class="slext-settings__section">
                 <h2>Keyboard bindings</h2>
@@ -99,9 +114,16 @@
             </div>
             <div class="slext-settings__section">
                 <h2>Changelog</h2>
+                <h4>version 1.3.0</h4>
+                <ul>
+                    <li>Custom themes are here! Press the + button in the theme selector to set a custom color scheme</li>
+                    <li>Added the option to invert the PDF colors</li>
+                    <li>Fixed a bug with tabs not being saved per project on Overleaf, meaning that tabs were lost when switching projects</li>
+                </ul>
                 <h4>version 1.2.5</h4>
                 <ul>
-                    <li>Fixed a bug causing files not to be reindexed. Now new and moved files are searchable and removed files are not</li>
+                    <li>Fixed a bug causing files not to be reindexed. Now new and moved files are searchable and removed files
+                        are not</li>
                 </ul>
                 <h4>version 1.2.4</h4>
                 <ul>
@@ -115,7 +137,7 @@
                 <h4>version 1.2.2</h4>
                 <ul>
                     <li>Load SLext on overleaf.com after the removal of v2 in the domain</li>
-                </ul>                
+                </ul>
                 <h4>version 1.2.1</h4>
                 <ul>
                     <li>Added two new themes to mimic default Overleaf themes</li>

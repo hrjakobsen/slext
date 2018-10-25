@@ -7,7 +7,7 @@ import { Container, Service, Inject } from "typedi";
 import { Settings } from './settings';
 import { TabModule } from './tabs';
 
-interface ThemeStructure {
+export interface ThemeStructure {
     [key: string]: string;
     accentColor: string;
     accentColorHover: string;
@@ -25,7 +25,7 @@ interface ThemeStructure {
     headerColor: string;
 }
 
-interface Theme {
+export interface Theme {
     name: string;
     theme: ThemeStructure;
 }
@@ -137,22 +137,29 @@ export class ThemeModule {
         this.settings = Container.get(Settings);
         var self = this;
         this.fixIcon();
-        PersistenceService.load('theme', function (response: number) {
-            if (!response) {
-                response = 0;
+        PersistenceService.load('theme', function (theme: number | ThemeStructure) {
+            try {
+                if (theme == null) {
+                    theme = ThemeModule.themes[0].theme;
+                } else if (typeof theme === 'number' || !isNaN(parseInt(theme.toString()))) {
+                    theme = ThemeModule.themes[parseInt(theme.toString())].theme;
+                }
+            } catch(err) {
+                // Default to the first theme, if a theme could not be loaded
+                theme = ThemeModule.themes[0].theme;
             }
-            self.setTheme(response);
+            self.setTheme(theme);
         });
 
         this.settings.addEventListener("themeChanged", self.setTheme);
     }
 
-    public setTheme(index) {
-        PersistenceService.save('theme', index);
-        for (let key in ThemeModule.themes[index].theme) {
+    public setTheme(theme: ThemeStructure) {
+        PersistenceService.save('theme', theme);
+        for (let key in theme) {
             document.documentElement.style.setProperty(
                 `--${key}`,
-                ThemeModule.themes[index].theme[key]
+                theme[key]
             );
         }
     }
