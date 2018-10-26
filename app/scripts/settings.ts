@@ -94,7 +94,12 @@ export class Settings extends Dispatcher {
                 });
                 self.dispatch("themeChanged", theme);
             });
-
+        menu
+            .on("change", ".slext-color-selector", function(e) {
+                let colorSelector = $(this);
+                let inputField = colorSelector.data("color-input") as JQuery<HTMLElement>;
+                inputField.val((e.target as HTMLInputElement).value).change();;
+            });
         menu
             .find(".slext-settings__custom_theme_string").on("change", function() {
                 let value = $(this).val() as string;
@@ -153,6 +158,9 @@ export class Settings extends Dispatcher {
             for (let key in theme) {
                 colors.push(theme[key])
                 let themeColor = $(Utils.format(Settings.themeColorTemplate, {name: key, color: theme[key], index: tabIndex++}));
+                let colorInput = themeColor.find(".color-input");
+                let colorPicker = themeColor.find(".slext-color-selector");
+                colorPicker.data("color-input", colorInput);
                 customThemeColors.append(themeColor);
             }
 
