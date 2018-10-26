@@ -513,15 +513,17 @@ header.toolbar.toolbar-tabs {
         border: 2px solid rgba(0,0,0,.2);
     }
 
-    .color-input + .color-label {
+    .color-label {
         flex: 0 0 auto;
         width: 25px;
         height: 25px;
         margin: 0;
         padding: 0;
         order: 1;
+        border: 0;
         border-right: 1px solid rgba(0,0,0,.2);
-        
+        outline: 0;
+        cursor: pointer;
     }
 
     .color-input {
@@ -551,6 +553,14 @@ header.toolbar.toolbar-tabs {
 
 .slext-hidden {
     display: none;
-}.slext-inverted {
+}
+
+.slext-inverted {
     filter: invert(100%);
+}
+
+.slext-color-selector {
+    opacity:0;
+    width:0px;
+    position:absolute;
 }
