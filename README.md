@@ -18,7 +18,11 @@ Then in Chrome, go to [chrome://extensions](chrome://extensions)
 Drag the packed chrome extension from the 'packages' folder onto the page to install the extension.
 
 ### Firefox
-Clone repository
+
+Download from [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/slext/) or install from source.
+
+To install from source, clone the repository:
+
 ```bash
 git clone git@github.com:hrjakobsen/slext.git
 cd slext
