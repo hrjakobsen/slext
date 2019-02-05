@@ -205,6 +205,12 @@ export class TabModule {
         self.slext.addEventListener("layoutChanged", function () {
             self.addCompileMainButton();
         });
+
+
+        $('#ide-body').on('scroll', x => {
+           $('#ide-body').scrollTop(0);
+        });
+
     }
 
     private reindexTabs() {
