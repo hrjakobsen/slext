@@ -2,7 +2,7 @@
     "name": "SLext",
     "short_name": "SLext",
     "description": "SLext enhances your editing experience on Overleaf by providing tabs, themes and more to the Overleaf website.",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "manifest_version": 2,
     "icons": {
         "16": "images/icon-16.png",
