@@ -564,3 +564,11 @@ header.toolbar.toolbar-tabs {
     width:0px;
     position:absolute;
 }
+
+.ace_dialog.ace_dialog-bottom {
+    margin-bottom:40px;
+}
+
+.file-tree-list {
+    padding-bottom: 32px; /* To ensure that the last element is visible if #ide-body overflows page*/
+}

@@ -209,6 +209,7 @@ export class TabModule {
 
         $('#ide-body').on('scroll', x => {
            $('#ide-body').scrollTop(0);
+           console.log("scrolling");
         });
 
     }
