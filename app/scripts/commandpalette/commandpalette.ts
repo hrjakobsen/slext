@@ -67,6 +67,7 @@ export class CommandPalette {
             if (e.which == 13) {
                 //Enter press
                 self.selectFile();
+                e.preventDefault();
             }
             if (e.which == 38) {
                 // Up
@@ -111,6 +112,7 @@ export class CommandPalette {
     private close() {
         this.active = false;
         this.box.removeClass('searchbox--active');
+        $(".ace_text-input").focus();
     }
 
     private selectFile() {
