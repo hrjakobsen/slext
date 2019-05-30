@@ -49,32 +49,35 @@ export class CommandPalette {
         this.settings.addEventListener("command_prefixChanged", r => self.prefixRequired = r || false);
 
         $(document).keydown(function (e) {
-            if (e.altKey && e.which == 80) {
-                //Alt+P
-                self.box.toggleClass('searchbox--active');
-                self.active = !self.active;
-                if (self.active) {
-                    self.box.children('.searchbox__field').focus();
-                    self.box.children('.searchbox__field').select();
+            
+            // We're only interested in the ALT key
+            if (!(e.ctrlKey || e.shiftKey || e.metaKey) && e.altKey) {
+                if (e.which == 80) { // p
+                    self.box.toggleClass('searchbox--active');
+                    self.active = !self.active;
+                    if (self.active) {
+                        self.box.children('.searchbox__field').focus();
+                        self.box.children('.searchbox__field').select();
+                    }
+                    e.preventDefault();
                 }
-            } else if (e.which == 27) {
-                //Esc
+            }
+                
+            if (e.which == 27) { // esc
                 self.close();
+                e.preventDefault();
             }
         });
 
         this.box.on('keydown', '.searchbox__field', function (e) {
-            if (e.which == 13) {
-                //Enter press
+            if (e.which == 13) { // enter
                 self.selectFile();
             }
-            if (e.which == 38) {
-                // Up
+            if (e.which == 38) { // up
                 self.select(self.currentSelected - 1);
                 e.preventDefault();
             }
-            if (e.which == 40) {
-                // Down
+            if (e.which == 40) { // down
                 self.select(self.currentSelected + 1);
                 e.preventDefault();
             }
