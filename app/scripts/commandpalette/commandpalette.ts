@@ -115,11 +115,16 @@ export class CommandPalette {
 
     private selectFile() {
         let selected = $('.searchbox__resultitem--selected');
-        this.resultlist.removeClass('searchbox--active');
-        let file = selected.data('t') as CommandItem;
-        let backend = selected.data('b') as CommandPaletteBackend;
-        backend.selected(file);
-        this.close();
+
+        // In jQuery, you can use the .length property to check if an element exists.
+        // if the element exists, the length property will return the total number of the matched elements.
+        if (selected.length) {
+            this.resultlist.removeClass('searchbox--active');
+            let file = selected.data('t') as CommandItem;
+            let backend = selected.data('b') as CommandPaletteBackend;
+            backend.selected(file);
+            this.close();
+        }
     }
 
     private select(index: number) {
