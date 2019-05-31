@@ -116,8 +116,7 @@ export class CommandPalette {
     private selectFile() {
         let selected = $('.searchbox__resultitem--selected');
 
-        // In jQuery, you can use the .length property to check if an element exists.
-        // if the element exists, the length property will return the total number of the matched elements.
+        // Check that search result was selected
         if (selected.length) {
             this.resultlist.removeClass('searchbox--active');
             let file = selected.data('t') as CommandItem;
