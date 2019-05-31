@@ -144,24 +144,30 @@ export class TabModule {
         });
 
         $(document).keydown(function (e) {
-            if (e.altKey && e.which == 87) {
-                self.closeTab(self._currentTab);
-            } else if (e.altKey && e.which == 77) {
-                self.setMainTab(self._currentTab);
-            } else if (e.altKey && e.which == 68) {
-                e.preventDefault();
-                self.setFavoriteTab(self._currentTab);
-            } else if (e.altKey && e.which == 13) {
-                e.preventDefault();
-                self.compileMain();
-            } else if (!e.ctrlKey && e.altKey && (e.which >= 49 && e.which <= 57)) {
-                e.preventDefault();
-                // Subtract 48 to get the value of the number pressed on keyboard
-                // 1 is 49, 9 is 57
-                let tabNumber = e.which - 48;
-                if (tabNumber == 9) tabNumber = self._tabs.length;
-                if (tabNumber <= self._tabs.length) {
-                    $(self._tabs[tabNumber - 1].file.handle).click();
+
+            // We're only interested in the ALT key
+            if (!(e.ctrlKey || e.shiftKey || e.metaKey) && e.altKey) {
+                if (e.which == 87) { // w
+                    self.closeTab(self._currentTab);
+                    e.preventDefault();
+                } else if (e.which == 77) { // m
+                    self.setMainTab(self._currentTab);
+                    e.preventDefault();
+                } else if (e.which == 68) { // d
+                    self.setFavoriteTab(self._currentTab);
+                    e.preventDefault();
+                } else if (e.which == 13) { // enter
+                    self.compileMain();
+                    e.preventDefault();
+                } else if (e.which >= 49 && e.which <= 57) { // 1..9
+
+                    // Subtract 48 to get the value of the number pressed on keyboard
+                    // 1 is 49, 9 is 57
+                    // Also constrain the range to be between 1 and the number of open tabs
+                    let tabNumber = Math.max(0, Math.min(self._tabs.length, e.which - 48));
+                    let tabIndex = tabNumber - 1;
+                    $(self._tabs[tabIndex].file.handle).click();
+                    e.preventDefault();
                 }
             }
         });
