@@ -115,11 +115,15 @@ export class CommandPalette {
 
     private selectFile() {
         let selected = $('.searchbox__resultitem--selected');
-        this.resultlist.removeClass('searchbox--active');
-        let file = selected.data('t') as CommandItem;
-        let backend = selected.data('b') as CommandPaletteBackend;
-        backend.selected(file);
-        this.close();
+
+        // Check that search result was selected
+        if (selected.length) {
+            this.resultlist.removeClass('searchbox--active');
+            let file = selected.data('t') as CommandItem;
+            let backend = selected.data('b') as CommandPaletteBackend;
+            backend.selected(file);
+            this.close();
+        }
     }
 
     private select(index: number) {
