@@ -139,7 +139,7 @@ export class TabModule {
             }
 
             if (self._tabs.includes(clickedTab)) {
-                $(clickedTab.file.handle)[0].click();
+                $(clickedTab.file.handle).first().click();
             }
         });
 
