@@ -57,7 +57,8 @@
 }
 
 .sl-review-icon {
-    float: left;
+    display: inline-block;
+    vertical-align: middle;
     height: 30px;
     width: 30px;
     margin: 0;
