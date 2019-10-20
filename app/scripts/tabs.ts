@@ -346,7 +346,7 @@ export class TabModule {
 
     protected addTabBar() {
         this.tabBar = $(TabModule.tabsTemplate);
-        $('header.toolbar').append(this.tabBar);
+        $('header.toolbar').after(this.tabBar);
         $('header.toolbar').addClass('toolbar-tabs');
         $('#ide-body').addClass('ide-tabs');
     }

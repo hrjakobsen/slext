@@ -1,9 +1,5 @@
 /* CUSTOM THEMING  */
 
-header.toolbar.toolbar-tabs {
-    height: 80px;
-    flex-flow: row wrap;
-}
 #ide-body.ide-tabs {
     top: 80px;
 }
@@ -26,6 +22,8 @@ header.toolbar.toolbar-tabs {
         font-size: 0;
         width:100%;
         box-shadow: rgba(0,0,0,.23) 0px 10px 8px -8px;
+        top:40px;
+        position: absolute;
     }
     
     &__tab {
