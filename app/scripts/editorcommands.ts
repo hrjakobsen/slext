@@ -8,6 +8,8 @@ declare var _debug_editors: [AceAjax.Editor];
 
 @Service()
 export class EditorCommands {
+    lastWrappingCommand : string = null;
+
     constructor(private slext: Slext) {
         let self = this;
         $(document).keydown(function (e) {
@@ -22,29 +24,24 @@ export class EditorCommands {
     }
 
     public wrapSelectedText() {
-        let command = prompt("Wrapping command");
+        let command = prompt("Wrapping command", this.lastWrappingCommand || "");
         command = command.replace(/ /g, ''); //remove all spaces
+        this.lastWrappingCommand = command;
         if (command == null) return;
         let injectedFunction = function (command) {
             var editor = _debug_editors[0];
-            var range = editor.getSelectionRange();
-            var start = range.start,
-                end = range.end;
-               
-            editor.getSession().insert(end, "}");
-            editor.getSession().insert(start, (command ? "\\" : "") + command + "{");
-            editor.clearSelection();
+            let selection = editor.getSelection();
+            let text = editor.getCopyText();
+            let empty = selection.isEmpty();
 
-            if(start.row == end.row && start.column == end.column) { //no text selected
-            	editor.gotoLine(start.row + 1, start.column + 2 + command.length); //2 for \{
+            if (command == "") {
+                editor.insert(`{${text}}`);
             } else {
-              if(command.length > 0) {
-                	editor.gotoLine(end.row + 1, end.column + 3 + command.length); //3 for \{}
-              } else {
-                	editor.gotoLine(end.row + 1, end.column + 2); //2 for {}
-              }
+                editor.insert(`\\${command}{${text}}`);
             }
-
+            if (empty) {
+                editor.navigateLeft(1);
+            }
         }
         PageHook.call(injectedFunction, [command]);
     }
