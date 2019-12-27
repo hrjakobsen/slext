@@ -27,6 +27,7 @@ export class Slext extends Dispatcher {
 
             clearInterval(loadingTimer);
             document.body.classList.add(Utils.isShareLatex(window.location.href) ? "sharelatex" : "overleaf");
+            document.body.classList.add("slext-loaded");
             self.loadingFinished();
             self.loaded = true;
         }, 200);
