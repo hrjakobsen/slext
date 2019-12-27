@@ -93,6 +93,14 @@ a {
     color: var(--accentColor);
 }
 
+.btn:hover {
+    text-decoration: none;
+}
+
+.btn-info, .btn-default {
+    color: white;
+}
+
 .text-primary {
     color: var(--accentColor);
 }

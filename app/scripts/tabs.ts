@@ -143,6 +143,12 @@ export class TabModule {
             }
         });
 
+        $('html').on('auxclick', '.slext-tabs__tab', function (evt) {
+            let clickedTab = $(this).data('tab') as Tab;
+            Logger.debug("Middle click on", clickedTab);
+            self.closeTab(clickedTab);
+        });
+
         $(document).keydown(function (e) {
 
             // We're only interested in the ALT key
