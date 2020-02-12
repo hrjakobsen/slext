@@ -10,6 +10,7 @@ import { PageHook } from './pagehook.service';
 import { RemoveFlagsModule } from './removeflags';
 import { InvertPdfModule } from './pdfinverter';
 import { Utils } from './utils';
+import { Shortcut } from './shortcut.service';
 
 
 function projectLoaded(url) {
@@ -26,6 +27,7 @@ function projectLoaded(url) {
                 if (!slext.isLoaded()) return;
                 clearInterval(interval);
                 let settings: Settings = Container.get(Settings);
+                let shortcut : Shortcut = Container.get(Shortcut);
                 let theme: ThemeModule = Container.get(ThemeModule);
                 let tabs = Container.get(TabModule);
                 let search = Container.get(CommandPalette);

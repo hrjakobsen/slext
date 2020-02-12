@@ -8,6 +8,7 @@ import { Logger } from '../logger';
 import { FileBackend } from './filebackend';
 import { CommandBackend } from './commandbackend';
 import { Settings } from '../settings';
+import { Shortcut } from '../shortcut.service';
 
 export interface CommandItem {
     type: string;
@@ -33,6 +34,8 @@ export class CommandPalette {
     currentSelected = -1;
     private backends: CommandPaletteBackend[];
     private settings: Settings;
+    private shortcut: Shortcut;
+
 
     constructor(private slext: Slext) {
         this.backends = [
@@ -40,6 +43,7 @@ export class CommandPalette {
             Container.get(CommandBackend),
         ];
         this.settings = Container.get(Settings);
+        this.shortcut = Container.get(Shortcut);
         let self = this;
         this.box = $(CommandPalette.box);
         this.resultlist = this.box.children('.searchbox__results');
@@ -48,21 +52,18 @@ export class CommandPalette {
         PersistenceService.load("command_prefix", r => self.prefixRequired = r || false);
         this.settings.addEventListener("command_prefixChanged", r => self.prefixRequired = r || false);
 
-        $(document).keydown(function (e) {
-            
-            // We're only interested in the ALT key
-            if (!(e.ctrlKey || e.shiftKey || e.metaKey) && e.altKey) {
-                if (e.which == 80) { // p
-                    self.box.toggleClass('searchbox--active');
-                    self.active = !self.active;
-                    if (self.active) {
-                        self.box.children('.searchbox__field').focus();
-                        self.box.children('.searchbox__field').select();
-                    }
-                    e.preventDefault();
-                }
+        
+        this.shortcut.addEventListener("Meta+P", function (e) {
+            self.box.toggleClass('searchbox--active');
+            self.active = !self.active;
+            if (self.active) {
+                self.box.children('.searchbox__field').focus();
+                self.box.children('.searchbox__field').select();
             }
-                
+            e.preventDefault();
+        });
+
+        $(document).on("keydown", function (e) {
             if (e.which == 27) { // esc
                 self.close();
                 e.preventDefault();

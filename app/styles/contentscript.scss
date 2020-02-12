@@ -570,3 +570,11 @@
 .file-tree-list {
     padding-bottom: 32px; /* To ensure that the last element is visible if #ide-body overflows page*/
 }
+
+.slext-select {
+    color: var(--textColor);
+    background: var(--backgroundColor);
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--accentColor);
+}

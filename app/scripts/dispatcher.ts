@@ -1,5 +1,5 @@
 export default class Dispatcher {
-    private listeners = new Map<String, Array<Function>>();
+    protected listeners = new Map<String, Array<Function>>();
 
     protected dispatch(event: string, data?: any) {
         if (!this.listeners.has(event)) return;

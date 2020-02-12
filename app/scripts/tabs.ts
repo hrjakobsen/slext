@@ -8,6 +8,7 @@ import { setInterval } from 'timers';
 import { Settings } from './settings';
 import { Logger } from './logger';
 import { NotificationService } from './notification.service';
+import { Shortcut } from './shortcut.service';
 
 
 interface Tab {
@@ -31,10 +32,12 @@ export class TabModule {
     private temporaryTabsEnabled: boolean;
     private mainTabFirst: boolean;
     private settings: Settings;
+    private shortcut: Shortcut;
 
     constructor(protected slext: Slext) {
         let self = this;
         this.settings = Container.get(Settings);
+        this.shortcut = Container.get(Shortcut);
         this.setupListeners();
         this.addTabBar();
         this.addCompileMainButton();
@@ -149,34 +152,42 @@ export class TabModule {
             self.closeTab(clickedTab);
         });
 
-        $(document).keydown(function (e) {
-
-            // We're only interested in the ALT key
-            if (!(e.ctrlKey || e.shiftKey || e.metaKey) && e.altKey) {
-                if (e.which == 87) { // w
-                    self.closeTab(self._currentTab);
-                    e.preventDefault();
-                } else if (e.which == 77) { // m
-                    self.setMainTab(self._currentTab);
-                    e.preventDefault();
-                } else if (e.which == 68) { // d
-                    self.setFavoriteTab(self._currentTab);
-                    e.preventDefault();
-                } else if (e.which == 13) { // enter
-                    self.compileMain();
-                    e.preventDefault();
-                } else if (e.which >= 49 && e.which <= 57) { // 1..9
-
-                    // Subtract 48 to get the value of the number pressed on keyboard
-                    // 1 is 49, 9 is 57
-                    // Also constrain the range to be between 1 and the number of open tabs
-                    let tabNumber = Math.max(0, Math.min(self._tabs.length, e.which - 48));
-                    let tabIndex = tabNumber - 1;
-                    $(self._tabs[tabIndex].file.handle).click();
-                    e.preventDefault();
-                }
-            }
+        this.shortcut.addEventListener("Meta+W", (e) => {
+            self.closeTab(self._currentTab);
+            e.preventDefault();
         });
+        this.shortcut.addEventListener("Meta+M", (e) => {
+            self.setMainTab(self._currentTab);
+            e.preventDefault();
+        });
+        this.shortcut.addEventListener("Meta+D", (e) => {
+            self.setFavoriteTab(self._currentTab);
+            e.preventDefault();
+        });
+        this.shortcut.addEventListener("Meta+Enter", (e) => {
+            self.compileMain();
+            e.preventDefault();
+        });
+
+        const goToTab = (e) => {
+            // Subtract 48 to get the value of the number pressed on keyboard
+            // 1 is 49, 9 is 57
+            // Also constrain the range to be between 1 and the number of open tabs
+            let tabNumber = Math.max(0, Math.min(self._tabs.length, e.which - 48));
+            let tabIndex = tabNumber - 1;
+            $(self._tabs[tabIndex].file.handle).click();
+            e.preventDefault();
+        };
+        this.shortcut.addEventListener("Meta+1", goToTab);
+        this.shortcut.addEventListener("Meta+2", goToTab);
+        this.shortcut.addEventListener("Meta+3", goToTab);
+        this.shortcut.addEventListener("Meta+4", goToTab);
+        this.shortcut.addEventListener("Meta+5", goToTab);
+        this.shortcut.addEventListener("Meta+6", goToTab);
+        this.shortcut.addEventListener("Meta+7", goToTab);
+        this.shortcut.addEventListener("Meta+8", goToTab);
+        this.shortcut.addEventListener("Meta+9", goToTab);
+
 
         $('html').on('click', '.slext-tabs__tab-cross', function (evt) {
             evt.stopPropagation();
@@ -221,7 +232,6 @@ export class TabModule {
 
         $('#ide-body').on('scroll', x => {
            $('#ide-body').scrollTop(0);
-           console.log("scrolling");
         });
 
     }

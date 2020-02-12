@@ -42,7 +42,7 @@ export class Settings extends Dispatcher {
         let button = $(
             '<div class="btn btn-full-height"><i class="fa fa-cog"></i><p class="toolbar-label">SLext Settings</p></div>'
         );
-        let menu = $(Settings.settingsTemplate);
+        let menu = $(Utils.format(Settings.settingsTemplate, {meta_key : PersistenceService.load("meta_key", null) || "Alt"}));
         menu
             .find('.slext-settings__plugins')
             .append(
@@ -134,6 +134,12 @@ export class Settings extends Dispatcher {
         });
 
         this.setUpCheckboxes(menu);
+        this.setUpDropdowns(menu);
+
+        menu.on("change", "#sl_meta_key",function(e) {
+            let val = (this as HTMLInputElement).value;
+            $(".sl_meta_key_icon").text(val);
+        });
 
         $('body').append(menu);
     }
@@ -191,6 +197,30 @@ export class Settings extends Dispatcher {
                 let checked = (this as HTMLInputElement).checked;
                 self.dispatch(setting + "Changed", checked);
                 PersistenceService.save(setting, checked);
+            });
+        });
+    }
+
+    private setUpDropdowns(menu) {
+        let settings = [
+            "meta_key"
+        ]
+        let self = this;
+
+        settings.forEach(setting => {
+            PersistenceService.load(setting, function (value) {
+                let el = menu.find("#sl_" + setting);
+                if (value === null) {
+                    value = el.first('option').val();
+                    el.val(value);
+                }
+                el.val(value);
+            });
+
+            menu.on("change", "#sl_" + setting, function () {
+                let value = (this as HTMLInputElement).value;
+                self.dispatch(setting + "Changed", value);
+                PersistenceService.save(setting, value);
             });
         });
     }
