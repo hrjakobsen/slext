@@ -127,6 +127,25 @@ export class ThemeModule {
                 buttonBorder: '#cfcfcf',
                 buttonColorHover: 'rgba(0,0,0,0.1)'
             }
+        },
+        {
+            name: 'Arc-Dark',
+            theme: {
+                accentColor: '#5294e2',
+                actionColor: '#5294e2',
+                accentColorHover: '6b221a',
+                accentColorActive: 'white',
+                textColor: '#a4a4a4',
+                textColorActive: 'white',
+                backgroundColor: '#2f343f',
+                headerColor: '#2f343f',
+                fileColor: '#a4a4a4',
+                fileColorHover: '#5294e2',
+                scrollbarBackgroundColor: '#2f343f',
+                scrollbarThumbColor: '#535353',
+                buttonBorder: '#cfcfcf',
+                buttonColorHover: 'white'
+            }
         }
     ];
 
