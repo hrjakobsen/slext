@@ -1,25 +1,29 @@
 import { Slext } from './slext';
-import { Service } from 'typedi';
+import { Service, Container } from 'typedi';
 import { File } from './file';
 import * as $ from 'jquery';
 import { PageHook } from './pagehook.service';
+import { Shortcut } from './shortcut.service';
 declare var _debug_editors: [AceAjax.Editor];
 
 
 @Service()
 export class EditorCommands {
     lastWrappingCommand : string = null;
+    private shortcut: Shortcut;
 
     constructor(private slext: Slext) {
         let self = this;
-        $(document).keydown(function (e) {
-            let functions = {
-                67: () => self.wrapSelectedText(),
-                71: () => self.jumpToFile()
-            }
-            if (e.altKey && functions[e.which]) {
-                functions[e.which]();
-            }
+        this.shortcut = Container.get(Shortcut);
+
+        this.shortcut.addEventListener("Meta+C", (e) => {
+            self.wrapSelectedText();
+            e.preventDefault();
+        });
+
+        this.shortcut.addEventListener("Meta+G", (e) => {
+            self.jumpToFile();
+            e.preventDefault();
         });
     }
 
