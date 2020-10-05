@@ -4,6 +4,15 @@
     top: 80px;
 }
 
+#ide-body.ide-history-open {
+    // Original 70px + tab height of 40px
+    top: 112px !important;
+}
+
+.history-toolbar {
+    margin-top: 40px;
+}
+
 .slext-tabs {
     width: calc(100% - 20px);
     clear: both;

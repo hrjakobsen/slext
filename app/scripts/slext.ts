@@ -45,6 +45,10 @@ export class Slext extends Dispatcher {
         return $(".full-size.ng-scope:not(.ng-hide)[ng-show=\"ui.view == 'pdf'\"]").length > 0;
     }
 
+    public isHistoryOpen(): boolean {
+        return $("#ide-body.ide-history-open").length > 0;
+    }
+
     public goToFullScreenPDF() {
         $("[ng-click=\"togglePdfView()\"]").click();
     }

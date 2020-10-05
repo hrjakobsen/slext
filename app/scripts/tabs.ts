@@ -134,6 +134,11 @@ export class TabModule {
         });
 
         $('html').on('click', '.slext-tabs__tab', function (evt) {
+            if (self.slext.isHistoryOpen()) {
+                // Clicking the original files while history is open can mess up the editor
+                NotificationService.warn("Tabs cannot be used while history is open. Close history panel and try again.")
+                return;
+            }
             let clickedTab = $(this).data('tab') as Tab;
             Logger.debug("Clicked on ", clickedTab);
             if (!document.contains(clickedTab.file.handle) ||

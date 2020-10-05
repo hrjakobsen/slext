@@ -121,6 +121,7 @@ a {
 
 .btn.btn-primary {
     background-color: var(--accentColor);
+    color: var(--accentColorActive);
     border-color: var(--accentColorHover);
 }
 
@@ -395,6 +396,30 @@ aside.file-tree:not(.multi-selected)
         color: var(--accentColorActive);
     }
 
+
+a.history-file-entity-link.history-file-entity-link-selected,
+a.history-file-entity-link.history-file-entity-link-selected::before {
+    background-color: var(--accentColor);
+    color: var(--accentColorActive);
+}
+
+a.history-file-entity-link {
+    color: var(--textColor);
+}
+
+.history-entries .history-entry-selected .history-entry-details, 
+.history-entries .history-entry-hover-selected .history-entry-details, 
+.history-entries .history-entry-hover-selected.history-entry-selected .history-entry-details, 
+.history-entries .history-version-with-label-hover-selected, 
+.history-entries  .history-version-with-label-hover-selected.history-entry-selected 
+    {
+    background-color: var(--accentColor);
+    color: var(--accentColorActive);
+}
+
+.history-entries .history-entry-fromV-handle, .history-entries .history-entry-toV-handle {
+    background-color: rgba(0,0,0,0.2);
+}
 
 .toolbar .toolbar-left > a:not(.btn).active,
 .toolbar .toolbar-left > a:not(.btn):active,
