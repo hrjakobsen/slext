@@ -360,6 +360,11 @@ a.thumbnail:hover {
     border-color: var(--accentColor);
 }
 
+.file-tree:not(.multi-selected) ul.file-tree-list li.selected>.entity>.entity-name {
+    color: var(--textColor);
+    background-color: var(--accentColor);
+}
+
 aside.file-tree:not(.multi-selected)
     ul.file-tree-list
     li.selected
