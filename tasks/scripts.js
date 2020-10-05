@@ -41,7 +41,17 @@ gulp.task('scripts', cb => {
                     ),
                     module: {
                         rules: [
-                            { test: /\.html$/, loader: 'html-loader' },
+                            {
+                                test: /\.html$/i,
+                                use: [
+                                    {
+                                    loader: 'raw-loader',
+                                    options: {
+                                        esModule: false,
+                                    },
+                                    },
+                                ],
+                            },
                             {
                                 test: /\.ts$/,
                                 loader: 'ts-loader',

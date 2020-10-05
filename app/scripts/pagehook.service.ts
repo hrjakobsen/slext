@@ -19,7 +19,7 @@ export class PageHook {
         let s = document.createElement('script');
         s.src = chrome.extension.getURL('scripts/injected.js');
         s.onload = function () {
-            this.remove();
+            s.remove();
         };
         (document.head || document.documentElement).appendChild(s);
     }
