@@ -30,15 +30,7 @@ gulp.task('scripts', cb => {
                             'process.env.NODE_ENV': JSON.stringify(ENV),
                             'process.env.VENDOR': JSON.stringify(args.vendor)
                         })
-                    ].concat(
-                        args.production
-                            ? [
-                                  new webpack.optimize.UglifyJsPlugin(),
-                                  new webpack.optimize
-                                      .ModuleConcatenationPlugin()
-                              ]
-                            : []
-                    ),
+                    ],
                     module: {
                         rules: [
                             {
@@ -62,7 +54,12 @@ gulp.task('scripts', cb => {
                     resolve: {
                         extensions: ['.ts', '.js'],
                         modules: ['node_modules/', 'app/scripts/']
-                    }
+                    },
+                    optimization: {
+                        minimize: args.production,
+                        concatenateModules: args.production
+                    },
+                    mode: args.production ? "production" : "development"
                 },
                 webpack,
                 (err, stats) => {
