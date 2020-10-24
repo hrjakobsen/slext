@@ -59,7 +59,7 @@ Run `$ npm run dev:chrome` and load the `dist/chrome`-directory into Chrome as a
 Run `$ npm run dev:firefox` and load the `dist/firefox`-directory into Firefox as an temporary add-on on [about:debugging → This Firefox → Load Temporary Add-on](about:debugging). After making changes to the code it will automatically be compiled, but you need to click "Reload" where you loaded the it.
 
 ## Building
-To build a relase of SLext run the following command
+To build a release of SLext run the following command
 
 ```bash
 npm run build:chrome
