@@ -63,7 +63,7 @@ export class Slext extends Dispatcher {
                 self.updateFiles();
             }
         });
-        mo.observe(document.querySelector(".file-tree"), {childList: true, subtree: true });
+        mo.observe(document.querySelector('select[name="rootDoc_id"]'), {childList: true, subtree: true });
         this.updateFiles();
         this.setupListeners();
     }
@@ -89,10 +89,14 @@ export class Slext extends Dispatcher {
 
     public updateFiles() {
         let self = this;
-        this.indexFiles().then((files : Array<File>) => {
-            self._files = files;
-            self.dispatch('FilesChanged');
+        return new Promise((resolve, reject) => {
+            this.indexFiles().then((files : Array<File>) => {
+                self._files = files;
+                self.dispatch('FilesChanged');
+                resolve(self._files);
+            });
         });
+        
     }
 
 
@@ -125,6 +129,8 @@ export class Slext extends Dispatcher {
 
 
     public selectFile(file : File) {
-        PageHook.evaluateJS("_ide.$scope.$emit('entity:selected', {type: '" + file.type + "', id:'" + file.id + "'})");
+        if (this._files.filter(f => f.id == file.id && f.path == file.path).length > 0) {
+            PageHook.evaluateJS("_ide.$scope.$emit('entity:selected', {type: '" + file.type + "', id:'" + file.id + "'})");
+        }
     }
 }

@@ -132,6 +132,9 @@ export class TabModule {
     protected setupListeners() {
         let self = this;
         this.slext.addEventListener('FileSelected', (selectedFile: File) => {
+            if (selectedFile == null) {
+                return;
+            }
             let index = self._tabs.findIndex(tab => {
                 return tab.file.path === selectedFile.path;
             });
@@ -155,13 +158,17 @@ export class TabModule {
             Logger.debug("Clicked on ", clickedTab);
             //Check if tab is "up to date"
             if (self.slext.getFiles()
-                    .filter(x => x.id != clickedTab.file.id)
-                    .filter(x => x.path != clickedTab.file.path).length == 0) {
-                self.reindexTabs();
-            }
-
-            if (self._tabs.includes(clickedTab)) {
-                self.slext.selectFile(clickedTab.file);
+                    .filter(x => x.id == clickedTab.file.id)
+                    .filter(x => x.path == clickedTab.file.path).length == 0) {
+                self.reindexTabs().then(() => {
+                    if (self._tabs.includes(clickedTab)) {
+                        self.slext.selectFile(clickedTab.file);
+                    }
+                });
+            } else {
+                if (self._tabs.includes(clickedTab)) {
+                    self.slext.selectFile(clickedTab.file);
+                }
             }
         });
 
@@ -256,24 +263,26 @@ export class TabModule {
     }
 
     private reindexTabs() {
-        this.slext.updateFiles();
-        let filesRemoved: number = 0;
-        for (let i = 0; i < this._tabs.length; i++) {
-            let tab = this._tabs[i];
-            let index = this.slext.getFiles().findIndex(f => f.path == tab.file.path);
-            if (index == -1) {
-                if (this.maintab == tab) this.setMainTab(tab);
-                if (tab.favorite) this.setFavoriteTab(tab);
-                if (this._tabs.length <= 1) this.ensureRightTab();
-                this.closeTab(tab);
-                filesRemoved++;
-            } else {
-                tab.file = this.slext.getFiles()[index];
+        let self = this;
+        return this.slext.updateFiles().then(() => {
+            let filesRemoved: number = 0;
+            for (let i = 0; i < self._tabs.length; i++) {
+                let tab = self._tabs[i];
+                let index = self.slext.getFiles().findIndex(f => f.path == tab.file.path);
+                if (index == -1) {
+                    if (self.maintab == tab) self.setMainTab(tab);
+                    if (tab.favorite) self.setFavoriteTab(tab);
+                    if (self._tabs.length <= 1) self.ensureRightTab();
+                    self.closeTab(tab);
+                    filesRemoved++;
+                } else {
+                    tab.file = self.slext.getFiles()[index];
+                }
             }
-        }
-        if (filesRemoved > 0) {
-            NotificationService.warn(filesRemoved + " dead tabs was just closed.");
-        }
+            if (filesRemoved > 0) {
+                NotificationService.warn(filesRemoved + " dead tabs was just closed.");
+            }
+        });
     }
 
     private openTab(file: File, favorite?: boolean, temporary?: boolean) {
