@@ -80,17 +80,29 @@ export class TabModule {
     }
 
     protected ensureRightTab() {
-        let curFile = this.slext.currentFile();
-        if (curFile == null) return;
-        if (this.currentFile == null || curFile.path != this.currentFile.path) {
-            let index = this._tabs.findIndex(f => f.file.path == curFile.path);
-            if (index != -1) {
-                this.selectTab(index);
-            } else {
-                this.openTab(curFile);
+        let self = this;
+        this.slext.currentFile().then((curFile : File) => {
+            if (curFile.type != "doc") {
+                self.currentFile = null;
+                self._currentTab = null;
+                self._currentTab.tab.removeClass('slext-tabs__tab--active');
             }
-            this.currentFile = curFile;
-        }
+            
+            if (self.currentFile == null || curFile.path != self.currentFile.path) {
+                let index = self._tabs.findIndex(f => f.file.path == curFile.path);
+                if (index != -1) {
+                    self.selectTab(index);
+                } else {
+                    self.openTab(curFile);
+                }
+                self.currentFile = curFile;
+            }
+        }).catch(err => {
+            // No file
+            self._currentTab.tab.removeClass('slext-tabs__tab--active');
+            self._currentTab = null;
+            self.currentFile = null;
+        });
     }
 
     protected saveTabs() {
@@ -141,13 +153,15 @@ export class TabModule {
             }
             let clickedTab = $(this).data('tab') as Tab;
             Logger.debug("Clicked on ", clickedTab);
-            if (!document.contains(clickedTab.file.handle) ||
-                FileUtils.newFile(clickedTab.file.handle).path != clickedTab.file.path) {
+            //Check if tab is "up to date"
+            if (self.slext.getFiles()
+                    .filter(x => x.id != clickedTab.file.id)
+                    .filter(x => x.path != clickedTab.file.path).length == 0) {
                 self.reindexTabs();
             }
 
             if (self._tabs.includes(clickedTab)) {
-                $(clickedTab.file.handle).first().click();
+                self.slext.selectFile(clickedTab.file);
             }
         });
 
@@ -180,7 +194,7 @@ export class TabModule {
             // Also constrain the range to be between 1 and the number of open tabs
             let tabNumber = Math.max(0, Math.min(self._tabs.length, e.which - 48));
             let tabIndex = tabNumber - 1;
-            $(self._tabs[tabIndex].file.handle).click();
+            self.slext.selectFile(self._tabs[tabIndex].file);
             e.preventDefault();
         };
         this.shortcut.addEventListener("Meta+1", goToTab);

@@ -13,7 +13,7 @@ export class FileBackend implements CommandPaletteBackend {
 
     selected(item: CommandItem): void {
         let file = item.data as File;
-        $(file.handle).click();
+        this.slext.selectFile(file);
     }
 
     getItems(filter: string): CommandItem[] {

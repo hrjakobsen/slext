@@ -17,8 +17,8 @@ export class EditorCommands {
         this.shortcut = Container.get(Shortcut);
 
         this.shortcut.addEventListener("Meta+C", (e) => {
-            self.wrapSelectedText();
             e.preventDefault();
+            self.wrapSelectedText();
         });
 
         this.shortcut.addEventListener("Meta+G", (e) => {
@@ -29,9 +29,9 @@ export class EditorCommands {
 
     public wrapSelectedText() {
         let command = prompt("Wrapping command", this.lastWrappingCommand || "");
+        if (command == null) return;
         command = command.replace(/ /g, ''); //remove all spaces
         this.lastWrappingCommand = command;
-        if (command == null) return;
         let injectedFunction = function (command) {
             var editor = _debug_editors[0];
             let selection = editor.getSelection();
@@ -85,7 +85,7 @@ export class EditorCommands {
                     //This is a possible file to search for
                     let files = self.slext.getFiles().filter(f => f.path.includes(match));
                     if (files.length) {
-                        $(files[0].handle).click();
+                        self.slext.selectFile(files[0]);
                     }
                 }
             });

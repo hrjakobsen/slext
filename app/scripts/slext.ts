@@ -2,7 +2,6 @@ import Dispatcher from './dispatcher';
 import { File, FileUtils } from './file';
 import * as $ from 'jquery';
 import { Container, Inject, Service } from 'typedi';
-import * as ace from 'ace-builds/src-noconflict/ace';
 import { PageHook } from './pagehook.service';
 import { Utils } from './utils';
 
@@ -71,15 +70,13 @@ export class Slext extends Dispatcher {
 
     private setupListeners() {
         let self = this;
-        let fileClickListener = $('html').on(
-            'click',
-            '.entity-name.ng-isolate-scope',
-            function (evt) {
-                var el = this;
-                let file = FileUtils.newFile(el);
-                self.dispatch('FileSelected', file);
-            }
-        );
+
+        window.addEventListener("editor.openDoc", function(e : CustomEvent) {
+            let file_id = e.detail;
+            let matches = self._files.filter((f, i) => f.id == file_id);
+            let file = matches.length ? matches[0] : null;
+            self.dispatch('FileSelected', file);
+        });
 
         document.addEventListener("slext_editorChanged", function (e) {
             self.dispatch("editorChanged");
@@ -91,34 +88,43 @@ export class Slext extends Dispatcher {
     }
 
     public updateFiles() {
-        this._files = this.indexFiles();
-        this.dispatch('FilesChanged');
+        let self = this;
+        this.indexFiles().then((files : Array<File>) => {
+            self._files = files;
+            self.dispatch('FilesChanged');
+        });
     }
 
 
     private indexFiles() {
-        let self = this;
-        let files: Array<File> = [];
-        $('file-entity > li.ng-scope .entity-name').each(function (
-            index: number,
-            element: Element
-        ) {
-            if (!FileUtils.isFile(element)) return;
-            files.push(FileUtils.newFile(element));
+        return new Promise((resolve, reject) => {
+            PageHook.evaluateJS("_ide.$scope.docs").then((response : any) => {
+                let res = response.map(f => FileUtils.newFile(f.doc.name, f.path, f.doc.id, 'doc'))
+                resolve(res);
+            });
         });
-        return files;
     }
 
     public getFiles(): Array<File> {
         return this._files;
     }
 
+
     public currentFile() {
-        let currentFile = $('file-entity > li.ng-scope.selected .entity-name');
-        if (currentFile.length == 0) return null;
-        if (FileUtils.isFile(currentFile[0])) {
-            return FileUtils.newFile(currentFile[0]);
-        }
-        return null;
+        return new Promise((resolve, reject) => {
+            let self = this;
+            PageHook.evaluateJS("_ide.editorManager.$scope.editor.open_doc_id").then(id => {
+                let matches = self._files.filter((f, i) => f.id == id);
+                if (matches.length == 0) {
+                    reject();
+                }
+                resolve(matches[0])
+            });
+        }); 
+    }
+
+
+    public selectFile(file : File) {
+        PageHook.evaluateJS("_ide.$scope.$emit('entity:selected', {type: '" + file.type + "', id:'" + file.id + "'})");
     }
 }
