@@ -130,7 +130,7 @@ export class Slext extends Dispatcher {
 
     public selectFile(file : File) {
         if (this._files.filter(f => f.id == file.id && f.path == file.path).length > 0) {
-            PageHook.evaluateJS("_ide.$scope.$emit('entity:selected', {type: '" + file.type + "', id:'" + file.id + "'})");
+            PageHook.evaluateJS("_ide.$scope.$emit('entity:selected', {type: '" + file.type + "', id:'" + file.id + "', name:'" + file.name + "'})");
         }
     }
 }
