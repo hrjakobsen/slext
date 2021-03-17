@@ -1,5 +1,5 @@
 # SLext
-[![Build Chrome + Firefox](https://github.com/hrjakobsen/slext/actions/workflows/build.yml/badge.svg)](https://github.com/hrjakobsen/slext/actions/workflows/build.yml)
+[![Build Chrome + Firefox](https://github.com/hrjakobsen/slext/actions/workflows/build.yml/badge.svg)](https://github.com/hrjakobsen/slext/actions/workflows/build.yml) ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/jlajbdlfgkklpjdgnhajdohfjbihming) ![Mozilla Add-on](https://img.shields.io/amo/v/slext)
 
 Slext is an unofficial browser extension for extending the online LaTeX editor Overleaf, with features such as tabs, custom themes and easier file navigation with search. 
 
