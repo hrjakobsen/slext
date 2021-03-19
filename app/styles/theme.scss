@@ -548,9 +548,14 @@ a:hover {
     background-color: var(--accentColor);
 }
 
+.file-tree:not(.multi-selected) ul.file-tree-list li.selected>.entity>.entity-name:before {
+    background-color: var(--accentColor);
+}
 
 &.overleaf {
-
+    .modal-new-file--list ul li a {
+        color: #5d6879;
+    }
     .file-tree ul.file-tree-list li:not(.selected)>.entity>.entity-name:hover,
     .file-tree ul.file-tree-list li:not(.selected)>.entity>.entity-name:hover:before {
         background-color: rgba(0,0,0,0.2) !important; 
@@ -562,6 +567,10 @@ a:hover {
 
     .btn-recompile {
         background-color: var(--accentColor) !important;
+        color: var(--accentColorActive);
+    }
+    .btn-recompile:hover {
+        background-color: var(--accentColorHover) !important;
     }
     
     .btn.btn-recompile.dropdown-toggle {

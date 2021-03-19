@@ -114,7 +114,7 @@ export class ThemeModule {
             theme: {
                 accentColor: '#4f9c45',
                 actionColor: 'white',
-                accentColorHover: 'white',
+                accentColorHover: '#418038',
                 accentColorActive: 'white',
                 textColor: '#ccc',
                 textColorActive: 'white',
