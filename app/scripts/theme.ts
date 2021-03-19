@@ -133,7 +133,7 @@ export class ThemeModule {
             theme: {
                 accentColor: '#5294e2',
                 actionColor: '#5294e2',
-                accentColorHover: '6b221a',
+                accentColorHover: '#5282e2',
                 accentColorActive: 'white',
                 textColor: '#a4a4a4',
                 textColorActive: 'white',
