@@ -17,22 +17,22 @@ function projectLoaded(url) {
 }
 
 (function () {
-    let i = setInterval(() => {
+    const i = setInterval(() => {
         if (projectLoaded(window.location.href)) {
             clearInterval(i);
             PageHook.initialize();
-            let slext: Slext = Container.get(Slext);
-            let interval = setInterval(() => {
+            const slext: Slext = Container.get(Slext);
+            const interval = setInterval(() => {
                 if (!slext.isLoaded()) return;
                 clearInterval(interval);
-                let settings: Settings = Container.get(Settings);
-                let shortcut: Shortcut = Container.get(Shortcut);
-                let theme: ThemeModule = Container.get(ThemeModule);
-                let tabs = Container.get(TabModule);
-                let search = Container.get(CommandPalette);
-                let editorcommands = Container.get(EditorCommands);
-                let removeFlags = Container.get(RemoveFlagsModule);
-                let pdfinverter = Container.get(InvertPdfModule);
+                Container.get(Settings);
+                Container.get(Shortcut);
+                Container.get(ThemeModule);
+                Container.get(TabModule);
+                Container.get(CommandPalette);
+                Container.get(EditorCommands);
+                Container.get(RemoveFlagsModule);
+                Container.get(InvertPdfModule);
             }, 100);
         }
     }, 500);

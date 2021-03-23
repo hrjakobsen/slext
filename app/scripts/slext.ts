@@ -1,7 +1,7 @@
-import Dispatcher from "./dispatcher";
+import { Dispatcher } from "./dispatcher";
 import { File, FileUtils } from "./file";
 import * as $ from "jquery";
-import { Container, Inject, Service } from "typedi";
+import { Service } from "typedi";
 import { PageHook } from "./pagehook.service";
 import { Utils } from "./utils";
 
@@ -15,26 +15,24 @@ export class Slext extends Dispatcher {
 
     constructor() {
         super();
-        let self = this;
         this.id = Slext.id++;
-        let loading = true;
-        let loadingTimer = setInterval(function () {
+        const loadingTimer = setInterval(() => {
             // Then check if the SL loading screen has finished
             if (document.getElementsByClassName("loading-screen").length) return;
 
             clearInterval(loadingTimer);
             document.body.classList.add(Utils.isShareLatex(window.location.href) ? "sharelatex" : "overleaf");
             document.body.classList.add("slext-loaded");
-            self.loadingFinished();
-            self.loaded = true;
+            this.loadingFinished();
+            this.loaded = true;
         }, 200);
     }
 
-    public isLoaded() {
+    public isLoaded(): boolean {
         return this.loaded;
     }
 
-    public getId() {
+    public getId(): number {
         return this.id;
     }
 
@@ -46,16 +44,15 @@ export class Slext extends Dispatcher {
         return $("#ide-body.ide-history-open").length > 0;
     }
 
-    public goToFullScreenPDF() {
+    public goToFullScreenPDF(): void {
         $('[ng-click="togglePdfView()"]').click();
     }
 
-    private loadingFinished() {
-        let self = this;
-        let mo = new MutationObserver(function (mutations, observer) {
+    private loadingFinished(): void {
+        const mo = new MutationObserver((mutations, _observer) => {
             if (mutations[0].addedNodes.length != 0 || mutations[0].removedNodes.length != 0) {
                 // Files have been added or removed from file tree
-                self.updateFiles();
+                this.updateFiles();
             }
         });
         mo.observe(document.querySelector('select[name="rootDoc_id"]'), {
@@ -66,44 +63,37 @@ export class Slext extends Dispatcher {
         this.setupListeners();
     }
 
-    private setupListeners() {
-        let self = this;
-
-        window.addEventListener("editor.openDoc", function (e: CustomEvent) {
-            let file_id = e.detail;
-            let matches = self._files.filter((f, i) => f.id == file_id);
-            let file = matches.length ? matches[0] : null;
-            self.dispatch("FileSelected", file);
+    private setupListeners(): void {
+        window.addEventListener("editor.openDoc", (e: CustomEvent) => {
+            const file_id = e.detail;
+            const matches = this._files.filter((f, _i) => f.id == file_id);
+            const file = matches.length ? matches[0] : null;
+            this.dispatch("FileSelected", file);
         });
 
-        document.addEventListener("slext_editorChanged", function (e) {
-            self.dispatch("editorChanged");
+        document.addEventListener("slext_editorChanged", (_e) => {
+            this.dispatch("editorChanged");
         });
 
-        $(document).on(
-            "click",
-            '[ng-click="switchToSideBySideLayout()"], [ng-click="switchToFlatLayout()"]',
-            function () {
-                self.dispatch("layoutChanged");
-            }
-        );
+        $(document).on("click", '[ng-click="switchToSideBySideLayout()"], [ng-click="switchToFlatLayout()"]', () => {
+            this.dispatch("layoutChanged");
+        });
     }
 
-    public updateFiles() {
-        let self = this;
-        return new Promise((resolve, reject) => {
+    public updateFiles(): Promise<File[]> {
+        return new Promise((resolve, _reject) => {
             this.indexFiles().then((files: Array<File>) => {
-                self._files = files;
-                self.dispatch("FilesChanged");
-                resolve(self._files);
+                this._files = files;
+                this.dispatch("FilesChanged");
+                resolve(this._files);
             });
         });
     }
 
-    private indexFiles() {
-        return new Promise((resolve, reject) => {
+    private indexFiles(): Promise<File[]> {
+        return new Promise((resolve, _reject) => {
             PageHook.evaluateJS("_ide.$scope.docs").then((response: any) => {
-                let res = response.map((f) => FileUtils.newFile(f.doc.name, f.path, f.doc.id, "doc"));
+                const res = response.map((f) => FileUtils.newFile(f.doc.name, f.path, f.doc.id, "doc"));
                 resolve(res);
             });
         });
@@ -113,11 +103,10 @@ export class Slext extends Dispatcher {
         return this._files;
     }
 
-    public currentFile() {
+    public currentFile(): Promise<File> {
         return new Promise((resolve, reject) => {
-            let self = this;
             PageHook.evaluateJS("_ide.editorManager.$scope.editor.open_doc_id").then((id) => {
-                let matches = self._files.filter((f, i) => f.id == id);
+                const matches = this._files.filter((f, _i) => f.id == id);
                 if (matches.length == 0) {
                     reject();
                 }
@@ -126,7 +115,7 @@ export class Slext extends Dispatcher {
         });
     }
 
-    public selectFile(file: File) {
+    public selectFile(file: File): void {
         if (this._files.filter((f) => f.id == file.id && f.path == file.path).length > 0) {
             PageHook.evaluateJS(
                 "_ide.$scope.$emit('entity:selected', {type: '" +

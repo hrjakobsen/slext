@@ -1,0 +1,7 @@
+# Ignore same files as .prettierignore
+dist/
+tasks/
+packages/
+node_modules/
+gulpfile.babel.js
+package-lock.json

@@ -1,10 +1,9 @@
 import { Slext } from "./slext";
 import { Service, Container } from "typedi";
-import { File, FileUtils } from "./file";
+import { File } from "./file";
 import * as $ from "jquery";
 import { Utils } from "./utils";
 import { PersistenceService } from "./persistence.service";
-import { setInterval } from "timers";
 import { Settings } from "./settings";
 import { Logger } from "./logger";
 import { NotificationService } from "./notification.service";
@@ -34,39 +33,38 @@ export class TabModule {
     private shortcut: Shortcut;
 
     constructor(protected slext: Slext) {
-        let self = this;
         this.settings = Container.get(Settings);
         this.shortcut = Container.get(Shortcut);
         this.setupListeners();
         this.addTabBar();
         this.addCompileMainButton();
 
-        PersistenceService.loadLocal("tabs_openFiles", function (files: [any]) {
+        PersistenceService.loadLocal("tabs_openFiles", (files: [any]) => {
             if (!files) return;
             if (files.length < 1) return;
-            let allfiles = self.slext.getFiles();
+            const allfiles = this.slext.getFiles();
             files.forEach((file) => {
-                let fileMatch = allfiles.find((x) => x.path == file.path);
+                const fileMatch = allfiles.find((x) => x.path == file.path);
                 if (fileMatch == null) return;
-                self.openTab(fileMatch, file.favorite);
+                this.openTab(fileMatch, file.favorite);
             });
 
-            PersistenceService.loadLocal("tabs_currentTab", function (path: string) {
-                let tab = self._tabs.findIndex((x) => x.file.path == path);
+            PersistenceService.loadLocal("tabs_currentTab", (path: string) => {
+                let tab = this._tabs.findIndex((x) => x.file.path == path);
                 if (tab == -1) tab = 0;
 
                 // If no tabs are open, we cannot do anything
-                if (!self._tabs.length) return;
+                if (!this._tabs.length) return;
 
-                self.currentFile = self._tabs[tab].file || null;
+                this.currentFile = this._tabs[tab].file || null;
 
-                self.selectTab(tab);
+                this.selectTab(tab);
             });
 
-            PersistenceService.loadLocal("tabs_mainTab", function (path: string) {
-                let tab = self._tabs.findIndex((x) => x.file.path == path);
+            PersistenceService.loadLocal("tabs_mainTab", (path: string) => {
+                const tab = this._tabs.findIndex((x) => x.file.path == path);
                 if (tab != -1) {
-                    self.setMainTab(self._tabs[tab]);
+                    this.setMainTab(this._tabs[tab]);
                 }
             });
         });
@@ -77,36 +75,35 @@ export class TabModule {
         slext.addEventListener("editorChanged", () => this.ensureRightTab());
     }
 
-    protected ensureRightTab() {
-        let self = this;
+    protected ensureRightTab(): void {
         this.slext
             .currentFile()
             .then((curFile: File) => {
                 if (curFile.type != "doc") {
-                    self.currentFile = null;
-                    self._currentTab = null;
-                    self._currentTab.tab.removeClass("slext-tabs__tab--active");
+                    this.currentFile = null;
+                    this._currentTab = null;
+                    this._currentTab.tab.removeClass("slext-tabs__tab--active");
                 }
 
-                if (self.currentFile == null || curFile.path != self.currentFile.path) {
-                    let index = self._tabs.findIndex((f) => f.file.path == curFile.path);
+                if (this.currentFile == null || curFile.path != this.currentFile.path) {
+                    const index = this._tabs.findIndex((f) => f.file.path == curFile.path);
                     if (index != -1) {
-                        self.selectTab(index);
+                        this.selectTab(index);
                     } else {
-                        self.openTab(curFile);
+                        this.openTab(curFile);
                     }
-                    self.currentFile = curFile;
+                    this.currentFile = curFile;
                 }
             })
-            .catch((err) => {
+            .catch((_err) => {
                 // No file
-                self._currentTab.tab.removeClass("slext-tabs__tab--active");
-                self._currentTab = null;
-                self.currentFile = null;
+                this._currentTab.tab.removeClass("slext-tabs__tab--active");
+                this._currentTab = null;
+                this.currentFile = null;
             });
     }
 
-    protected saveTabs() {
+    protected saveTabs(): void {
         PersistenceService.saveLocal(
             "tabs_openFiles",
             this._tabs.map((t) => {
@@ -123,74 +120,73 @@ export class TabModule {
         }
     }
 
-    protected setupListeners() {
-        let self = this;
+    protected setupListeners(): void {
         this.slext.addEventListener("FileSelected", (selectedFile: File) => {
             if (selectedFile == null) {
                 return;
             }
-            let index = self._tabs.findIndex((tab) => {
+            const index = this._tabs.findIndex((tab) => {
                 return tab.file.path === selectedFile.path;
             });
 
             if (index == -1) {
                 // File is not already opened
-                self.openTab(selectedFile, false, self.temporaryTabsEnabled);
+                this.openTab(selectedFile, false, this.temporaryTabsEnabled);
             } else {
                 // File is already open. Focus it instead
-                self.selectTab(index);
+                this.selectTab(index);
             }
         });
 
-        $("html").on("click", ".slext-tabs__tab", function (evt) {
-            if (self.slext.isHistoryOpen()) {
+        $("html").on("click", ".slext-tabs__tab", (e) => {
+            if (this.slext.isHistoryOpen()) {
                 // Clicking the original files while history is open can mess up the editor
                 NotificationService.warn(
                     "Tabs cannot be used while history is open. Close history panel and try again."
                 );
                 return;
             }
-            let clickedTab = $(this).data("tab") as Tab;
+            const clickedTab = $(e.currentTarget).data("tab") as Tab;
             Logger.debug("Clicked on ", clickedTab);
             //Check if tab is "up to date"
             if (
-                self.slext
+                this.slext
                     .getFiles()
                     .filter((x) => x.id == clickedTab.file.id)
                     .filter((x) => x.path == clickedTab.file.path).length == 0
             ) {
-                self.reindexTabs().then(() => {
-                    if (self._tabs.includes(clickedTab)) {
-                        self.slext.selectFile(clickedTab.file);
+                this.reindexTabs().then(() => {
+                    if (this._tabs.includes(clickedTab)) {
+                        this.slext.selectFile(clickedTab.file);
                     }
                 });
             } else {
-                if (self._tabs.includes(clickedTab)) {
-                    self.slext.selectFile(clickedTab.file);
+                if (this._tabs.includes(clickedTab)) {
+                    this.slext.selectFile(clickedTab.file);
                 }
             }
         });
 
-        $("html").on("auxclick", ".slext-tabs__tab", function (evt) {
-            let clickedTab = $(this).data("tab") as Tab;
+        $("html").on("auxclick", ".slext-tabs__tab", (e) => {
+            const clickedTab = $(e.currentTarget).data("tab") as Tab;
             Logger.debug("Middle click on", clickedTab);
-            self.closeTab(clickedTab);
+            this.closeTab(clickedTab);
         });
 
         this.shortcut.addEventListener("Meta+W", (e) => {
-            self.closeTab(self._currentTab);
+            this.closeTab(this._currentTab);
             e.preventDefault();
         });
         this.shortcut.addEventListener("Meta+M", (e) => {
-            self.setMainTab(self._currentTab);
+            this.setMainTab(this._currentTab);
             e.preventDefault();
         });
         this.shortcut.addEventListener("Meta+D", (e) => {
-            self.setFavoriteTab(self._currentTab);
+            this.setFavoriteTab(this._currentTab);
             e.preventDefault();
         });
         this.shortcut.addEventListener("Meta+Enter", (e) => {
-            self.compileMain();
+            this.compileMain();
             e.preventDefault();
         });
 
@@ -198,9 +194,9 @@ export class TabModule {
             // Subtract 48 to get the value of the number pressed on keyboard
             // 1 is 49, 9 is 57
             // Also constrain the range to be between 1 and the number of open tabs
-            let tabNumber = Math.max(0, Math.min(self._tabs.length, e.which - 48));
-            let tabIndex = tabNumber - 1;
-            self.slext.selectFile(self._tabs[tabIndex].file);
+            const tabNumber = Math.max(0, Math.min(this._tabs.length, e.which - 48));
+            const tabIndex = tabNumber - 1;
+            this.slext.selectFile(this._tabs[tabIndex].file);
             e.preventDefault();
         };
         this.shortcut.addEventListener("Meta+1", goToTab);
@@ -213,64 +209,63 @@ export class TabModule {
         this.shortcut.addEventListener("Meta+8", goToTab);
         this.shortcut.addEventListener("Meta+9", goToTab);
 
-        $("html").on("click", ".slext-tabs__tab-cross", function (evt) {
-            evt.stopPropagation();
-            let tab = $(this).parent().data("tab") as Tab;
-            self.closeTab(tab);
+        $("html").on("click", ".slext-tabs__tab-cross", (e) => {
+            e.stopPropagation();
+            const tab = $(e.currentTarget).parent().data("tab") as Tab;
+            this.closeTab(tab);
         });
 
-        $("html").on("click", ".slext-tabs__caret--next", function (evt) {
-            let bar = $(".slext-tabs");
+        $("html").on("click", ".slext-tabs__caret--next", function (_e) {
+            const bar = $(".slext-tabs");
             bar.scrollLeft(bar.scrollLeft() + 100);
         });
 
-        $("html").on("click", ".slext-tabs__caret--prev", function (evt) {
-            let bar = $(".slext-tabs");
+        $("html").on("click", ".slext-tabs__caret--prev", function (_e) {
+            const bar = $(".slext-tabs");
             bar.scrollLeft(Math.max(bar.scrollLeft() - 100, 0));
         });
 
-        PersistenceService.load("temporary_tabs", function (enabled) {
-            self.temporaryTabsEnabled = enabled || false;
+        PersistenceService.load("temporary_tabs", (enabled) => {
+            this.temporaryTabsEnabled = enabled || false;
         });
-        self.settings.addEventListener("temporary_tabsChanged", function (enabled) {
-            self.temporaryTabsEnabled = enabled;
+        this.settings.addEventListener("temporary_tabsChanged", (enabled) => {
+            this.temporaryTabsEnabled = enabled;
         });
 
-        PersistenceService.load("main_tab_first", function (enabled) {
-            self.mainTabFirst = enabled || false;
+        PersistenceService.load("main_tab_first", (enabled) => {
+            this.mainTabFirst = enabled || false;
         });
-        self.settings.addEventListener("main_tab_firstChanged", function (enabled) {
-            self.mainTabFirst = enabled;
-            if (self.mainTabFirst && self.maintab != null && self.maintab !== undefined) {
-                let index = self._tabs.indexOf(self.maintab);
-                self.moveTab(index, 0);
+        this.settings.addEventListener("main_tab_firstChanged", (enabled) => {
+            this.mainTabFirst = enabled;
+            if (this.mainTabFirst && this.maintab != null && this.maintab !== undefined) {
+                const index = this._tabs.indexOf(this.maintab);
+                this.moveTab(index, 0);
             }
         });
 
-        self.slext.addEventListener("layoutChanged", function () {
-            self.addCompileMainButton();
+        this.slext.addEventListener("layoutChanged", () => {
+            this.addCompileMainButton();
         });
 
-        $("#ide-body").on("scroll", (x) => {
+        $("#ide-body").on("scroll", (_x) => {
             $("#ide-body").scrollTop(0);
         });
     }
 
-    private reindexTabs() {
-        let self = this;
+    private reindexTabs(): Promise<void> {
         return this.slext.updateFiles().then(() => {
-            let filesRemoved: number = 0;
-            for (let i = 0; i < self._tabs.length; i++) {
-                let tab = self._tabs[i];
-                let index = self.slext.getFiles().findIndex((f) => f.path == tab.file.path);
+            let filesRemoved = 0;
+            for (let i = 0; i < this._tabs.length; i++) {
+                const tab = this._tabs[i];
+                const index = this.slext.getFiles().findIndex((f) => f.path == tab.file.path);
                 if (index == -1) {
-                    if (self.maintab == tab) self.setMainTab(tab);
-                    if (tab.favorite) self.setFavoriteTab(tab);
-                    if (self._tabs.length <= 1) self.ensureRightTab();
-                    self.closeTab(tab);
+                    if (this.maintab == tab) this.setMainTab(tab);
+                    if (tab.favorite) this.setFavoriteTab(tab);
+                    if (this._tabs.length <= 1) this.ensureRightTab();
+                    this.closeTab(tab);
                     filesRemoved++;
                 } else {
-                    tab.file = self.slext.getFiles()[index];
+                    tab.file = this.slext.getFiles()[index];
                 }
             }
             if (filesRemoved > 0) {
@@ -279,13 +274,13 @@ export class TabModule {
         });
     }
 
-    private openTab(file: File, favorite?: boolean, temporary?: boolean) {
+    private openTab(file: File, favorite?: boolean, temporary?: boolean): void {
         //Check if file is already open
         if (this._tabs.filter((f) => f.file.path == file.path).length) return;
 
         favorite = favorite || false;
 
-        let el = $(Utils.format(TabModule.tabTemplate, file));
+        const el = $(Utils.format(TabModule.tabTemplate, file));
         el[0].ondragstart = (e) => this.dragstart(e);
         el[0].ondragenter = (e) => this.dragenter(e);
         el[0].ondragleave = (e) => this.dragleave(e);
@@ -293,7 +288,7 @@ export class TabModule {
         el[0].ondrop = (e) => this.drop(e);
         el[0].ondragend = (e) => this.dragend(e);
         this.tabBar.find(".slext-tabs").append(el);
-        let t: Tab = {
+        const t: Tab = {
             tab: el,
             file: file,
             favorite: false,
@@ -310,49 +305,45 @@ export class TabModule {
         }
 
         if (t.temporary) {
-            let self = this;
-
             this.temporarytab = t;
             t.tab.addClass("slext-tabs__tab--temporary");
 
-            let editorListener, tabListener;
-
-            let removeTemp = function (event) {
+            const removeTemp = (event) => {
                 //Ignore commands
                 if (event.altKey || event.ctrlKey) return;
 
-                if (self._currentTab == t) {
+                if (this._currentTab == t) {
                     t.temporary = false;
-                    self.temporarytab = null;
+                    this.temporarytab = null;
                     t.tab.removeClass("slext-tabs__tab--temporary");
                     editorListener.unbind();
                     tabListener.unbind();
                 }
             };
 
-            editorListener = $("#editor").on("keydown", function (e) {
+            const editorListener = $("#editor").on("keydown", (e) => {
                 removeTemp(e);
             });
 
-            tabListener = t.tab.on("dblclick", function (e) {
+            const tabListener = t.tab.on("dblclick", (e) => {
                 removeTemp(e);
             });
         }
 
-        let overlaps = this._tabs.filter((tab) => tab.file.name == t.file.name);
+        const overlaps = this._tabs.filter((tab) => tab.file.name == t.file.name);
         if (overlaps.length > 1) {
             this.fixOverlaps(overlaps);
         }
     }
 
-    private fixOverlaps(overlaps: Tab[]) {
+    private fixOverlaps(overlaps: Tab[]): void {
         //Special case of removal tab that has overlaps
         if (overlaps.length == 1) {
             overlaps[0].tab.find(".slext-tabs__tab-name").text(overlaps[0].file.name);
             return;
         }
 
-        let parts = overlaps.map((x) => x.file.path.split("/"));
+        const parts = overlaps.map((x) => x.file.path.split("/"));
 
         while (this.matchesNLayers(parts, 2)) {
             for (let i = 0; i < parts.length; i++) {
@@ -366,9 +357,9 @@ export class TabModule {
         }
     }
 
-    private matchesNLayers(arrs, n) {
+    private matchesNLayers(arrs, n): boolean {
         for (let l = 0; l < n; l++) {
-            let val = arrs[0][l];
+            const val = arrs[0][l];
             for (let i = 1; i < arrs.length; i++) {
                 if (arrs[i][l] != val) {
                     return false;
@@ -378,50 +369,48 @@ export class TabModule {
         return true;
     }
 
-    private selectTab(index: number) {
+    private selectTab(index: number): void {
         if (this._currentTab) this._currentTab.tab.removeClass("slext-tabs__tab--active");
         this._currentTab = this._tabs[index];
         if (this._currentTab) this._currentTab.tab.addClass("slext-tabs__tab--active");
     }
 
-    protected addTabBar() {
+    protected addTabBar(): void {
         this.tabBar = $(TabModule.tabsTemplate);
         $("header.toolbar").after(this.tabBar);
         $("header.toolbar").addClass("toolbar-tabs");
         $("#ide-body").addClass("ide-tabs");
     }
 
-    private compileMain() {
-        let self = this;
-        let fullscreen = self.slext.isFullScreenPDF();
-        if (self.maintab == null || self.maintab === undefined) {
+    private compileMain(): void {
+        const fullscreen = this.slext.isFullScreenPDF();
+        if (this.maintab == null || this.maintab === undefined) {
             alert("Select a main file first!");
             return;
         }
-        let cur = self._currentTab;
-        self.maintab.tab.click();
+        const cur = this._currentTab;
+        this.maintab.tab.click();
         setTimeout(() => {
             $("a[ng-click='recompile()']")[0].click();
             setTimeout(() => {
                 cur.tab.click();
                 if (fullscreen) {
                     setTimeout(() => {
-                        self.slext.goToFullScreenPDF();
+                        this.slext.goToFullScreenPDF();
                     }, 500);
                 }
             }, 500);
         }, 500);
     }
 
-    protected addCompileMainButton() {
+    protected addCompileMainButton(): void {
         //Check if button is already there
         if ($(".btn-compile-main").length > 0) {
             Logger.debug("Main button already present, no need to add it again");
             return;
         }
 
-        let self = this;
-        let compileMainButton = $(`
+        const compileMainButton = $(`
             <div class="btn-recompile-group btn-compile-main">
                 <a class="btn btn-recompile" href>
                     <i class="fa fa-home"></i>
@@ -430,13 +419,13 @@ export class TabModule {
             </div>
         `);
         $(".btn-recompile-group").after(compileMainButton);
-        compileMainButton.on("click", function () {
-            self.compileMain();
+        compileMainButton.on("click", () => {
+            this.compileMain();
         });
     }
 
-    private closeTab(tab: Tab) {
-        let overlaps = this._tabs.filter((t) => t.file.name == tab.file.name && t != tab);
+    private closeTab(tab: Tab): void {
+        const overlaps = this._tabs.filter((t) => t.file.name == tab.file.name && t != tab);
         if (overlaps.length > 0) {
             this.fixOverlaps(overlaps);
         }
@@ -448,8 +437,8 @@ export class TabModule {
             //If only one tab open, we cannot close it
             if (this._tabs.length == 1) return;
 
-            let index = this._tabs.indexOf(tab);
-            let newIndex = Math.max(0, index - 1);
+            const index = this._tabs.indexOf(tab);
+            const newIndex = Math.max(0, index - 1);
 
             this._tabs[index].tab.remove();
             this._tabs.splice(index, 1);
@@ -457,7 +446,7 @@ export class TabModule {
             this.selectTab(newIndex);
             this._currentTab.tab.click();
         } else {
-            let index = this._tabs.indexOf(tab);
+            const index = this._tabs.indexOf(tab);
             this._tabs.splice(index, 1);
             tab.tab.remove();
         }
@@ -466,7 +455,7 @@ export class TabModule {
         }
     }
 
-    private setMainTab(tab: Tab) {
+    private setMainTab(tab: Tab): void {
         if (this.maintab == tab) {
             this.maintab.tab.removeClass("slext-tabs__tab--main");
             this.maintab = null;
@@ -478,51 +467,51 @@ export class TabModule {
         this.maintab = tab;
         this.maintab.tab.addClass("slext-tabs__tab--main");
         if (this.mainTabFirst) {
-            let tabIndex = this._tabs.indexOf(tab);
+            const tabIndex = this._tabs.indexOf(tab);
             this.moveTab(tabIndex, 0);
         }
     }
 
-    private setFavoriteTab(tab: Tab) {
+    private setFavoriteTab(tab: Tab): void {
         tab.favorite = !tab.favorite;
         tab.tab.toggleClass("slext-tabs__tab--favorite");
     }
 
-    private dragstart(e: DragEvent) {
-        this.draggedtab = $(e.srcElement).data("tab") as Tab;
+    private dragstart(e: DragEvent): void {
+        this.draggedtab = $(e.currentTarget).data("tab") as Tab;
         this.draggedtab.tab.addClass("slext-tabs__tab--dragged");
     }
 
-    private dragenter(e: DragEvent) {
-        let el = $(e.target);
+    private dragenter(e: DragEvent): void {
+        let el = $(e.currentTarget);
         if (!el.hasClass("slext-tabs__tab")) {
             el = el.parents(".slext-tabs__tab");
         }
         el.addClass("slext-tabs__tab--hovered");
     }
 
-    private dragleave(e: DragEvent) {
-        $(e.target).removeClass("slext-tabs__tab--hovered");
+    private dragleave(e: DragEvent): void {
+        $(e.currentTarget).removeClass("slext-tabs__tab--hovered");
     }
 
-    private drop(e) {
+    private drop(e: DragEvent): boolean {
         this.dragleave(e);
         e.preventDefault();
-        let el = $(e.target);
+        let el = $(e.currentTarget);
         if (!el.hasClass("slext-tabs__tab")) {
             el = el.parents(".slext-tabs__tab");
         }
-        let target = el.data("tab") as Tab;
+        const target = el.data("tab") as Tab;
 
         //Tried to move maintab away
         if ((target == this.maintab || this.draggedtab == this.maintab) && this.mainTabFirst) return true;
 
-        let indexTarget = this._tabs.indexOf(target);
+        const indexTarget = this._tabs.indexOf(target);
         if (indexTarget == -1) {
             Logger.error("Could not find target tab as an open tab");
             return true;
         }
-        let indexSrc = this._tabs.indexOf(this.draggedtab);
+        const indexSrc = this._tabs.indexOf(this.draggedtab);
         if (indexSrc == -1) {
             Logger.error("Could not find source tab as an open tab");
             return true;
@@ -533,10 +522,10 @@ export class TabModule {
         return true;
     }
 
-    private moveTab(src: number, target: number) {
+    private moveTab(src: number, target: number): void {
         if (src == target) return; // No need to do anything
-        let srcEl = this._tabs[src].tab;
-        let targetEl = this._tabs[target].tab;
+        const srcEl = this._tabs[src].tab;
+        const targetEl = this._tabs[target].tab;
 
         if (src < target) {
             //We should place the src after the target
@@ -549,15 +538,15 @@ export class TabModule {
         }
     }
 
-    private arrmove(arr: Array<any>, src: number, target: number) {
+    private arrmove(arr: Array<any>, src: number, target: number): void {
         if (src == target) return;
-        let element = arr[src];
+        const element = arr[src];
         if (src < target) target--;
         arr.splice(src, 1);
         arr.splice(target + 1, 0, element);
     }
 
-    private dragend(e) {
+    private dragend(_e): void {
         this.draggedtab.tab.removeClass("slext-tabs__tab--dragged");
         this.draggedtab = null;
     }

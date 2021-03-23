@@ -19,11 +19,15 @@
         "version:feature": "gulp feature",
         "version:release": "gulp release",
         "prettier": "prettier --write .",
-        "prettier:check": "prettier --check ."
+        "prettier:check": "prettier --check .",
+        "lint": "eslint --fix . --ext .js,.ts",
+        "lint:check": "eslint . --ext .js,.ts"
     },
     "devDependencies": {
         "@types/chrome": "^0.x.x",
         "@types/jquery": "^3.5.1",
+        "@typescript-eslint/eslint-plugin": "^4.19.0",
+        "@typescript-eslint/parser": "^4.19.0",
         "babel-cli": "6.x.x",
         "babel-core": "6.x.x",
         "babel-loader": "8.x.x",
@@ -32,6 +36,8 @@
         "chromereload": "0.x.x",
         "debounce": "1.x.x",
         "del": "6.x.x",
+        "eslint": "^7.22.0",
+        "eslint-config-prettier": "^8.1.0",
         "gulp": "3.x.x",
         "gulp-bump": "3.x.x",
         "gulp-cache": "1.x.x",
@@ -55,6 +61,7 @@
         "raw-loader": "^4.0.1",
         "require-dir": "1.x.x",
         "ts-loader": "^8.x.x",
+        "typescript": "^4.2.3",
         "vinyl-named": "1.x.x",
         "webpack": "4.x.x",
         "webpack-stream": "6.x.x",
@@ -67,7 +74,6 @@
         "ace-code-editor": "^1.2.3",
         "jquery": "^3.5.1",
         "reflect-metadata": "^0.1.13",
-        "typedi": "^0.8.0",
-        "typescript": "^4.0.3"
+        "typedi": "^0.8.0"
     }
 }

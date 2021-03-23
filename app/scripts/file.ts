@@ -1,6 +1,3 @@
-import * as $ from "jquery";
-import { Slext } from "./slext";
-
 export interface File {
     name: string;
     path: string;

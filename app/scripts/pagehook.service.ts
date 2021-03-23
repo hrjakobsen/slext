@@ -3,9 +3,9 @@ import { Service } from "typedi";
 @Service()
 export class PageHook {
     public static evaluateJS(variable: string): Promise<any> {
-        let promise = new Promise<any>((accept, resolve) => {
-            let query = new CustomEvent("variable_query", { detail: variable });
-            let eventListener = (res: CustomEvent) => {
+        const promise = new Promise<any>((accept, _resolve) => {
+            const query = new CustomEvent("variable_query", { detail: variable });
+            const eventListener = (res: CustomEvent) => {
                 document.removeEventListener("variable_query_" + variable, eventListener);
                 accept(res.detail);
             };
@@ -15,8 +15,8 @@ export class PageHook {
         return promise;
     }
 
-    public static initialize() {
-        let s = document.createElement("script");
+    public static initialize(): void {
+        const s = document.createElement("script");
         s.src = chrome.extension.getURL("scripts/injected.js");
         s.onload = function () {
             s.remove();
@@ -24,9 +24,10 @@ export class PageHook {
         (document.head || document.documentElement).appendChild(s);
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     public static call(fun: Function, args?: Array<string>): Promise<any> {
         args = args || [];
-        let jscode = `(${String(fun)})(${args.map((x) => '"' + x + '"').join(", ")});`;
+        const jscode = `(${String(fun)})(${args.map((x) => '"' + x + '"').join(", ")});`;
         return PageHook.evaluateJS(jscode);
     }
 }

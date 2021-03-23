@@ -1,8 +1,8 @@
 export class Utils {
     static format(str: string, obj: any): string {
-        return str.replace(/{{(.*?)}}/g, function (a, b: string) {
+        return str.replace(/{{(.*?)}}/g, function (_a, b: string) {
             let t = obj;
-            let path = b.split(".");
+            const path = b.split(".");
             path.forEach((element) => {
                 t = t[element];
             });
@@ -10,7 +10,7 @@ export class Utils {
         });
     }
 
-    static isShareLatex(url) {
+    static isShareLatex(url: string): boolean {
         return (
             /^.*sharelatex\.com\/project\/\S+$/.test(url) ||
             /^.*sharelatex\.com\/read\/\S+$/.test(url) ||
@@ -18,7 +18,7 @@ export class Utils {
         );
     }
 
-    static isOverleaf(url) {
+    static isOverleaf(url: string): boolean {
         return (
             /^.*(v2\.)?overleaf\.com\/project\/\S+$/.test(url) ||
             /^.*(v2\.)?overleaf\.com\/read\/\S+$/.test(url) ||

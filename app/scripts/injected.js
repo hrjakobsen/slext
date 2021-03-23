@@ -1,3 +1,5 @@
+/* global document, CustomEvent, _debug_editors, Event */
+
 document.addEventListener("variable_query", function (evt) {
     var query = evt.detail;
     var res = eval(query);

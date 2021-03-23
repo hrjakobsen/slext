@@ -1,10 +1,8 @@
 import { Slext } from "../slext";
 import { Service, Container } from "typedi";
-import { File } from "../file";
 import * as $ from "jquery";
 import { Utils } from "../utils";
 import { PersistenceService } from "../persistence.service";
-import { Logger } from "../logger";
 import { FileBackend } from "./filebackend";
 import { CommandBackend } from "./commandbackend";
 import { Settings } from "../settings";
@@ -40,57 +38,56 @@ export class CommandPalette {
         this.backends = [Container.get(FileBackend), Container.get(CommandBackend)];
         this.settings = Container.get(Settings);
         this.shortcut = Container.get(Shortcut);
-        let self = this;
         this.box = $(CommandPalette.box);
         this.resultlist = this.box.children(".searchbox__results");
         $("body").append(this.box);
 
-        PersistenceService.load("command_prefix", (r) => (self.prefixRequired = r || false));
-        this.settings.addEventListener("command_prefixChanged", (r) => (self.prefixRequired = r || false));
+        PersistenceService.load("command_prefix", (r: boolean) => (this.prefixRequired = r || false));
+        this.settings.addEventListener("command_prefixChanged", (r: boolean) => (this.prefixRequired = r || false));
 
-        this.shortcut.addEventListener("Meta+P", function (e) {
-            self.box.toggleClass("searchbox--active");
-            self.active = !self.active;
-            if (self.active) {
-                self.box.children(".searchbox__field").focus();
-                self.box.children(".searchbox__field").select();
+        this.shortcut.addEventListener("Meta+P", (e) => {
+            this.box.toggleClass("searchbox--active");
+            this.active = !this.active;
+            if (this.active) {
+                this.box.children(".searchbox__field").focus();
+                this.box.children(".searchbox__field").select();
             }
             e.preventDefault();
         });
 
-        $(document).on("keydown", function (e) {
+        $(document).on("keydown", (e) => {
             if (e.which == 27) {
                 // esc
-                self.close();
+                this.close();
                 e.preventDefault();
             }
         });
 
-        this.box.on("keydown", ".searchbox__field", function (e) {
+        this.box.on("keydown", ".searchbox__field", (e) => {
             if (e.which == 13) {
                 // enter
-                self.selectFile();
+                this.selectFile();
                 e.preventDefault();
             }
             if (e.which == 38) {
                 // up
-                self.select(self.currentSelected - 1);
+                this.select(this.currentSelected - 1);
                 e.preventDefault();
             }
             if (e.which == 40) {
                 // down
-                self.select(self.currentSelected + 1);
+                this.select(this.currentSelected + 1);
                 e.preventDefault();
             }
         });
 
-        this.box.on("input", ".searchbox__field", function (e) {
-            let inputfield = $(this);
-            let text = inputfield.val() as string;
+        this.box.on("input", ".searchbox__field", (e) => {
+            const inputfield = $(e.currentTarget);
+            const text = inputfield.val() as string;
 
-            let backendsToSearch = self.backends;
+            let backendsToSearch = this.backends;
 
-            if (self.prefixRequired) {
+            if (this.prefixRequired) {
                 backendsToSearch = backendsToSearch.filter((backend) => {
                     if (text.length == 0) {
                         return backend.getPrefix() == null;
@@ -101,17 +98,17 @@ export class CommandPalette {
                 });
             }
 
-            self.resultlist.empty();
+            this.resultlist.empty();
 
             backendsToSearch.forEach((backend) => {
-                if (self.resultlist.children().length >= 5) return;
-                self.resultlist.append(
-                    self.createList(backend, backend.getItems(text)).slice(0, 5 - self.resultlist.children().length)
+                if (this.resultlist.children().length >= 5) return;
+                this.resultlist.append(
+                    this.createList(backend, backend.getItems(text)).slice(0, 5 - this.resultlist.children().length)
                 );
             });
 
-            if (self.resultlist.children().length > 0) {
-                self.select(0);
+            if (this.resultlist.children().length > 0) {
+                this.select(0);
             }
         });
     }
@@ -123,36 +120,35 @@ export class CommandPalette {
     }
 
     private selectFile() {
-        let selected = $(".searchbox__resultitem--selected");
+        const selected = $(".searchbox__resultitem--selected");
 
         // Check that search result was selected
         if (selected.length) {
             this.resultlist.removeClass("searchbox--active");
-            let file = selected.data("t") as CommandItem;
-            let backend = selected.data("b") as CommandPaletteBackend;
+            const file = selected.data("t") as CommandItem;
+            const backend = selected.data("b") as CommandPaletteBackend;
             backend.selected(file);
             this.close();
         }
     }
 
     private select(index: number) {
-        let numChildren = this.resultlist.children().length;
+        const numChildren = this.resultlist.children().length;
         if (numChildren <= 0) return;
         this.currentSelected = Math.max(Math.min(index, numChildren - 1), 0);
         $(".searchbox__resultitem--selected").removeClass("searchbox__resultitem--selected");
-        let newSelected = this.resultlist.children().get(this.currentSelected);
+        const newSelected = this.resultlist.children().get(this.currentSelected);
         newSelected.classList.add("searchbox__resultitem--selected");
     }
 
     private createList(backend: CommandPaletteBackend, items: CommandItem[]): JQuery<HTMLElement>[] {
-        let self = this;
-        let elements: JQuery<HTMLElement>[] = [];
+        const elements: JQuery<HTMLElement>[] = [];
         for (let i = 0; i < Math.min(5, items.length); i++) {
-            let f = items[i];
-            let match = $(Utils.format(CommandPalette.result, f));
-            match.click(function (e) {
-                self.select(i);
-                self.close();
+            const f = items[i];
+            const match = $(Utils.format(CommandPalette.result, f));
+            match.click((_e) => {
+                this.select(i);
+                this.close();
                 backend.selected(f);
             });
             match.data("t", f);

@@ -1,11 +1,8 @@
 import { Slext } from "./slext";
-import { File } from "./file";
 import * as $ from "jquery";
-import { Utils } from "./utils";
 import { PersistenceService } from "./persistence.service";
-import { Container, Service, Inject } from "typedi";
+import { Container, Service } from "typedi";
 import { Settings } from "./settings";
-import { TabModule } from "./tabs";
 
 export interface ThemeStructure {
     [key: string]: string;
@@ -154,9 +151,8 @@ export class ThemeModule {
     constructor(private slext: Slext) {
         // This does not work with constructor injection, and I don't know why
         this.settings = Container.get(Settings);
-        var self = this;
         this.fixIcon();
-        PersistenceService.load("theme", function (theme: number | ThemeStructure) {
+        PersistenceService.load("theme", (theme: number | ThemeStructure) => {
             try {
                 if (theme == null) {
                     theme = ThemeModule.themes[0].theme;
@@ -167,23 +163,24 @@ export class ThemeModule {
                 // Default to the first theme, if a theme could not be loaded
                 theme = ThemeModule.themes[0].theme;
             }
-            self.setTheme(theme);
+            this.setTheme(theme);
         });
 
-        this.settings.addEventListener("themeChanged", self.setTheme);
+        this.settings.addEventListener("themeChanged", this.setTheme);
     }
 
-    public setTheme(theme: ThemeStructure) {
+    public setTheme(theme: ThemeStructure): void {
         PersistenceService.save("theme", theme);
-        for (let key in theme) {
+        for (const key in theme) {
             document.documentElement.style.setProperty(`--${key}`, theme[key]);
         }
     }
 
     private fixIcon() {
-        var icon = $(".review-icon");
+        const icon = $(".review-icon");
         icon.addClass("sl-review-icon");
         icon.removeClass("review-icon");
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         icon.html(require("../templates/icon.html"));
     }
 }

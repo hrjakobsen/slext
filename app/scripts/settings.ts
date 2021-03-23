@@ -1,14 +1,11 @@
-import Dispatcher from "./dispatcher";
-import { File, FileUtils } from "./file";
 import * as $ from "jquery";
-import { Container, Inject, Service } from "typedi";
-import * as ace from "ace-builds/src-noconflict/ace";
-import { PageHook } from "./pagehook.service";
+import { Service } from "typedi";
 import { Slext } from "./slext";
 import { TabModule } from "./tabs";
-import { ThemeModule, Theme } from "./theme";
+import { ThemeModule } from "./theme";
 import { Utils } from "./utils";
 import { PersistenceService } from "./persistence.service";
+import { Dispatcher } from "./dispatcher";
 
 class Plugin {
     name: string;
@@ -38,11 +35,10 @@ export class Settings extends Dispatcher {
 
     constructor() {
         super();
-        let self = this;
-        let button = $(
+        const button = $(
             '<div class="btn btn-full-height"><i class="fa fa-cog"></i><p class="toolbar-label">SLext Settings</p></div>'
         );
-        let menu = $(
+        const menu = $(
             Utils.format(Settings.settingsTemplate, {
                 meta_key: PersistenceService.load("meta_key", null) || "Alt",
             })
@@ -56,12 +52,12 @@ export class Settings extends Dispatcher {
             return true;
         });
 
-        let themeSection = menu.find(".slext-settings__themes");
-        let themeButtons = [];
+        const themeSection = menu.find(".slext-settings__themes");
+        const themeButtons = [];
         for (let theme = 0; theme < ThemeModule.themes.length; theme++) {
-            let themeElement = $(Utils.format(Settings.themeTemplate, ThemeModule.themes[theme]));
-            themeElement.on("click", function () {
-                self.dispatch("themeChanged", ThemeModule.themes[theme].theme);
+            const themeElement = $(Utils.format(Settings.themeTemplate, ThemeModule.themes[theme]));
+            themeElement.on("click", () => {
+                this.dispatch("themeChanged", ThemeModule.themes[theme].theme);
             });
             themeButtons.push(themeElement);
         }
@@ -76,29 +72,29 @@ export class Settings extends Dispatcher {
 
         this.addEventListener("themeChanged", (theme) => this.setTheme(menu, theme));
 
-        menu.on("change", ".color-input", function () {
-            let colors = menu.find(".color-input");
+        menu.on("change", ".color-input", () => {
+            const colors = menu.find(".color-input");
             // Construct theme
-            let theme = {};
-            colors.each((i, el) => {
+            const theme = {};
+            colors.each((_i, el) => {
                 theme[el.id.replace("color-", "")] = $(el).val();
             });
-            self.dispatch("themeChanged", theme);
+            this.dispatch("themeChanged", theme);
         });
         menu.on("change", ".slext-color-selector", function (e) {
-            let colorSelector = $(this);
-            let inputField = colorSelector.data("color-input") as JQuery<HTMLElement>;
+            const colorSelector = $(this);
+            const inputField = colorSelector.data("color-input") as JQuery<HTMLElement>;
             inputField.val((e.target as HTMLInputElement).value).change();
         });
-        menu.find(".slext-settings__custom_theme_string").on("change", function () {
-            let value = $(this).val() as string;
-            let colors = value.split(";").map((x) => x.trim());
-            let theme = {};
+        menu.find(".slext-settings__custom_theme_string").on("change", (e) => {
+            const value = $(e.currentTarget).val() as string;
+            const colors = value.split(";").map((x) => x.trim());
+            const theme = {};
 
             //Use theme 0 for default colors
-            let defaultTheme = ThemeModule.themes[0].theme;
+            const defaultTheme = ThemeModule.themes[0].theme;
             let count = 0;
-            for (let key in defaultTheme) {
+            for (const key in defaultTheme) {
                 if (count >= colors.length) {
                     theme[key] = defaultTheme[key];
                 } else {
@@ -106,8 +102,8 @@ export class Settings extends Dispatcher {
                 }
                 count++;
             }
-            self.setTheme(menu, theme);
-            self.dispatch("themeChanged", theme);
+            this.setTheme(menu, theme);
+            this.dispatch("themeChanged", theme);
         });
 
         $("header.toolbar .toolbar-right .btn.btn-full-height").first().before(button);
@@ -125,8 +121,8 @@ export class Settings extends Dispatcher {
         this.setUpCheckboxes(menu);
         this.setUpDropdowns(menu);
 
-        menu.on("change", "#sl_meta_key", function (e) {
-            let val = (this as HTMLInputElement).value;
+        menu.on("change", "#sl_meta_key", (e) => {
+            const val = (e.currentTarget as HTMLInputElement).value;
             $(".sl_meta_key_icon").text(val);
         });
 
@@ -144,23 +140,23 @@ export class Settings extends Dispatcher {
             // Default to the first theme, if a theme could not be loaded
             theme = ThemeModule.themes[0].theme;
         }
-        let customThemeColors = menu.find(".slext-settings__custom_theme_colors");
+        const customThemeColors = menu.find(".slext-settings__custom_theme_colors");
         customThemeColors.empty();
 
-        let colors = [];
+        const colors = [];
         let tabIndex = 1;
 
-        for (let key in theme) {
+        for (const key in theme) {
             colors.push(theme[key]);
-            let themeColor = $(
+            const themeColor = $(
                 Utils.format(Settings.themeColorTemplate, {
                     name: key,
                     color: theme[key],
                     index: tabIndex++,
                 })
             );
-            let colorInput = themeColor.find(".color-input");
-            let colorPicker = themeColor.find(".slext-color-selector");
+            const colorInput = themeColor.find(".color-input");
+            const colorPicker = themeColor.find(".slext-color-selector");
             colorPicker.data("color-input", colorInput);
             customThemeColors.append(themeColor);
         }
@@ -169,31 +165,29 @@ export class Settings extends Dispatcher {
     }
 
     private setUpCheckboxes(menu) {
-        let settings = ["flags", "cursors", "temporary_tabs", "main_tab_first", "command_prefix", "invert_pdf"];
-        let self = this;
+        const settings = ["flags", "cursors", "temporary_tabs", "main_tab_first", "command_prefix", "invert_pdf"];
 
         settings.forEach((setting) => {
             PersistenceService.load(setting, function (toggled) {
                 toggled = toggled || false;
-                let el = menu.find("#sl_" + setting);
+                const el = menu.find("#sl_" + setting);
                 el.prop("checked", toggled);
             });
 
-            menu.on("change", "#sl_" + setting, function () {
-                let checked = (this as HTMLInputElement).checked;
-                self.dispatch(setting + "Changed", checked);
+            menu.on("change", "#sl_" + setting, (e) => {
+                const checked = (e.currentTarget as HTMLInputElement).checked;
+                this.dispatch(setting + "Changed", checked);
                 PersistenceService.save(setting, checked);
             });
         });
     }
 
     private setUpDropdowns(menu) {
-        let settings = ["meta_key"];
-        let self = this;
+        const settings = ["meta_key"];
 
         settings.forEach((setting) => {
-            PersistenceService.load(setting, function (value) {
-                let el = menu.find("#sl_" + setting);
+            PersistenceService.load(setting, (value) => {
+                const el = menu.find("#sl_" + setting);
                 if (value === null) {
                     value = el.first("option").val();
                     el.val(value);
@@ -201,20 +195,20 @@ export class Settings extends Dispatcher {
                 el.val(value);
             });
 
-            menu.on("change", "#sl_" + setting, function () {
-                let value = (this as HTMLInputElement).value;
-                self.dispatch(setting + "Changed", value);
+            menu.on("change", "#sl_" + setting, (e) => {
+                const value = (e.currentTarget as HTMLInputElement).value;
+                this.dispatch(setting + "Changed", value);
                 PersistenceService.save(setting, value);
             });
         });
     }
 
     private static generatePluginList(plugin: Plugin): JQuery<HTMLElement> {
-        let element = $(`
+        const element = $(`
             <li class="slext-settings__plugin"><input type="checkbox">${plugin.name}</li>
         `);
         if (plugin.children.length > 0) {
-            let list = $(`
+            const list = $(`
                 <ul class="slext-settings__pluginlist"></ul>
             `);
             plugin.children.forEach((child) => {
