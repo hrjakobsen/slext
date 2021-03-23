@@ -391,7 +391,7 @@ export class TabModule {
         const cur = this._currentTab;
         this.maintab.tab.click();
         setTimeout(() => {
-            $("a[ng-click='recompile()']")[0].click();
+            $("#text-recompile").parent().click();
             setTimeout(() => {
                 cur.tab.click();
                 if (fullscreen) {

@@ -45,7 +45,10 @@ export class Slext extends Dispatcher {
     }
 
     public goToFullScreenPDF(): void {
-        $('[ng-click="togglePdfView()"]').click();
+        const button = $('[ng-click="togglePdfView()"]');
+        if (button.length) {
+            (button[0] as HTMLElement).click();
+        }
     }
 
     private loadingFinished(): void {
