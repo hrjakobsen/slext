@@ -29,12 +29,12 @@
     &__wrapper {
         border-top: 1px solid var(--buttonBorder);
         font-size: 0;
-        width:100%;
-        box-shadow: rgba(0,0,0,.23) 0px 10px 8px -8px;
-        top:40px;
+        width: 100%;
+        box-shadow: rgba(0, 0, 0, 0.23) 0px 10px 8px -8px;
+        top: 40px;
         position: absolute;
     }
-    
+
     &__tab {
         font-size: 1rem;
         background-color: rgba(0, 0, 0, 0.1);
@@ -49,13 +49,13 @@
         &:not(:hover) * {
             pointer-events: none;
         }
-        
+
         .slext-tabs__tab-cross {
             margin-left: 10px;
         }
-        
+
         .slext-tabs__tab-cross .fa:before {
-            content: '\f00d';
+            content: "\f00d";
             cursor: pointer;
         }
 
@@ -72,15 +72,16 @@
             font-style: italic;
         }
 
-        &--main, &--main.slext-tabs__tab--favorite {
+        &--main,
+        &--main.slext-tabs__tab--favorite {
             .slext-tabs__tab-cross .fa:before {
-                content: '\f015';
+                content: "\f015";
             }
         }
 
         &--favorite {
             .slext-tabs__tab-cross .fa:before {
-                content: '\f004';
+                content: "\f004";
             }
         }
 
@@ -138,14 +139,16 @@
         margin: 0;
         padding: 0;
         color: var(--textColor);
-        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-family: "Open Sans", Helvetica, Arial, sans-serif;
     }
 
     a:not(.btn) {
         color: var(--accentColor);
         font-weight: bold;
 
-        &:hover, &:focus, &:active {
+        &:hover,
+        &:focus,
+        &:active {
             color: var(--accentColorHover);
         }
     }
@@ -171,8 +174,7 @@
         height: 90%;
         background-color: var(--backgroundColor);
         color: var(--textColor);
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
-            0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         position: absolute;
         left: 15%;
         top: 5%;
@@ -268,10 +270,10 @@
         margin: 2px;
         font-weight: normal;
         font-size: 16px;
-        font-family: 'Monaco', monospace;
+        font-family: "Monaco", monospace;
         text-align: center;
         text-decoration: none;
-        border-radius: .3em;
+        border-radius: 0.3em;
         user-select: none;
         background: #ffffff;
         border-color: rgba(0, 0, 0, 0.07);
@@ -281,7 +283,7 @@
 }
 
 .slext-keyboard-bindings {
-    tr:nth-child(2n+1) {
+    tr:nth-child(2n + 1) {
         background-color: rgba(255, 255, 255, 0.1);
     }
     tr:nth-child(2n) {
@@ -343,11 +345,11 @@
             line-height: 64px;
 
             &--file:after {
-                content: "\f15b"
+                content: "\f15b";
             }
 
             &--command:after {
-                content: "\f120"
+                content: "\f120";
             }
         }
 
@@ -391,24 +393,25 @@
     * Code from https://codepen.io/jamesbarnett/pen/yILjk
     */
     /* to hide the checkbox itself */
-    input[type=checkbox] {
-        display:none;
+    input[type="checkbox"] {
+        display: none;
     }
 
-    input[type=checkbox] + label:before {
-      font-family: FontAwesome;
-      display: inline-block;
+    input[type="checkbox"] + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
     }
 
-    input[type=checkbox] + label:before {
-        content: "\f096"; width: 1.5em;
+    input[type="checkbox"] + label:before {
+        content: "\f096";
+        width: 1.5em;
     } /* unchecked icon */
 
-    input[type=checkbox]:checked + label:before {
+    input[type="checkbox"]:checked + label:before {
         content: "\f046";
-    }/* checked icon */
+    } /* checked icon */
 
-    input[type=checkbox]:checked + label:before {
+    input[type="checkbox"]:checked + label:before {
         letter-spacing: 5px;
     } /* allow space for check mark */
 }
@@ -420,7 +423,7 @@
     width: 400px;
 
     .slext__notification {
-        display: flex;        
+        display: flex;
         position: relative;
         width: 100%;
         min-height: 50px;
@@ -428,27 +431,27 @@
         margin-bottom: 10px;
         cursor: pointer;
         background: #f0f3f5;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
         &--warning .slext__notification__icon {
-            background: #FBC02D;
+            background: #fbc02d;
             color: white;
 
-            &>.fa:before {
+            & > .fa:before {
                 content: "\f06a";
             }
         }
         &--info .slext__notification__icon {
             background: #2196f3;
             color: white;
-            &>.fa:before {
+            & > .fa:before {
                 content: "\f05a";
             }
         }
         &--error .slext__notification__icon {
             background: #f44336;
             color: white;
-            &>.fa:before {
+            & > .fa:before {
                 content: "\f057";
             }
         }
@@ -510,14 +513,14 @@
         display: inline-block;
         border: 1px solid black;
     }
-    
+
     .color-box {
         display: flex;
         align-items: stretch;
         margin: 0;
         width: 100%;
         background-color: transparent;
-        border: 2px solid rgba(0,0,0,.2);
+        border: 2px solid rgba(0, 0, 0, 0.2);
     }
 
     .color-label {
@@ -528,7 +531,7 @@
         padding: 0;
         order: 1;
         border: 0;
-        border-right: 1px solid rgba(0,0,0,.2);
+        border-right: 1px solid rgba(0, 0, 0, 0.2);
         outline: 0;
         cursor: pointer;
     }
@@ -555,7 +558,6 @@
     font-size: 18px;
     outline: 0;
     border: 2px solid var(--accentColor);
-
 }
 
 .slext-hidden {
@@ -567,13 +569,13 @@
 }
 
 .slext-color-selector {
-    opacity:0;
-    width:0px;
-    position:absolute;
+    opacity: 0;
+    width: 0px;
+    position: absolute;
 }
 
 .ace_dialog.ace_dialog-bottom {
-    margin-bottom:40px;
+    margin-bottom: 40px;
 }
 
 .file-tree-list {

@@ -11,8 +11,7 @@ export class PersistenceService {
         matches = url.match(/.*(?:v2\.)?(?:overleaf|sharelatex)\.com\/([0-9]{10}[a-z]{12})/);
         if (matches != null && matches.length >= 2) return matches[1];
 
-        return '';
-
+        return "";
     }
 
     public static saveLocal(key: string, object: any) {

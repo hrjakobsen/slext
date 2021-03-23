@@ -7,14 +7,9 @@
         "noImplicitReturns": true,
         "strictNullChecks": false,
         "jsx": "react",
-        "lib": [
-            "dom",
-            "es2017"
-        ],
+        "lib": ["dom", "es2017"],
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
+        "experimentalDecorators": true
     },
-    "exclude": [
-        "app/scripts/injected.js"
-    ]
+    "exclude": ["app/scripts/injected.js"]
 }

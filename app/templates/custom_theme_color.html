@@ -1,10 +1,15 @@
 <div class="color-field">
-    <div class="color-description">
-        {{name}}
-    </div>
+    <div class="color-description">{{name}}</div>
     <div class="color-box">
         <label style="background-color: {{color}};" class="color-label" for="color-picker-{{index}}"></label>
-        <input type="color" id="color-picker-{{index}}" class="slext-color-selector"/>
-        <input type="text" class="color-input" name="color" id="color-{{name}}" value="{{color}}" tabindex="{{index}}">
+        <input type="color" id="color-picker-{{index}}" class="slext-color-selector" />
+        <input
+            type="text"
+            class="color-input"
+            name="color"
+            id="color-{{name}}"
+            value="{{color}}"
+            tabindex="{{index}}"
+        />
     </div>
 </div>

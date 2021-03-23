@@ -1,4 +1,4 @@
-import { Service } from 'typedi';
+import { Service } from "typedi";
 
 @Service()
 export class PageHook {
@@ -13,11 +13,11 @@ export class PageHook {
             document.dispatchEvent(query);
         });
         return promise;
-    };
+    }
 
     public static initialize() {
-        let s = document.createElement('script');
-        s.src = chrome.extension.getURL('scripts/injected.js');
+        let s = document.createElement("script");
+        s.src = chrome.extension.getURL("scripts/injected.js");
         s.onload = function () {
             s.remove();
         };
@@ -26,7 +26,7 @@ export class PageHook {
 
     public static call(fun: Function, args?: Array<string>): Promise<any> {
         args = args || [];
-        let jscode = `(${String(fun)})(${args.map(x => "\"" + x + "\"").join(", ")});`;
+        let jscode = `(${String(fun)})(${args.map((x) => '"' + x + '"').join(", ")});`;
         return PageHook.evaluateJS(jscode);
     }
 }

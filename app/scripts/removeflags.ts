@@ -1,16 +1,14 @@
-import { Slext } from './slext';
-import { File } from './file';
-import * as $ from 'jquery';
-import { Utils } from './utils';
-import { PersistenceService } from './persistence.service';
+import { Slext } from "./slext";
+import { File } from "./file";
+import * as $ from "jquery";
+import { Utils } from "./utils";
+import { PersistenceService } from "./persistence.service";
 import { Container, Service, Inject } from "typedi";
-import { Settings } from './settings';
-import { TabModule } from './tabs';
-
+import { Settings } from "./settings";
+import { TabModule } from "./tabs";
 
 @Service()
 export class RemoveFlagsModule {
-
     private settings: Settings;
 
     constructor(private slext: Slext) {
@@ -25,11 +23,11 @@ export class RemoveFlagsModule {
     private initialSetup() {
         let element = true;
         let self = this;
-        PersistenceService.load("flags", x => {
+        PersistenceService.load("flags", (x) => {
             x = x || false;
             self.setClasses("flags", x);
         });
-        PersistenceService.load("cursors", x => {
+        PersistenceService.load("cursors", (x) => {
             x = x || false;
             self.setClasses("cursors", x);
         });
@@ -55,5 +53,4 @@ export class RemoveFlagsModule {
             $("#editor").removeClass(element + "_hidden");
         }
     }
-
 }

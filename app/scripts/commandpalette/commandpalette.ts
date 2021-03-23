@@ -1,14 +1,14 @@
-import { Slext } from '../slext';
-import { Service, Container } from 'typedi';
-import { File } from '../file';
-import * as $ from 'jquery';
-import { Utils } from '../utils';
-import { PersistenceService } from '../persistence.service';
-import { Logger } from '../logger';
-import { FileBackend } from './filebackend';
-import { CommandBackend } from './commandbackend';
-import { Settings } from '../settings';
-import { Shortcut } from '../shortcut.service';
+import { Slext } from "../slext";
+import { Service, Container } from "typedi";
+import { File } from "../file";
+import * as $ from "jquery";
+import { Utils } from "../utils";
+import { PersistenceService } from "../persistence.service";
+import { Logger } from "../logger";
+import { FileBackend } from "./filebackend";
+import { CommandBackend } from "./commandbackend";
+import { Settings } from "../settings";
+import { Shortcut } from "../shortcut.service";
 
 export interface CommandItem {
     type: string;
@@ -25,8 +25,8 @@ export interface CommandPaletteBackend {
 
 @Service()
 export class CommandPalette {
-    private static box: string = require('../../templates/searchbox.html');
-    private static result: string = require('../../templates/searchresult.html');
+    private static box: string = require("../../templates/searchbox.html");
+    private static result: string = require("../../templates/searchresult.html");
     private prefixRequired: boolean;
     box: JQuery<HTMLElement>;
     resultlist: JQuery<HTMLElement>;
@@ -36,75 +36,78 @@ export class CommandPalette {
     private settings: Settings;
     private shortcut: Shortcut;
 
-
     constructor(private slext: Slext) {
-        this.backends = [
-            Container.get(FileBackend),
-            Container.get(CommandBackend),
-        ];
+        this.backends = [Container.get(FileBackend), Container.get(CommandBackend)];
         this.settings = Container.get(Settings);
         this.shortcut = Container.get(Shortcut);
         let self = this;
         this.box = $(CommandPalette.box);
-        this.resultlist = this.box.children('.searchbox__results');
-        $('body').append(this.box);
+        this.resultlist = this.box.children(".searchbox__results");
+        $("body").append(this.box);
 
-        PersistenceService.load("command_prefix", r => self.prefixRequired = r || false);
-        this.settings.addEventListener("command_prefixChanged", r => self.prefixRequired = r || false);
+        PersistenceService.load("command_prefix", (r) => (self.prefixRequired = r || false));
+        this.settings.addEventListener("command_prefixChanged", (r) => (self.prefixRequired = r || false));
 
-        
         this.shortcut.addEventListener("Meta+P", function (e) {
-            self.box.toggleClass('searchbox--active');
+            self.box.toggleClass("searchbox--active");
             self.active = !self.active;
             if (self.active) {
-                self.box.children('.searchbox__field').focus();
-                self.box.children('.searchbox__field').select();
+                self.box.children(".searchbox__field").focus();
+                self.box.children(".searchbox__field").select();
             }
             e.preventDefault();
         });
 
         $(document).on("keydown", function (e) {
-            if (e.which == 27) { // esc
+            if (e.which == 27) {
+                // esc
                 self.close();
                 e.preventDefault();
             }
         });
 
-        this.box.on('keydown', '.searchbox__field', function (e) {
-            if (e.which == 13) { // enter
+        this.box.on("keydown", ".searchbox__field", function (e) {
+            if (e.which == 13) {
+                // enter
                 self.selectFile();
                 e.preventDefault();
             }
-            if (e.which == 38) { // up
+            if (e.which == 38) {
+                // up
                 self.select(self.currentSelected - 1);
                 e.preventDefault();
             }
-            if (e.which == 40) { // down
+            if (e.which == 40) {
+                // down
                 self.select(self.currentSelected + 1);
                 e.preventDefault();
             }
         });
 
-        this.box.on('input', '.searchbox__field', function (e) {
+        this.box.on("input", ".searchbox__field", function (e) {
             let inputfield = $(this);
             let text = inputfield.val() as string;
 
             let backendsToSearch = self.backends;
 
             if (self.prefixRequired) {
-                backendsToSearch = backendsToSearch.filter(backend => {
+                backendsToSearch = backendsToSearch.filter((backend) => {
                     if (text.length == 0) {
                         return backend.getPrefix() == null;
                     }
-                    return backend.getPrefix() == null || backend.getPrefix() == text.slice(0, backend.getPrefix().length);
-                })
+                    return (
+                        backend.getPrefix() == null || backend.getPrefix() == text.slice(0, backend.getPrefix().length)
+                    );
+                });
             }
 
             self.resultlist.empty();
 
-            backendsToSearch.forEach(backend => {
+            backendsToSearch.forEach((backend) => {
                 if (self.resultlist.children().length >= 5) return;
-                self.resultlist.append(self.createList(backend, backend.getItems(text)).slice(0, 5 - self.resultlist.children().length));
+                self.resultlist.append(
+                    self.createList(backend, backend.getItems(text)).slice(0, 5 - self.resultlist.children().length)
+                );
             });
 
             if (self.resultlist.children().length > 0) {
@@ -115,18 +118,18 @@ export class CommandPalette {
 
     private close() {
         this.active = false;
-        this.box.removeClass('searchbox--active');
+        this.box.removeClass("searchbox--active");
         $(".ace_text-input").focus();
     }
 
     private selectFile() {
-        let selected = $('.searchbox__resultitem--selected');
+        let selected = $(".searchbox__resultitem--selected");
 
         // Check that search result was selected
         if (selected.length) {
-            this.resultlist.removeClass('searchbox--active');
-            let file = selected.data('t') as CommandItem;
-            let backend = selected.data('b') as CommandPaletteBackend;
+            this.resultlist.removeClass("searchbox--active");
+            let file = selected.data("t") as CommandItem;
+            let backend = selected.data("b") as CommandPaletteBackend;
             backend.selected(file);
             this.close();
         }
@@ -136,11 +139,9 @@ export class CommandPalette {
         let numChildren = this.resultlist.children().length;
         if (numChildren <= 0) return;
         this.currentSelected = Math.max(Math.min(index, numChildren - 1), 0);
-        $('.searchbox__resultitem--selected').removeClass(
-            'searchbox__resultitem--selected'
-        );
+        $(".searchbox__resultitem--selected").removeClass("searchbox__resultitem--selected");
         let newSelected = this.resultlist.children().get(this.currentSelected);
-        newSelected.classList.add('searchbox__resultitem--selected');
+        newSelected.classList.add("searchbox__resultitem--selected");
     }
 
     private createList(backend: CommandPaletteBackend, items: CommandItem[]): JQuery<HTMLElement>[] {
@@ -154,8 +155,8 @@ export class CommandPalette {
                 self.close();
                 backend.selected(f);
             });
-            match.data('t', f);
-            match.data('b', backend);
+            match.data("t", f);
+            match.data("b", backend);
             elements.push(match);
         }
         return elements;

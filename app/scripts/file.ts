@@ -1,5 +1,5 @@
-import * as $ from 'jquery';
-import { Slext } from './slext';
+import * as $ from "jquery";
+import { Slext } from "./slext";
 
 export interface File {
     name: string;
@@ -9,13 +9,12 @@ export interface File {
 }
 
 export class FileUtils {
-
-    public static newFile(name: string, path: string, id : string, type: string): File {
+    public static newFile(name: string, path: string, id: string, type: string): File {
         return {
             name: name,
             path: path,
             id: id,
-            type: type
+            type: type,
         };
     }
 }
