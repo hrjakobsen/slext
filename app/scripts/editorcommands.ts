@@ -28,6 +28,10 @@ export class EditorCommands {
         if (command == null) return;
         command = command.replace(/ /g, ""); //remove all spaces
         this.lastWrappingCommand = command;
+        this.wrapInCommand(command);
+    }
+
+    public wrapInCommand(command: string): void {
         const injectedFunction = function (command) {
             const editor = _debug_editors[0];
             const selection = editor.getSelection();

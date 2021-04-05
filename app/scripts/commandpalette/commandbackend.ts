@@ -11,19 +11,43 @@ interface Command {
 
 @Service()
 export class CommandBackend implements CommandPaletteBackend {
+    private _editorCommands;
+    constructor() {
+        this._editorCommands = Container.get(EditorCommands);
+    }
+
     private commands: Command[] = [
         {
             name: "Character Count",
-            func: function () {
-                Container.get(EditorCommands)
-                    .characterCount()
-                    .then((response) => {
-                        NotificationService.info(
-                            response + " character" + (response == "1" ? " is" : "s are") + " selected"
-                        );
-                    });
+            func: () => {
+                this._editorCommands.characterCount().then((response) => {
+                    NotificationService.info(
+                        response + " character" + (response == "1" ? " is" : "s are") + " selected"
+                    );
+                });
             },
             description: "Counts the number of selected characters",
+        },
+        {
+            name: "Bold font",
+            func: () => {
+                this._editorCommands.wrapInCommand("textbf");
+            },
+            description: "Wrap selected text in \\textbf{}",
+        },
+        {
+            name: "Italic font",
+            func: () => {
+                this._editorCommands.wrapInCommand("textit");
+            },
+            description: "Wrap selected text in \\textit{}",
+        },
+        {
+            name: "Typewriter font",
+            func: () => {
+                this._editorCommands.wrapInCommand("texttt");
+            },
+            description: "Wrap selected text in \\texttt{}",
         },
     ];
     selected(item: CommandItem): void {
