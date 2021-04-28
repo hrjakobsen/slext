@@ -387,6 +387,21 @@
         display: none;
     }
 }
+
+:not(.rp-state-current-file-expanded) > #editor.comments_highlight_hidden {
+    .ace-editor-wrapper .ace_dark .track-changes-comment-marker,
+    .ace-editor-wrapper .track-changes-comment-marker {
+        background-color: unset;
+        opacity: unset;
+    }
+}
+
+:not(.rp-state-current-file-expanded) > #editor.comments_underline_hidden {
+    .ace-editor-wrapper .track-changes-comment-marker-callout {
+        border-bottom: unset;
+    }
+}
+
 .slext-settings {
     /*
     * Replace standard checkboxes with font-awesome icons.

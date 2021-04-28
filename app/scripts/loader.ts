@@ -7,7 +7,7 @@ import { CommandPalette } from "./commandpalette/commandpalette";
 import { ThemeModule } from "./theme";
 import { EditorCommands } from "./editorcommands";
 import { PageHook } from "./pagehook.service";
-import { RemoveFlagsModule } from "./removeflags";
+import { ElementHiderModule } from "./elementhider";
 import { InvertPdfModule } from "./pdfinverter";
 import { Utils } from "./utils";
 import { Shortcut } from "./shortcut.service";
@@ -31,7 +31,7 @@ function projectLoaded(url) {
                 Container.get(TabModule);
                 Container.get(CommandPalette);
                 Container.get(EditorCommands);
-                Container.get(RemoveFlagsModule);
+                Container.get(ElementHiderModule);
                 Container.get(InvertPdfModule);
             }, 100);
         }

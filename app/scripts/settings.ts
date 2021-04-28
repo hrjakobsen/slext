@@ -165,7 +165,16 @@ export class Settings extends Dispatcher {
     }
 
     private setUpCheckboxes(menu) {
-        const settings = ["flags", "cursors", "temporary_tabs", "main_tab_first", "command_prefix", "invert_pdf"];
+        const settings = [
+            "flags",
+            "cursors",
+            "temporary_tabs",
+            "main_tab_first",
+            "command_prefix",
+            "invert_pdf",
+            "comments_highlight",
+            "comments_underline",
+        ];
 
         settings.forEach((setting) => {
             PersistenceService.load(setting, function (toggled) {
