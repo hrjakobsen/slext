@@ -214,8 +214,7 @@ export class TabModule {
         this.shortcut.addEventListener("Meta+9", goToTab);
 
         const goToPreviousTab = (e) => {
-            if(this._previousTab)
-                this.slext.selectFile(this._previousTab.file);
+            if (this._previousTab) this.slext.selectFile(this._previousTab.file);
             e.preventDefault();
         };
 
@@ -383,8 +382,7 @@ export class TabModule {
 
     private selectTab(index: number): void {
         if (this._currentTab) this._currentTab.tab.removeClass("slext-tabs__tab--active");
-        if(this._currentTab != this._tabs[index])
-            this._previousTab = this._currentTab;
+        if (this._currentTab != this._tabs[index]) this._previousTab = this._currentTab;
         this._currentTab = this._tabs[index];
         if (this._currentTab) this._currentTab.tab.addClass("slext-tabs__tab--active");
     }

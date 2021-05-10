@@ -21,6 +21,16 @@ export class EditorCommands {
             this.jumpToFile();
             e.preventDefault();
         });
+
+        this.shortcut.addEventListener("Meta+Y", (e) => {
+            slext.toggleFullScreenPDFEditor();
+            e.preventDefault();
+        });
+
+        this.shortcut.addEventListener("Meta+U", (e) => {
+            slext.goToSplitScreen();
+            e.preventDefault();
+        });
     }
 
     public wrapSelectedText(): void {

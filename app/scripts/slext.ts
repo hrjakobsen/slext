@@ -40,15 +40,59 @@ export class Slext extends Dispatcher {
         return $(".full-size.ng-scope:not(.ng-hide)[ng-show=\"ui.view == 'pdf'\"]").length > 0;
     }
 
+    public isFullScreenEditor(): boolean {
+        return !this.isFullScreenPDF() && !this.isSplitScreen();
+    }
+
     public isHistoryOpen(): boolean {
         return $("#ide-body.ide-history-open").length > 0;
     }
 
-    public goToFullScreenPDF(): void {
+    private _toggleFullScreenPDFEditor(): void {
         const button = $('[ng-click="togglePdfView()"]');
         if (button.length) {
             (button[0] as HTMLElement).click();
         }
+    }
+
+    public toggleFullScreenPDFEditor(): void {
+        if (this.isSplitScreen()) this.goToFullScreenPDF();
+        else this._toggleFullScreenPDFEditor();
+    }
+
+    public goToFullScreenEditor(): void {
+        if (this.isSplitScreen()) {
+            const button = $("[ng-click=\"switchToFlatLayout('pdf')\"]");
+            if (button.length) {
+                (button[0] as HTMLElement).click();
+            }
+        } else if (!this.isFullScreenEditor()) {
+            this.toggleFullScreenPDFEditor();
+        }
+    }
+
+    public goToFullScreenPDF(): void {
+        if (this.isSplitScreen()) {
+            const button = $("[ng-click=\"switchToFlatLayout('pdf')\"]");
+            if (button.length) {
+                (button[0] as HTMLElement).click();
+            }
+        } else if (!this.isFullScreenPDF()) {
+            this._toggleFullScreenPDFEditor();
+        }
+    }
+
+    public goToSplitScreen(): void {
+        if (!this.isSplitScreen()) {
+            const button = $("[ng-click=\"switchToSideBySideLayout('editor')\"]");
+            if (button.length) {
+                (button[0] as HTMLElement).click();
+            }
+        }
+    }
+
+    public isSplitScreen(): boolean {
+        return $('.ng-hide[ng-click="togglePdfView()"]').length > 0;
     }
 
     private loadingFinished(): void {
@@ -78,9 +122,15 @@ export class Slext extends Dispatcher {
             this.dispatch("editorChanged");
         });
 
-        $(document).on("click", '[ng-click="switchToSideBySideLayout()"], [ng-click="switchToFlatLayout()"]', () => {
-            this.dispatch("layoutChanged");
-        });
+        $(document).on(
+            "click",
+            "[ng-click=\"switchToSideBySideLayout('editor')\"], " +
+                "[ng-click=\"switchToFlatLayout('pdf')\"], " +
+                "[ng-click=\"switchToFlatLayout('editor')\"] ",
+            () => {
+                this.dispatch("layoutChanged");
+            }
+        );
     }
 
     public updateFiles(): Promise<File[]> {
