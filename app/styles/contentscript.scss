@@ -332,8 +332,7 @@
         height: 64px;
         color: var(--fileColor);
         cursor: pointer;
-        &--selected,
-        &:hover {
+        &--selected {
             color: var(--accentColor);
         }
 

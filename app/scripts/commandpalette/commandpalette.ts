@@ -147,9 +147,11 @@ export class CommandPalette {
             const f = items[i];
             const match = $(Utils.format(CommandPalette.result, f));
             match.click((_e) => {
-                this.select(i);
                 this.close();
                 backend.selected(f);
+            });
+            match.hover((_e) => {
+                this.select(i);
             });
             match.data("t", f);
             match.data("b", backend);
