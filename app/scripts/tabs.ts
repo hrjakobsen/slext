@@ -22,6 +22,7 @@ export class TabModule {
     private static tabTemplate: string = require("../templates/tab.html");
     protected _tabs: Tab[] = [];
     protected _currentTab: Tab;
+    protected _previousTab: Tab;
     protected tabBar: JQuery<HTMLElement>;
     private currentFile: File = null;
     private maintab: Tab = null;
@@ -67,6 +68,8 @@ export class TabModule {
                     this.setMainTab(this._tabs[tab]);
                 }
             });
+
+            this._previousTab = null;
         });
 
         window.onbeforeunload = () => this.saveTabs();
@@ -199,6 +202,7 @@ export class TabModule {
             this.slext.selectFile(this._tabs[tabIndex].file);
             e.preventDefault();
         };
+
         this.shortcut.addEventListener("Meta+1", goToTab);
         this.shortcut.addEventListener("Meta+2", goToTab);
         this.shortcut.addEventListener("Meta+3", goToTab);
@@ -208,6 +212,14 @@ export class TabModule {
         this.shortcut.addEventListener("Meta+7", goToTab);
         this.shortcut.addEventListener("Meta+8", goToTab);
         this.shortcut.addEventListener("Meta+9", goToTab);
+
+        const goToPreviousTab = (e) => {
+            if(this._previousTab)
+                this.slext.selectFile(this._previousTab.file);
+            e.preventDefault();
+        };
+
+        this.shortcut.addEventListener("Meta+0", goToPreviousTab);
 
         $("html").on("click", ".slext-tabs__tab-cross", (e) => {
             e.stopPropagation();
@@ -371,6 +383,8 @@ export class TabModule {
 
     private selectTab(index: number): void {
         if (this._currentTab) this._currentTab.tab.removeClass("slext-tabs__tab--active");
+        if(this._currentTab != this._tabs[index])
+            this._previousTab = this._currentTab;
         this._currentTab = this._tabs[index];
         if (this._currentTab) this._currentTab.tab.addClass("slext-tabs__tab--active");
     }
@@ -449,6 +463,9 @@ export class TabModule {
             const index = this._tabs.indexOf(tab);
             this._tabs.splice(index, 1);
             tab.tab.remove();
+        }
+        if (tab == this._previousTab) {
+            this._previousTab = null;
         }
         if (tab == this.temporarytab) {
             this.temporarytab = null;
