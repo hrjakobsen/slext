@@ -73,7 +73,11 @@ export class Slext extends Dispatcher {
 
     public goToFullScreenPDF(): void {
         if (this.isSplitScreen()) {
-            const button = $("[ng-click=\"switchToFlatLayout('pdf')\"]");
+            let button = $("[ng-click=\"switchToFlatLayout('pdf')\"]");
+            if (!button.length) {
+                // Try to use the beta-feature button
+                button = $(".toolbar-pdf-expand-btn");
+            }
             if (button.length) {
                 (button[0] as HTMLElement).click();
             }
