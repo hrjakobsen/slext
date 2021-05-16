@@ -218,7 +218,7 @@ export class TabModule {
             e.preventDefault();
         };
 
-        this.shortcut.addEventListener("Meta+0", goToPreviousTab);
+        this.shortcut.addEventListener("Meta+B", goToPreviousTab);
 
         $("html").on("click", ".slext-tabs__tab-cross", (e) => {
             e.stopPropagation();
