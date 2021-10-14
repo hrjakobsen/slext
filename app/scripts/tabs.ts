@@ -280,7 +280,9 @@ export class TabModule {
                 }
             }
             if (filesRemoved > 0) {
-                NotificationService.warn(filesRemoved + " dead tab" + filesRemoved.length == 1 ? " was" : "s were" + " just closed.");
+                NotificationService.warn(
+                    filesRemoved + " dead tab" + filesRemoved.length == 1 ? " was" : "s were" + " just closed."
+                );
             }
         });
     }
