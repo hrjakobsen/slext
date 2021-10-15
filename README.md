@@ -58,6 +58,9 @@ cd slext
 
 ## Install dependencies
 
+SLext is built and tested against Node 16. It is possible that a lower version will also build it.
+With Node 16 and npm installed, the dependencies for SLext can be installed with:
+
 ```bash
 npm install
 ```
@@ -83,18 +86,3 @@ npm run build:firefox
 ```
 
 The resulting extension will be stored in the `packages` directory.
-
-## Versioning
-
-To increment the version number of `manifest.json` and `package.json`,
-commit the change to git and add a git tag (Github release).
-
-    npm run version:patch      // => 0.0.X
-
-or
-
-    npm run version:feature    // => 0.X.0
-
-or
-
-    npm run version:release    // => X.0.0

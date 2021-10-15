@@ -1,50 +1,34 @@
-import gulp from 'gulp'
+import gulp, { series } from 'gulp'
 import gulpif from 'gulp-if'
-import gutil from 'gulp-util'
 import sourcemaps from 'gulp-sourcemaps'
-import less from 'gulp-less'
-import sass from 'gulp-sass'
+import gulpSass from 'gulp-sass'
+import jsSass from 'sass';
 import cleanCSS from 'gulp-clean-css'
-import livereload from 'gulp-livereload'
 import args from './lib/args'
+import log from 'fancy-log';
 
-gulp.task('styles:css', function () {
+const sass = gulpSass(jsSass);
+
+function styles_css() {
   return gulp.src('app/styles/*.css')
     .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
     .pipe(gulpif(args.production, cleanCSS()))
     .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
     .pipe(gulp.dest(`dist/${args.vendor}/styles`))
-    .pipe(gulpif(args.watch, livereload()))
-})
+}
 
-gulp.task('styles:less', function () {
-  return gulp.src('app/styles/*.less')
-    .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
-    .pipe(less({ paths: ['./app'] }).on('error', function (error) {
-      gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message))
-      this.emit('end')
-    }))
-    .pipe(gulpif(args.production, cleanCSS()))
-    .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
-    .pipe(gulp.dest(`dist/${args.vendor}/styles`))
-    .pipe(gulpif(args.watch, livereload()))
-})
-
-gulp.task('styles:sass', function () {
+function styles_sass() {
   return gulp.src('app/styles/*.scss')
     .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
     .pipe(sass({ includePaths: ['./app'] }).on('error', function (error) {
-      gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message))
+      log('Error (' + error.plugin + '): ' + error.message)
       this.emit('end')
     }))
     .pipe(gulpif(args.production, cleanCSS()))
     .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
     .pipe(gulp.dest(`dist/${args.vendor}/styles`))
-    .pipe(gulpif(args.watch, livereload()))
-})
+}
 
-gulp.task('styles', [
-  'styles:css',
-  'styles:less',
-  'styles:sass'
-])
+exports.sass = styles_sass;
+exports.css = styles_css;
+exports.styles = gulp.parallel(styles_sass, styles_css);

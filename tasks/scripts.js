@@ -1,23 +1,24 @@
 import gulp from 'gulp';
-import gulpif from 'gulp-if';
-import { log, colors } from 'gulp-util';
 import named from 'vinyl-named';
 import webpack from 'webpack';
 import gulpWebpack from 'webpack-stream';
 import plumber from 'gulp-plumber';
-import livereload from 'gulp-livereload';
 import args from './lib/args';
+import log from 'fancy-log';
+import gulpif from 'gulp-if'
 
 const ENV = args.production ? 'production' : 'development';
 
-gulp.task('scripts', cb => {
+function scripts(cb) {
     return gulp
         .src(['app/scripts/*.js', 'app/scripts/*.ts'])
         .pipe(
-            plumber({
+            // We should only plumb the error handling if we are using --watch,
+            // otherwise the build should fail 
+            gulpif(args.watch, plumber({
                 // Webpack will log the errors
                 errorHandler() {}
-            })
+            }))
         )
         .pipe(named())
         .pipe(
@@ -63,9 +64,10 @@ gulp.task('scripts', cb => {
                 },
                 webpack,
                 (err, stats) => {
+                    cb();
                     if (err) return;
                     log(
-                        `Finished '${colors.cyan('scripts')}'`,
+                        "Finished 'scripts'",
                         stats.toString({
                             chunks: false,
                             colors: true,
@@ -77,5 +79,6 @@ gulp.task('scripts', cb => {
             )
         )
         .pipe(gulp.dest(`dist/${args.vendor}/scripts`))
-        .pipe(gulpif(args.watch, livereload()));
-});
+}
+
+module.exports = scripts;
