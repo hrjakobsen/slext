@@ -1,6 +1,6 @@
 import gulp from "gulp";
 import reload from "./tasks/reload";
-import clean from "./tasks/clean";
+import { clean } from "./tasks/clean";
 import manifest from "./tasks/manifest";
 import scripts from "./tasks/scripts";
 import { styles } from "./tasks/styles";
@@ -15,3 +15,5 @@ exports.build = build;
 exports.default = build;
 
 exports.pack = gulp.series(build, pack_internal);
+
+exports.clean = clean;
