@@ -49,9 +49,12 @@ export class Slext extends Dispatcher {
     }
 
     private _toggleFullScreenPDFEditor(): void {
-        const button = $('[ng-click="togglePdfView()"]');
-        if (button.length) {
-            (button[0] as HTMLElement).click();
+        // There's no good way to select the togglePdf button anymore.
+        // So we're using a very specific selector to hopefully avoid false hits.
+        const button_icon = $("header.toolbar-header .toolbar-left + a.btn-full-height-no-border i.fa-file-pdf-o");
+
+        if (button_icon.length) {
+            (button_icon.parent()[0] as HTMLElement).click();
         }
     }
 
@@ -96,7 +99,7 @@ export class Slext extends Dispatcher {
     }
 
     public isSplitScreen(): boolean {
-        return $('.ng-hide[ng-click="togglePdfView()"]').length > 0;
+        return $("[ng-click=\"switchToFlatLayout('editor')\"]:not(.ng-hide)").length > 0;
     }
 
     private loadingFinished(): void {
