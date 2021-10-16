@@ -1,50 +1,38 @@
-import gulp from 'gulp'
-import gulpif from 'gulp-if'
-import gutil from 'gulp-util'
-import sourcemaps from 'gulp-sourcemaps'
-import less from 'gulp-less'
-import sass from 'gulp-sass'
-import cleanCSS from 'gulp-clean-css'
-import livereload from 'gulp-livereload'
-import args from './lib/args'
+import gulp, { series } from "gulp";
+import gulpif from "gulp-if";
+import sourcemaps from "gulp-sourcemaps";
+import gulpSass from "gulp-sass";
+import jsSass from "sass";
+import cleanCSS from "gulp-clean-css";
+import args from "./lib/args";
+import log from "fancy-log";
 
-gulp.task('styles:css', function () {
-  return gulp.src('app/styles/*.css')
-    .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
-    .pipe(gulpif(args.production, cleanCSS()))
-    .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
-    .pipe(gulp.dest(`dist/${args.vendor}/styles`))
-    .pipe(gulpif(args.watch, livereload()))
-})
+const sass = gulpSass(jsSass);
 
-gulp.task('styles:less', function () {
-  return gulp.src('app/styles/*.less')
-    .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
-    .pipe(less({ paths: ['./app'] }).on('error', function (error) {
-      gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message))
-      this.emit('end')
-    }))
-    .pipe(gulpif(args.production, cleanCSS()))
-    .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
-    .pipe(gulp.dest(`dist/${args.vendor}/styles`))
-    .pipe(gulpif(args.watch, livereload()))
-})
+function styles_css() {
+    return gulp
+        .src("app/styles/*.css")
+        .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
+        .pipe(gulpif(args.production, cleanCSS()))
+        .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
+        .pipe(gulp.dest(`dist/${args.vendor}/styles`));
+}
 
-gulp.task('styles:sass', function () {
-  return gulp.src('app/styles/*.scss')
-    .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
-    .pipe(sass({ includePaths: ['./app'] }).on('error', function (error) {
-      gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message))
-      this.emit('end')
-    }))
-    .pipe(gulpif(args.production, cleanCSS()))
-    .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
-    .pipe(gulp.dest(`dist/${args.vendor}/styles`))
-    .pipe(gulpif(args.watch, livereload()))
-})
+function styles_sass() {
+    return gulp
+        .src("app/styles/*.scss")
+        .pipe(gulpif(args.sourcemaps, sourcemaps.init()))
+        .pipe(
+            sass({ includePaths: ["./app"] }).on("error", function (error) {
+                log("Error (" + error.plugin + "): " + error.message);
+                this.emit("end");
+            })
+        )
+        .pipe(gulpif(args.production, cleanCSS()))
+        .pipe(gulpif(args.sourcemaps, sourcemaps.write()))
+        .pipe(gulp.dest(`dist/${args.vendor}/styles`));
+}
 
-gulp.task('styles', [
-  'styles:css',
-  'styles:less',
-  'styles:sass'
-])
+exports.sass = styles_sass;
+exports.css = styles_css;
+exports.styles = gulp.parallel(styles_sass, styles_css);

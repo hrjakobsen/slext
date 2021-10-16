@@ -1,5 +1,19 @@
-import requireDir from 'require-dir'
+import gulp from "gulp";
+import reload from "./tasks/reload";
+import { clean } from "./tasks/clean";
+import manifest from "./tasks/manifest";
+import scripts from "./tasks/scripts";
+import { styles } from "./tasks/styles";
+import images from "./tasks/images";
+import fonts from "./tasks/fonts";
+import pack_internal from "./tasks/pack";
 
-// Check out the tasks directory
-// if you want to modify tasks!
-requireDir('./tasks')
+const build = gulp.series(clean, gulp.parallel(manifest, scripts, styles, images, fonts), reload);
+
+exports.build = build;
+
+exports.default = build;
+
+exports.pack = gulp.series(build, pack_internal);
+
+exports.clean = clean;

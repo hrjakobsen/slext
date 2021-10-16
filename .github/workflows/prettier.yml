@@ -14,9 +14,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            - name: Install Node 10.x
+            - name: Install Node 16.x
               uses: actions/setup-node@v1
               with:
-                  node-version: 10.x
+                  node-version: 16.x
             - run: npm ci
             - run: npm run prettier:check
