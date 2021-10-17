@@ -67,7 +67,11 @@ function scripts(cb) {
                 },
                 webpack,
                 (err, stats) => {
-                    cb();
+                    // TODO: Find a better way to signal completion for watching
+                    // or not watching
+                    if (args.watch) {
+                        cb();
+                    }
                     if (err) return;
                     log(
                         "Finished 'scripts'",
@@ -81,7 +85,13 @@ function scripts(cb) {
                 }
             )
         )
-        .pipe(gulp.dest(`dist/${args.vendor}/scripts`));
+        .pipe(gulp.dest(`dist/${args.vendor}/scripts`))
+        .on("done", () => {
+            // TODO: Same here, this is not very pretty
+            if (!args.watch) {
+                cb();
+            }
+        });
 }
 
 module.exports = scripts;
