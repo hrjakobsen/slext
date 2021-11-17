@@ -36,7 +36,7 @@ export class Settings extends Dispatcher {
     constructor() {
         super();
         const button = $(
-            '<div class="btn btn-full-height"><i class="fa fa-cog"></i><p class="toolbar-label">SLext Settings</p></div>'
+            '<div class="toolbar-item"><button class="btn btn-full-height"><i class="fa fa-cog"></i><p class="toolbar-label">SLext Settings</p></button></div>'
         );
         const menu = $(
             Utils.format(Settings.settingsTemplate, {
@@ -106,8 +106,8 @@ export class Settings extends Dispatcher {
             this.dispatch("themeChanged", theme);
         });
 
-        $("header.toolbar .toolbar-right .btn.btn-full-height").first().before(button);
-        button.click(function () {
+        $("header.toolbar .toolbar-right .toolbar-item").first().before(button);
+        button.on("click", function () {
             menu.addClass("slext-settings--active");
         });
 
