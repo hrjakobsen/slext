@@ -172,6 +172,7 @@ export class Settings extends Dispatcher {
             "main_tab_first",
             "command_prefix",
             "invert_pdf",
+            "pdf_padding",
             "comments_highlight",
             "comments_underline",
         ];

@@ -582,6 +582,10 @@
     filter: invert(100%);
 }
 
+.slext-pdf-padding .pdfjs-viewer-inner {
+    padding-bottom: 100vh;
+}
+
 .slext-color-selector {
     opacity: 0;
     width: 0px;

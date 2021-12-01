@@ -8,7 +8,7 @@ import { ThemeModule } from "./theme";
 import { EditorCommands } from "./editorcommands";
 import { PageHook } from "./pagehook.service";
 import { ElementHiderModule } from "./elementhider";
-import { InvertPdfModule } from "./pdfinverter";
+import { PdfTweaksModule } from "./pdftweaks";
 import { Utils } from "./utils";
 import { Shortcut } from "./shortcut.service";
 
@@ -32,7 +32,7 @@ function projectLoaded(url) {
                 Container.get(CommandPalette);
                 Container.get(EditorCommands);
                 Container.get(ElementHiderModule);
-                Container.get(InvertPdfModule);
+                Container.get(PdfTweaksModule);
             }, 100);
         }
     }, 500);
