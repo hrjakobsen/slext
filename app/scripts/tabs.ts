@@ -403,9 +403,28 @@ export class TabModule {
             return;
         }
         const cur = this._currentTab;
+        const find_recompile_button = () => {
+            // An overleaf update changed the layout of the recompile toolbar.
+            // This makes best-effort attempt to find the recompilation button
+            // trying first the old layout, and falling back to the new structure.
+            const text_compile_label = $("#text-recompile");
+            if (text_compile_label.length) {
+                return text_compile_label.parent();
+            }
+            const recompile_label = $(".btn-recompile-label");
+            if (recompile_label.length) {
+                return recompile_label.parent();
+            }
+            return null;
+        };
+        const recompile_button = find_recompile_button();
+        if (recompile_button == null) {
+            NotificationService.error("Error finding recompilation button");
+            return;
+        }
         this.maintab.tab.click();
         setTimeout(() => {
-            $("#text-recompile").parent().click();
+            recompile_button.click();
             setTimeout(() => {
                 cur.tab.click();
                 if (fullscreen) {
