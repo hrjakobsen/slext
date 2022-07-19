@@ -34,11 +34,11 @@ export class AceEditorBackend implements EditorBackend {
     getCurrentLine(): Promise<EditorLine> {
         const injectedFunction = function () {
             const editor = _debug_editors[_debug_editors.length - 1];
-            const text = editor.getSession().getDocument().getTextRange(editor.getSelectionRange());
+            const cursor = editor.getCursorPosition();
             return {
-                column: editor.getSelectionRange().startColumn,
-                row: editor.getSelectionRange().startRow,
-                text,
+                column: cursor.column,
+                row: cursor.row,
+                text: editor.getSession().getLine(cursor.row),
             };
         };
         return PageHook.call(injectedFunction);
