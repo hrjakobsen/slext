@@ -5,7 +5,7 @@ import { TabModule } from "./tabs";
 import { Settings } from "./settings";
 import { CommandPalette } from "./commandpalette/commandpalette";
 import { ThemeModule } from "./theme";
-import { EditorCommands } from "./editorcommands";
+import { EditorCommands } from "./editorcommands/editorcommands";
 import { PageHook } from "./pagehook.service";
 import { ElementHiderModule } from "./elementhider";
 import { PdfTweaksModule } from "./pdftweaks";

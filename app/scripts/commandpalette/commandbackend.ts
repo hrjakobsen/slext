@@ -1,6 +1,6 @@
 import { CommandItem, CommandPaletteBackend } from "./commandpalette";
 import { Service, Container } from "typedi";
-import { EditorCommands } from "../editorcommands";
+import { EditorCommands } from "../editorcommands/editorcommands";
 import { NotificationService } from "../notification.service";
 
 interface Command {
