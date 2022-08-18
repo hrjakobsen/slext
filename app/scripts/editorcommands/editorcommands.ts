@@ -41,6 +41,10 @@ export class EditorCommands {
             this.jumpToFile();
             e.preventDefault();
         });
+        this.shortcut.addEventListener("Meta+F", (e) => {
+            this.jumpToFile();
+            e.preventDefault();
+        });
 
         this.shortcut.addEventListener("Meta+Y", (e) => {
             slext.toggleFullScreenPDFEditor();
