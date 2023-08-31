@@ -16,7 +16,7 @@ function scripts(cb) {
             // We should only plumb the error handling if we are using --watch,
             // otherwise the build should fail
             gulpif(
-                args.watch,
+                args.incremental,
                 plumber({
                     // Webpack will log the errors
                     errorHandler() {},
@@ -28,7 +28,7 @@ function scripts(cb) {
             gulpWebpack(
                 {
                     devtool: args.sourcemaps ? "inline-source-map" : false,
-                    watch: args.watch,
+                    watch: args.incremental,
                     plugins: [
                         new webpack.DefinePlugin({
                             "process.env.NODE_ENV": JSON.stringify(ENV),
@@ -69,7 +69,7 @@ function scripts(cb) {
                 (err, stats) => {
                     // TODO: Find a better way to signal completion for watching
                     // or not watching
-                    if (args.watch) {
+                    if (args.incremental) {
                         cb();
                     }
                     if (err) return;
@@ -88,7 +88,7 @@ function scripts(cb) {
         .pipe(gulp.dest(`dist/${args.vendor}/scripts`))
         .on("done", () => {
             // TODO: Same here, this is not very pretty
-            if (!args.watch) {
+            if (!args.incremental) {
                 cb();
             }
         });

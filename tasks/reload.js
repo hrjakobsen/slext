@@ -7,8 +7,8 @@ import fonts from "./fonts";
 
 function reload(cb) {
     // This task runs only if the
-    // watch argument is present!
-    if (!args.watch) return cb();
+    // incremental argument is present!
+    if (!args.incremental) return cb();
 
     // The watching for javascript files is done by webpack
     // Check out ./tasks/scripts.js for further info.

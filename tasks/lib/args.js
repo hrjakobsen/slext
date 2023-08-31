@@ -8,7 +8,7 @@ const args = yargs
         describe: "Minify all scripts and assets",
     })
 
-    .option("watch", {
+    .option("incremental", {
         boolean: true,
         default: false,
         describe: "Watch all files and start a livereload server",
