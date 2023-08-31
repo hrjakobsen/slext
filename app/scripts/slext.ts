@@ -109,10 +109,16 @@ export class Slext extends Dispatcher {
                 this.updateFiles();
             }
         });
-        mo.observe(document.querySelector('select[name="rootDoc_id"]'), {
-            childList: true,
-            subtree: true,
-        });
+        const mainDocument =
+            document.querySelector('select[name="rootDoc_id"]') ?? document.querySelector("#settings-menu-rootDocId");
+        console.log(mainDocument);
+        if (mainDocument) {
+            mo.observe(mainDocument, {
+                childList: true,
+                subtree: true,
+            });
+        }
+
         this.updateFiles();
         this.setupListeners();
     }
