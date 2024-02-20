@@ -116,7 +116,7 @@ export class CommandPalette {
     private close() {
         this.active = false;
         this.box.removeClass("searchbox--active");
-        $(".ace_text-input").focus();
+        this.slext.focusEditor();
     }
 
     private selectFile() {

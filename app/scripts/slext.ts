@@ -36,6 +36,10 @@ export class Slext extends Dispatcher {
         return this.id;
     }
 
+    public focusEditor() {
+        document.dispatchEvent(new Event("slext:focusEditor"));
+    }
+
     public isFullScreenPDF(): boolean {
         return $(".full-size.ng-scope:not(.ng-hide)[ng-show=\"ui.view == 'pdf'\"],.pdf.full-size").length > 0;
     }

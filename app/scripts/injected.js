@@ -64,11 +64,24 @@ window.addEventListener("UNSTABLE_editor:extensions", (event) => {
 
         return {
             destroy: () => {
-                document.removeEventListener("slext:codemirror:requestSelectionLength");
+                document.removeEventListener("slext:codemirror:requestSelectionLength", provideSelectionLength);
             },
         };
     });
     extensions.push(requestSelectionLength);
+
+    const focusView = ViewPlugin.define((view) => {
+        const focus = () => {
+            view.focus();
+        };
+        document.addEventListener("slext:focusEditor", focus);
+        return {
+            destroy: () => {
+                document.removeEventListener("slext:focusEditor", focus);
+            },
+        };
+    });
+    extensions.push(focusView);
 
     const requestWrapInCommand = ViewPlugin.define((view) => {
         const wrapInCommand = (event) => {
