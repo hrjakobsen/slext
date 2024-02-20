@@ -1,4 +1,4 @@
-/* global document, CustomEvent, Event */
+/* global document, CustomEvent, window */
 
 document.addEventListener("slext:initializeStoreWatchers", () => {
     window.overleaf?.unstable.store.watch(

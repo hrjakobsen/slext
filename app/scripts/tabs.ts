@@ -42,7 +42,7 @@ export class TabModule {
 
         function waitForFiles() {
             let checks = 100;
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const interval = setInterval(() => {
                     if (slext.getFiles().length) {
                         clearInterval(interval);

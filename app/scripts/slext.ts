@@ -2,7 +2,6 @@ import { Dispatcher } from "./dispatcher";
 import { File, FileUtils } from "./file";
 import * as $ from "jquery";
 import { Service } from "typedi";
-import { Logger } from "./logger";
 import { Utils } from "./utils";
 
 @Service()
