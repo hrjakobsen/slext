@@ -2,12 +2,13 @@ import { Dispatcher } from "./dispatcher";
 import { File, FileUtils } from "./file";
 import * as $ from "jquery";
 import { Service } from "typedi";
-import { PageHook } from "./pagehook.service";
+import { Logger } from "./logger";
 import { Utils } from "./utils";
 
 @Service()
 export class Slext extends Dispatcher {
     private _files: Array<File> = [];
+    private _currentlySelectedFile: File | null = null;
     private static id = 0;
     private loaded = false;
 
@@ -37,7 +38,7 @@ export class Slext extends Dispatcher {
     }
 
     public isFullScreenPDF(): boolean {
-        return $(".full-size.ng-scope:not(.ng-hide)[ng-show=\"ui.view == 'pdf'\"]").length > 0;
+        return $(".full-size.ng-scope:not(.ng-hide)[ng-show=\"ui.view == 'pdf'\"],.pdf.full-size").length > 0;
     }
 
     public isFullScreenEditor(): boolean {
@@ -45,7 +46,7 @@ export class Slext extends Dispatcher {
     }
 
     public isHistoryOpen(): boolean {
-        return $("#ide-body.ide-history-open").length > 0;
+        return $("#ide-body.ide-history-open,.history-react").length > 0;
     }
 
     private _toggleFullScreenPDFEditor(): void {
@@ -103,36 +104,20 @@ export class Slext extends Dispatcher {
     }
 
     private loadingFinished(): void {
-        const mo = new MutationObserver((mutations, _observer) => {
-            if (mutations[0].addedNodes.length != 0 || mutations[0].removedNodes.length != 0) {
-                // Files have been added or removed from file tree
-                this.updateFiles();
-            }
-        });
-        const mainDocument =
-            document.querySelector('select[name="rootDoc_id"]') ?? document.querySelector("#settings-menu-rootDocId");
-        console.log(mainDocument);
-        if (mainDocument) {
-            mo.observe(mainDocument, {
-                childList: true,
-                subtree: true,
-            });
-        }
-
-        this.updateFiles();
         this.setupListeners();
     }
 
     private setupListeners(): void {
-        window.addEventListener("editor.openDoc", (e: CustomEvent) => {
+        document.addEventListener("slext:fileChanged", (e: CustomEvent) => {
             const file_id = e.detail;
             const matches = this._files.filter((f, _i) => f.id == file_id);
             const file = matches.length ? matches[0] : null;
+            this._currentlySelectedFile = file;
             this.dispatch("FileSelected", file);
         });
 
-        document.addEventListener("slext_editorChanged", (_e) => {
-            this.dispatch("editorChanged");
+        document.addEventListener("slext:setProject", (e: CustomEvent) => {
+            this.updateFiles(e.detail);
         });
 
         $(document).on(
@@ -146,22 +131,19 @@ export class Slext extends Dispatcher {
         );
     }
 
-    public updateFiles(): Promise<File[]> {
-        return new Promise((resolve, _reject) => {
-            this.indexFiles().then((files: Array<File>) => {
-                this._files = files;
-                this.dispatch("FilesChanged");
-                resolve(this._files);
-            });
-        });
-    }
-
-    private indexFiles(): Promise<File[]> {
-        return new Promise((resolve, _reject) => {
-            PageHook.evaluateJS("_ide.$scope.docs").then((response: any) => {
-                const res = response.map((f) => FileUtils.newFile(f.doc.name, f.path, f.doc.id, "doc"));
-                resolve(res);
-            });
+    public updateFiles(project: any): Promise<File[]> {
+        function getDocsFromFolder(folder, path) {
+            const files = folder.docs.map((d) => FileUtils.newFile(d.name, path + "/" + d.name, d._id, "doc"));
+            for (const subFolder of folder.folders) {
+                files.push(...getDocsFromFolder(subFolder, path + "/" + subFolder.name));
+            }
+            return files;
+        }
+        return new Promise((resolve) => {
+            const files = getDocsFromFolder(project.rootFolder[0], "");
+            this._files = files;
+            this.dispatch("FilesChanged");
+            resolve(this._files);
         });
     }
 
@@ -171,27 +153,17 @@ export class Slext extends Dispatcher {
 
     public currentFile(): Promise<File> {
         return new Promise((resolve, reject) => {
-            PageHook.evaluateJS("_ide.editorManager.$scope.editor.open_doc_id").then((id) => {
-                const matches = this._files.filter((f, _i) => f.id == id);
-                if (matches.length == 0) {
-                    reject();
-                }
-                resolve(matches[0]);
-            });
+            if (this._currentlySelectedFile) {
+                resolve(this._currentlySelectedFile);
+            } else {
+                reject();
+            }
         });
     }
 
     public selectFile(file: File): void {
         if (this._files.filter((f) => f.id == file.id && f.path == file.path).length > 0) {
-            PageHook.evaluateJS(
-                "_ide.$scope.$emit('entity:selected', {type: '" +
-                    file.type +
-                    "', id:'" +
-                    file.id +
-                    "', name:'" +
-                    file.name +
-                    "'})"
-            );
+            document.dispatchEvent(new CustomEvent("slext:doFileChange", { detail: file.id }));
         }
     }
 }

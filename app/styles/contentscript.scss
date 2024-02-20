@@ -1,5 +1,6 @@
 /* CUSTOM THEMING  */
 
+.ide-react-body.ide-tabs,
 #ide-body.ide-tabs {
     top: 80px;
 }
@@ -31,8 +32,10 @@
         font-size: 0;
         width: 100%;
         box-shadow: rgba(0, 0, 0, 0.23) 0px 10px 8px -8px;
-        top: 40px;
-        position: absolute;
+        &:not(.slext-tabs--react) {
+            top: 40px;
+            position: absolute;
+        }
     }
 
     &__tab {
@@ -300,6 +303,7 @@
 
 .searchbox {
     position: fixed;
+    z-index: 100;
     top: 10%;
     width: 50%;
     left: 0;
@@ -435,6 +439,7 @@
     top: 10px;
     right: 10px;
     width: 400px;
+    z-index: 1000;
 
     .slext__notification {
         display: flex;

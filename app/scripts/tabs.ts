@@ -21,7 +21,7 @@ export class TabModule {
     private static tabsTemplate: string = require("../templates/tabs.html");
     private static tabTemplate: string = require("../templates/tab.html");
     protected _tabs: Tab[] = [];
-    protected _currentTab: Tab;
+    protected _currentTab: Tab | null;
     protected _previousTab: Tab;
     protected tabBar: JQuery<HTMLElement>;
     private currentFile: File = null;
@@ -40,42 +40,60 @@ export class TabModule {
         this.addTabBar();
         this.addCompileMainButton();
 
-        PersistenceService.loadLocal("tabs_openFiles", (files: [any]) => {
-            if (!files) return;
-            if (files.length < 1) return;
-            const allfiles = this.slext.getFiles();
-            files.forEach((file) => {
-                const fileMatch = allfiles.find((x) => x.path == file.path);
-                if (fileMatch == null) return;
-                this.openTab(fileMatch, file.favorite);
+        function waitForFiles() {
+            let checks = 100;
+            return new Promise<void>((resolve, reject) => {
+                const interval = setInterval(() => {
+                    if (slext.getFiles().length) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                    if (checks-- < 0) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 10);
             });
+        }
 
-            PersistenceService.loadLocal("tabs_currentTab", (path: string) => {
-                let tab = this._tabs.findIndex((x) => x.file.path == path);
-                if (tab == -1) tab = 0;
+        waitForFiles().then(() =>
+            PersistenceService.loadLocal("tabs_openFiles", (files: [any]) => {
+                if (!files) return;
+                if (files.length < 1) return;
+                const allfiles = this.slext.getFiles();
+                files.forEach((file) => {
+                    const fileMatch = allfiles.find((x) => x.path == file.path);
+                    if (fileMatch == null) return;
+                    this.openTab(fileMatch, file.favorite);
+                });
 
-                // If no tabs are open, we cannot do anything
-                if (!this._tabs.length) return;
+                PersistenceService.loadLocal("tabs_currentTab", (path: string) => {
+                    let tab = this._tabs.findIndex((x) => x.file.path == path);
+                    if (tab == -1) tab = 0;
 
-                this.currentFile = this._tabs[tab].file || null;
+                    // If no tabs are open, we cannot do anything
+                    if (!this._tabs.length) return;
 
-                this.selectTab(tab);
-            });
+                    this.currentFile = this._tabs[tab].file || null;
 
-            PersistenceService.loadLocal("tabs_mainTab", (path: string) => {
-                const tab = this._tabs.findIndex((x) => x.file.path == path);
-                if (tab != -1) {
-                    this.setMainTab(this._tabs[tab]);
-                }
-            });
+                    this.selectTab(tab);
+                });
 
-            this._previousTab = null;
-        });
+                PersistenceService.loadLocal("tabs_mainTab", (path: string) => {
+                    const tab = this._tabs.findIndex((x) => x.file.path == path);
+                    if (tab != -1) {
+                        this.setMainTab(this._tabs[tab]);
+                    }
+                });
+
+                this._previousTab = null;
+            })
+        );
 
         window.onbeforeunload = () => this.saveTabs();
 
         setTimeout(() => this.ensureRightTab(), 2000);
-        slext.addEventListener("editorChanged", () => this.ensureRightTab());
+        slext.addEventListener("FileSelected", () => this.ensureRightTab());
     }
 
     protected ensureRightTab(): void {
@@ -84,8 +102,8 @@ export class TabModule {
             .then((curFile: File) => {
                 if (curFile.type != "doc") {
                     this.currentFile = null;
+                    this._currentTab?.tab.removeClass("slext-tabs__tab--active");
                     this._currentTab = null;
-                    this._currentTab.tab.removeClass("slext-tabs__tab--active");
                 }
 
                 if (this.currentFile == null || curFile.path != this.currentFile.path) {
@@ -100,8 +118,7 @@ export class TabModule {
             })
             .catch((_err) => {
                 // No file
-                this._currentTab.tab.removeClass("slext-tabs__tab--active");
-                this._currentTab = null;
+                this._currentTab?.tab.removeClass("slext-tabs__tab--active");
                 this.currentFile = null;
             });
     }
@@ -114,7 +131,9 @@ export class TabModule {
             })
         );
 
-        PersistenceService.saveLocal("tabs_currentTab", this._currentTab.file.path);
+        if (this._currentTab) {
+            PersistenceService.saveLocal("tabs_currentTab", this._currentTab.file.path);
+        }
 
         if (this.maintab != null && this.maintab !== undefined) {
             PersistenceService.saveLocal("tabs_mainTab", this.maintab.file.path);
@@ -126,6 +145,8 @@ export class TabModule {
     protected setupListeners(): void {
         this.slext.addEventListener("FileSelected", (selectedFile: File) => {
             if (selectedFile == null) {
+                this._currentTab?.tab.removeClass("slext-tabs__tab--active");
+                this._currentTab = null;
                 return;
             }
             const index = this._tabs.findIndex((tab) => {
@@ -264,7 +285,7 @@ export class TabModule {
     }
 
     private reindexTabs(): Promise<void> {
-        return this.slext.updateFiles().then(() => {
+        return Promise.resolve(this.slext.getFiles()).then(() => {
             let filesRemoved = 0;
             for (let i = 0; i < this._tabs.length; i++) {
                 const tab = this._tabs[i];
@@ -334,7 +355,7 @@ export class TabModule {
                 }
             };
 
-            const editorListener = $("#editor").on("keydown", (e) => {
+            const editorListener = $("#editor,.cm-editor").on("keydown", (e) => {
                 removeTemp(e);
             });
 
@@ -393,6 +414,9 @@ export class TabModule {
         this.tabBar = $(TabModule.tabsTemplate);
         $("header.toolbar").after(this.tabBar);
         $("header.toolbar").addClass("toolbar-tabs");
+        if ($(".ide-react-body").length) {
+            this.tabBar.addClass("slext-tabs--react");
+        }
         $("#ide-body").addClass("ide-tabs");
     }
 
@@ -414,6 +438,12 @@ export class TabModule {
             const recompile_label = $(".btn-recompile-label");
             if (recompile_label.length) {
                 return recompile_label.parent();
+            }
+            // If none of those worked. Try finding a split menu button in the
+            // pdf toolbar.
+            const toolbarPdfButton = $(".toolbar-pdf .split-menu-button");
+            if (toolbarPdfButton) {
+                return toolbarPdfButton.parent();
             }
             return null;
         };
@@ -457,7 +487,10 @@ export class TabModule {
         });
     }
 
-    private closeTab(tab: Tab): void {
+    private closeTab(tab: Tab | null): void {
+        if (!tab) {
+            return;
+        }
         const overlaps = this._tabs.filter((t) => t.file.name == tab.file.name && t != tab);
         if (overlaps.length > 0) {
             this.fixOverlaps(overlaps);
@@ -477,7 +510,7 @@ export class TabModule {
             this._tabs.splice(index, 1);
 
             this.selectTab(newIndex);
-            this._currentTab.tab.click();
+            this._currentTab?.tab.click();
         } else {
             const index = this._tabs.indexOf(tab);
             this._tabs.splice(index, 1);
@@ -491,7 +524,10 @@ export class TabModule {
         }
     }
 
-    private setMainTab(tab: Tab): void {
+    private setMainTab(tab: Tab | null): void {
+        if (tab === null) {
+            return;
+        }
         if (this.maintab == tab) {
             this.maintab.tab.removeClass("slext-tabs__tab--main");
             this.maintab = null;
@@ -508,7 +544,10 @@ export class TabModule {
         }
     }
 
-    private setFavoriteTab(tab: Tab): void {
+    private setFavoriteTab(tab: Tab | null): void {
+        if (tab === null) {
+            return;
+        }
         tab.favorite = !tab.favorite;
         tab.tab.toggleClass("slext-tabs__tab--favorite");
     }

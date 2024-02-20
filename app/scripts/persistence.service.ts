@@ -19,9 +19,9 @@ export class PersistenceService {
         return PersistenceService.save(key + project, object);
     }
 
-    public static loadLocal(key: string, object: any): void {
+    public static loadLocal(key: string, callback: any): void {
         const project = PersistenceService.getProjectId();
-        return PersistenceService.load(key + project, object);
+        return PersistenceService.load(key + project, callback);
     }
 
     public static save(key: string, object: any): void {

@@ -1,9 +1,23 @@
-/* global document, CustomEvent, _debug_editors, Event */
-document.addEventListener("variable_query", function (evt) {
-    var query = evt.detail;
-    var res = eval(query);
-    var resEvent = new CustomEvent("variable_query_" + query, { detail: res });
-    document.dispatchEvent(resEvent);
+/* global document, CustomEvent, Event */
+
+document.addEventListener("slext:initializeStoreWatchers", () => {
+    window.overleaf?.unstable.store.watch(
+        "project",
+        (project) => {
+            var resEvent = new CustomEvent("slext:setProject", { detail: project });
+            document.dispatchEvent(resEvent);
+        },
+        true
+    );
+
+    window.overleaf?.unstable.store.watch("editor.open_doc_id", (id) => {
+        var resEvent = new CustomEvent("slext:fileChanged", { detail: id });
+        document.dispatchEvent(resEvent);
+    });
+});
+
+document.addEventListener("slext:doFileChange", ({ detail: id }) => {
+    window.dispatchEvent(new CustomEvent("editor.openDoc", { detail: id }));
 });
 
 // eslint-disable-next-line no-undef
@@ -104,22 +118,3 @@ window.addEventListener("UNSTABLE_editor:extensions", (event) => {
     });
     extensions.push(requestWrapInCommand);
 });
-
-var limit = 50;
-var tries = 0;
-var int = setInterval(function () {
-    try {
-        if (_debug_editors && _debug_editors.length) {
-            clearInterval(int);
-            var editor = _debug_editors[0];
-            editor.on("changeSession", function () {
-                var event = new Event("slext_editorChanged");
-                document.dispatchEvent(event);
-            });
-        }
-        tries++;
-    } catch (e) {
-        if (!(e instanceof ReferenceError)) throw e;
-        if (tries++ >= limit) clearInterval(int);
-    }
-}, 100);

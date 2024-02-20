@@ -1,9 +1,11 @@
+import { Logger } from "./logger";
 export type Listener = (d: any) => any;
 
 export class Dispatcher {
     protected listeners = new Map<string, Array<Listener>>();
 
     protected dispatch(event: string, data?: any): void {
+        Logger.debug(`[${this.constructor.name}]: ${event}`);
         if (!this.listeners.has(event)) return;
         this.listeners.get(event).forEach(function (listener) {
             listener(data);
