@@ -17,7 +17,7 @@ document.addEventListener("slext:initializeStoreWatchers", () => {
 });
 
 document.addEventListener("slext:doFileChange", ({ detail: id }) => {
-    window.dispatchEvent(new CustomEvent("editor.openDoc", { detail: id }));
+    window.dispatchEvent(new CustomEvent("entity:opened", { detail: id }));
 });
 
 // eslint-disable-next-line no-undef
